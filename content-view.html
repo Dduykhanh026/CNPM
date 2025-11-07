@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Nội Dung Học Tập - Nền Tảng Học Trực Tuyến</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Nền Tảng Học Trực Tuyến</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-detail">
+            <div class="detail-hero">
+                <div class="detail-hero-top">
+                    <a href="content.html" class="back-link">← Quay lại Nội Dung Học Tập</a>
+                    <div class="detail-badges">
+                        <span class="badge badge-info" id="detail-subject-badge">Toán</span>
+                        <span class="badge badge-success" id="detail-type-badge">Bài giảng</span>
+                        <span class="badge badge-info" id="detail-format-badge">Video</span>
+                        <span class="badge badge-warning" id="detail-price-badge">Miễn phí</span>
+                    </div>
+                </div>
+                <h1 id="detail-title">Tên nội dung học tập</h1>
+                <p id="detail-description">Mô tả chi tiết về nội dung học tập sẽ hiển thị tại đây.</p>
+                <div class="detail-meta-line">
+                    <span id="detail-duration">⏱️ 45 phút</span>
+                    <span id="detail-students">👥 120 học viên đã học</span>
+                    <span id="detail-rating">⭐ 4.5 (28 đánh giá)</span>
+                </div>
+            </div>
+
+            <div class="detail-layout">
+                <div class="detail-main">
+                    <div class="detail-preview" id="detail-preview">
+                        <!-- Preview area -->
+                    </div>
+
+                    <section class="detail-section">
+                        <div class="detail-section-header">
+                            <h2>Nội dung chính</h2>
+                            <span id="detail-section-count" class="detail-section-count">0 mục</span>
+                        </div>
+                        <ul class="detail-outline" id="detail-outline">
+                            <!-- Outline items -->
+                        </ul>
+                    </section>
+
+                    <section class="detail-section">
+                        <h2>Thông tin thêm</h2>
+                        <p id="detail-extra-note">Nội dung này bao gồm các tài liệu và ví dụ minh họa giúp bạn nắm vững kiến thức.</p>
+                    </section>
+                </div>
+
+                <aside class="detail-sidebar">
+                    <div class="detail-action-card" id="detail-action-card">
+                        <h3 id="detail-action-title">Bắt đầu học ngay</h3>
+                        <p id="detail-action-subtitle">Truy cập toàn bộ nội dung và tài liệu đi kèm.</p>
+                        <div class="detail-price-box" id="detail-price-box">
+                            <span class="price-label">Giá</span>
+                            <strong id="detail-price-display">Miễn phí</strong>
+                        </div>
+                        <button class="btn btn-primary" id="primary-action-btn">Bắt đầu học</button>
+                        <button class="btn btn-outline" id="secondary-action-btn">Quay lại danh sách</button>
+                    </div>
+
+                    <div class="detail-info-card">
+                        <h3>Chi tiết</h3>
+                        <ul>
+                            <li><strong>Môn học:</strong> <span id="detail-info-subject">Toán</span></li>
+                            <li><strong>Loại nội dung:</strong> <span id="detail-info-type">Bài giảng</span></li>
+                            <li><strong>Định dạng:</strong> <span id="detail-info-format">Video</span></li>
+                            <li><strong>Thời lượng:</strong> <span id="detail-info-duration">45 phút</span></li>
+                            <li><strong>Lượt học:</strong> <span id="detail-info-students">120</span></li>
+                            <li><strong>Đánh giá:</strong> <span id="detail-info-rating">4.5 / 5</span></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/content-view.js"></script>
+</body>
+</html>
+

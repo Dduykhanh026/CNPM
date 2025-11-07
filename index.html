@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nền Tảng Học Trực Tuyến - Toán, Vật Lý, Hóa Học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Nền Tảng Học Trực Tuyến</h1>
+                <p>Toán, Vật Lý & Hóa Học cho Học Sinh Trung Học</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Đăng Nhập</button>
+                <button class="tab-btn" data-tab="register">Đăng Ký</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-tab" class="auth-tab-content active">
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mật Khẩu</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-role">Vai Trò</label>
+                        <select id="login-role" name="role" required>
+                            <option value="student">Học Sinh</option>
+                            <option value="teacher">Giáo Viên</option>
+                            <option value="admin">Quản Trị Viên</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <a href="#" id="forgot-password-link" class="forgot-link">Quên Mật Khẩu?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-tab" class="auth-tab-content">
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="register-name">Họ và Tên</label>
+                        <input type="text" id="register-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-phone">Số Điện Thoại</label>
+                        <input type="tel" id="register-phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Mật Khẩu</label>
+                        <input type="password" id="register-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Xác Nhận Mật Khẩu</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-role">Vai Trò</label>
+                        <select id="register-role" name="role" required>
+                            <option value="student">Học Sinh</option>
+                            <option value="teacher">Giáo Viên</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đăng Ký</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

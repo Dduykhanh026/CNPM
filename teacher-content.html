@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Nội Dung - Giáo Viên</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Nền Tảng Học Trực Tuyến</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Quản Lý Nội Dung</h1>
+            <p>Tải lên bài giảng, tạo bài tập, bài kiểm tra, bộ đề có phí hoặc miễn phí</p>
+        </div>
+
+        <div class="card" style="margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="showCreateContent()">Tạo Nội Dung Mới</button>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Tìm kiếm nội dung...">
+            <button class="btn btn-primary" onclick="searchContent()">Tìm Kiếm</button>
+        </div>
+
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tiêu Đề</th>
+                        <th>Môn Học</th>
+                        <th>Loại</th>
+                        <th>Giá</th>
+                        <th>Trạng Thái</th>
+                        <th>Ngày Tạo</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="content-table">
+                    <tr>
+                        <td>Đại số và Giải tích - Chương 1</td>
+                        <td>Toán</td>
+                        <td>Bài giảng</td>
+                        <td>Miễn phí</td>
+                        <td><span class="badge badge-success">Đã Duyệt</span></td>
+                        <td>05/12/2024</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">Sửa</button>
+                            <button class="btn btn-sm btn-danger">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Dao động điều hòa</td>
+                        <td>Vật Lý</td>
+                        <td>Video</td>
+                        <td>50,000 VNĐ</td>
+                        <td><span class="badge badge-success">Đã Duyệt</span></td>
+                        <td>03/12/2024</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">Sửa</button>
+                            <button class="btn btn-sm btn-danger">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Bài tập Hóa học hữu cơ</td>
+                        <td>Hóa Học</td>
+                        <td>Bài tập</td>
+                        <td>Miễn phí</td>
+                        <td><span class="badge badge-warning">Chờ Duyệt</span></td>
+                        <td>10/12/2024</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">Sửa</button>
+                            <button class="btn btn-sm btn-danger">Xóa</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/teacher-content.js"></script>
+</body>
+</html>

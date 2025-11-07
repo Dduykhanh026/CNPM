@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Làm Bài Tự Luận - Nền Tảng Học Trực Tuyến</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body data-exercise-type="written">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Nền Tảng Học Trực Tuyến</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="exercise-session">
+            <div class="session-header">
+                <div class="session-header-text">
+                    <h1 id="exercise-title">Bài tập tự luận</h1>
+                    <div class="session-badges">
+                        <span class="badge badge-info" id="exercise-subject-badge">Toán</span>
+                        <span class="badge badge-warning" id="exercise-difficulty-badge">Trung bình</span>
+                        <span class="badge badge-info" id="exercise-type-badge">Tự luận</span>
+                    </div>
+                    <p id="session-instructions">Trình bày lời giải chi tiết và rõ ràng. Bạn có thể đính kèm hình ảnh khi cần thiết.</p>
+                </div>
+                <div class="session-meta">
+                    <div class="meta-box">
+                        <span class="meta-label">Thời gian</span>
+                        <strong id="exercise-meta-duration">45 phút</strong>
+                    </div>
+                    <div class="meta-box">
+                        <span class="meta-label">Số câu</span>
+                        <strong id="exercise-meta-questions">5 câu</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="session-body written-layout">
+                <aside class="question-nav">
+                    <h3 class="question-nav-title">Danh sách câu hỏi</h3>
+                    <div class="question-nav-grid" id="question-nav">
+                        <!-- Danh sách câu hỏi sẽ được hiển thị tại đây -->
+                    </div>
+                </aside>
+
+                <section class="question-panel">
+                    <div class="question-card">
+                        <div class="question-heading">
+                            <span class="badge badge-info" id="current-question-number">Câu 1</span>
+                            <span class="question-type" id="current-question-type">Tự luận</span>
+                        </div>
+                        <p class="question-text" id="question-placeholder-text">Đề bài sẽ hiển thị tại đây. Bạn hãy trình bày lời giải chi tiết cho câu hỏi này.</p>
+                        <div class="answer-area">
+                            <label for="written-answer" class="answer-label">Bài làm của bạn</label>
+                            <textarea id="written-answer" placeholder="Nhập lời giải tại đây..."></textarea>
+                        </div>
+                        <div class="attachment-area">
+                            <p>Bạn có thể tải lên hình ảnh hoặc file bổ sung (tùy chọn):</p>
+                            <div class="attachment-inputs">
+                                <input type="file" id="attachment-input" accept="image/*,application/pdf">
+                                <button class="btn btn-secondary">Tải Lên</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="session-actions">
+                        <button class="btn btn-outline">Câu Trước</button>
+                        <button class="btn btn-primary">Câu Tiếp</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="session-footer">
+                <div class="session-note">
+                    <p>Hãy kiểm tra lại bài làm trước khi nộp. Giáo viên sẽ phản hồi và chấm điểm sau khi bạn hoàn thành.</p>
+                </div>
+                <div class="session-footer-actions">
+                    <button class="btn btn-outline">Lưu Tạm</button>
+                    <button class="btn btn-primary">Nộp Bài</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/exercise-session.js"></script>
+</body>
+</html>
+

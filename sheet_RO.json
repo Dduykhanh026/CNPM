@@ -1,0 +1,598 @@
+{
+  "columns": [
+    "Unnamed: 0",
+    "Requirement Outline",
+    "Unnamed: 2",
+    "Unnamed: 3"
+  ],
+  "data": [
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "Nhóm 33",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "Đề tài:  Xây dựng nền tảng học trực tuyến Toán, Vật Lý và hóa học cho học sinh trung học",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "- Ý tưởng của nhóm: Xây dựng website tối ưu về tốc độ, tính năng thuận tiện, tối ưu cho khả năng học nhanh - nhớ lâu cho học sinh trung học.",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "- Đối tượng sử dụng hướng đến:",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Học sinh trung học phổ thông",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Giáo viên",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản trị viên website (ADMIN)",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "- Chức năng của User:",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "1. Quản lý tài khoản",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Đăng ký sử dụng (Ngoại trừ ADMIN)",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Đăng nhập Sử dụng: Mỗi đối tượng người dùng có các chức năng khác nhau",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Xem / cập nhật thông tin cá nhân",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Khôi phục tài khoản / mật khẩu.",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "2. Sử dụng tài khoản",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "a. Đối tượng học sinh",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Truy cập nội dung học tập",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xem bài giảng (video, tài liệu, đề thi thử...) về Toán, Vật Lý, Hóa học phù hợp với chương trình học."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xem các đánh giá, phản hồi về chất lượng nội dung học tập."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Làm bài tập",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Thực hiện các bài tập trắc nghiệm hoặc tự luận, nhận kết quả ngay lập tức (đối với trắc nghiệm)."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Tham gia bài kiểm tra",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Làm bài kiểm tra định kỳ hoặc kiểm tra thử để đánh giá kiến thức."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Theo dõi tiến độ học tập",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xem thống kê điểm số, bài đã hoàn thành, và các phần còn yếu."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Nhắc lịch học"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": " Gợi ý nội dung học tập theo năng lực cá nhân và mục tiêu mong muốn"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Tương tác với giáo viên",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Đặt câu hỏi hoặc trao đổi trực tuyến về bài tập/bài kiểm tra."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xem livestream của giáo viên"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Tìm kiếm nội dung học tập.",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Bài giảng."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tài liệu."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Bài tập, bài kiểm tra."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Giáo Viên"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Thi đua học tập:",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tham gia thi đua."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xem bảng xếp hạng."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Tải tài liệu lý thuyết và bài tập.",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tài liệu miễn phí"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tài liệu có tính phí"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Diễn đàn trao đổi. ",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Theo bộ môn."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tương tác với học sinh, trả lời câu hỏi tin nhắn với học sinh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Nạp tiền vào tài khoản.",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Thanh toán bằng VN Pay hoặc MOMO"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Thanh toán phí tải tài liệu ",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Thanh toán bằng cách trừ vào tài khoản "
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Báo cáo lỗi /  nội dung sai",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Nhận thông báo qua email/SMS về deadline, lịch học, bài kiểm tra",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "b. Đối tượng giáo viên",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý nội dung",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tìm kiếm nội dung."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tải lên bài giảng (video, tài liệu), tạo bài tập, bài kiểm tra, bộ đề có phí hoặc miễn phí."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Cập nhật, chỉnh sửa, xóa, ẩn bài giảng, bài tập, bộ đề."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý học sinh",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Theo dõi danh sách học sinh, điểm số, tiến độ học tập, và mức độ tham gia."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Phân tích dữ liệu học sinh , xuất dữ liệu bài làm điểm số thành PDF/ Excel"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Chấm bài và phản hồi",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Chấm bài tự luận, cung cấp nhận xét hoặc giải đáp thắc mắc của học sinh."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Tạo lịch học/bài kiểm tra",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Lên lịch cho các bài kiểm tra hoặc nhắc nhở học sinh về bài tập."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Cá nhân hóa nội dung",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Điều chỉnh bài giảng hoặc bài tập phù hợp với trình độ của học sinh."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Trao đổi nhóm với nhiều học sinh cùng lúc",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Livestream trao đổi cùng lúc với nhiều học sinh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Cho phép nhiều học sinh cùng tham gia và trao đổi trong một nhóm chat nhỏ dưới quyền quản lý của giao viên"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý phản hồi học sinh, xử lý khiếu nại về nội dung giảng dạy",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tiếp nhận, đọc, xử lý và phản hồi với học sinh về vấn đề khiếu nại"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "+ Theo dõi doanh thu từ đề đã bán.",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "c. Quản trị viên website (ADMIN)",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý tài khoản",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tìm kiếm tài khoản của học sinh, giáo viên và các quản trị viên có quyền thấp hơn"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Thêm tài khoản của học sinh, giáo viên và các quản trị viên có quyền thấp hơn"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xóa tài khoản của học sinh, giáo viên và các quản trị viên có quyền thấp hơn."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Chỉnh sửa tài khoản của học sinh, giáo viên và các quản trị viên có quyền thấp hơn."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý nội dung",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Tìm kiếm nội dung."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Kiểm duyệt nội dung đăng tải."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Chỉnh sửa nội dung trực tuyến."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Xóa bài giảng, bài tập, bộ đề, bài kiểm tra."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Nội dung câu hỏi, chủ đề thảo luận trong diễn đàn, live stream"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Phê duyệt bài giảng, bài tập, bộ đề hoặc các tài liệu do giáo viên tải lên."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý quyền truy cập",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Phân quyền cho các nhóm người dùng (học sinh, giáo viên, admin)."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Phân tích dữ liệu hệ thống và quản lí giao dịch, doanh thu.",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Dashboard trực quan thể hiện thống kê về số lượng người dùng, lượt truy cập, số lượng đề đã bán, doanh thu và hiệu suất nền tảng."
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Thống kê dữ liệu chi tiết từng bộ môn"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Quản lý và phê duyệt các giao dịch tài chính"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Giám sát lỗi hệ thống",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": " + Quản lý thông báo toàn hệ thống",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "Kiểm tra, quản lý và gửi thông báo cho toàn hệ thống"
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "- Kỹ thuật:",
+      "Unnamed: 2": "",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "Sử dụng ngôn ngữ Java theo mô hình MVC framework Struts",
+      "Unnamed: 3": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Requirement Outline": "",
+      "Unnamed: 2": "Sử dụng hệ quản trị cơ sở dữ liệu SQL Server",
+      "Unnamed: 3": ""
+    }
+  ]
+}

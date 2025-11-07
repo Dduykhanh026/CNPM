@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Làm Bài Trắc Nghiệm - Nền Tảng Học Trực Tuyến</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body data-exercise-type="quiz">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Nền Tảng Học Trực Tuyến</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="exercise-session">
+            <div class="session-header">
+                <div class="session-header-text">
+                    <h1 id="exercise-title">Bài tập trắc nghiệm</h1>
+                    <div class="session-badges">
+                        <span class="badge badge-info" id="exercise-subject-badge">Toán</span>
+                        <span class="badge badge-warning" id="exercise-difficulty-badge">Trung bình</span>
+                        <span class="badge badge-info" id="exercise-type-badge">Trắc nghiệm</span>
+                    </div>
+                    <p id="session-instructions">Chọn đáp án đúng cho từng câu hỏi. Bạn có thể đánh dấu câu hỏi cần xem lại.</p>
+                </div>
+                <div class="session-meta">
+                    <div class="meta-box">
+                        <span class="meta-label">Thời gian</span>
+                        <strong id="exercise-meta-duration">30 phút</strong>
+                    </div>
+                    <div class="meta-box">
+                        <span class="meta-label">Số câu</span>
+                        <strong id="exercise-meta-questions">20 câu</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="session-body">
+                <aside class="question-nav">
+                    <h3 class="question-nav-title">Danh sách câu hỏi</h3>
+                    <div class="question-nav-grid" id="question-nav">
+                        <!-- Danh sách câu hỏi sẽ được hiển thị tại đây -->
+                    </div>
+                </aside>
+
+                <section class="question-panel">
+                    <div class="question-card">
+                        <div class="question-heading">
+                            <span class="badge badge-info" id="current-question-number">Câu 1</span>
+                            <span class="question-type" id="current-question-type">Trắc nghiệm</span>
+                        </div>
+                        <p class="question-text" id="question-placeholder-text">Nội dung câu hỏi sẽ hiển thị tại đây. Đây là phần mô phỏng cho giao diện bài tập trắc nghiệm.</p>
+                        <div class="options-list">
+                            <label class="option-item">
+                                <input type="radio" name="question-1">
+                                <span>Đáp án A</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="question-1">
+                                <span>Đáp án B</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="question-1">
+                                <span>Đáp án C</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="question-1">
+                                <span>Đáp án D</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="session-actions">
+                        <button class="btn btn-outline">Câu Trước</button>
+                        <button class="btn btn-primary">Câu Tiếp</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="session-footer">
+                <div class="session-note">
+                    <p>Hệ thống sẽ tự động lưu tiến độ làm bài của bạn mỗi vài phút. Bạn có thể quay lại trang bài tập để tiếp tục bất kỳ lúc nào.</p>
+                </div>
+                <div class="session-footer-actions">
+                    <button class="btn btn-outline">Lưu Tạm</button>
+                    <button class="btn btn-primary">Nộp Bài</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/exercise-session.js"></script>
+</body>
+</html>
+

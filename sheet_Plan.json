@@ -1,0 +1,380 @@
+{
+  "columns": [
+    "Unnamed: 0",
+    "Unnamed: 1",
+    "Unnamed: 2",
+    "Unnamed: 3",
+    "Unnamed: 4",
+    "Unnamed: 5"
+  ],
+  "data": [
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Danh sách nhóm",
+      "Unnamed: 2": "Email",
+      "Unnamed: 3": "Số điện thoại",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Đỗ Tiến Mạnh",
+      "Unnamed: 2": "22T1020665@husc.edu.vn",
+      "Unnamed: 3": "0825390795",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Đào Duy Khánh",
+      "Unnamed: 2": "22T1020171@husc.edu.vn",
+      "Unnamed: 3": "0763658573",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Nguyễn Hữu Đạt",
+      "Unnamed: 2": "22T1020056@husc.edu.vn",
+      "Unnamed: 3": "0975390204",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Trà Đình Hải",
+      "Unnamed: 2": "22T1020097@husc.edu.vn",
+      "Unnamed: 3": 334460857,
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Võ Công Danh",
+      "Unnamed: 2": "22t1020051@husc.edu.vn",
+      "Unnamed: 3": 916137509,
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Ngô Trần Thuận Khang",
+      "Unnamed: 2": "22T1020635@husc.edu.vn",
+      "Unnamed: 3": "0388874641",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "Chức năng",
+      "Unnamed: 2": "SRS",
+      "Unnamed: 3": "Prototype",
+      "Unnamed: 4": "Database design",
+      "Unnamed: 5": "Testcase"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Đăng ký ",
+      "Unnamed: 2": "Trà Đình Hải",
+      "Unnamed: 3": "Trà Đình Hải",
+      "Unnamed: 4": "Trà Đình Hải",
+      "Unnamed: 5": "Trà Đình Hải"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Đăng nhập ",
+      "Unnamed: 2": "Trà Đình Hải",
+      "Unnamed: 3": "Trà Đình Hải",
+      "Unnamed: 4": "Trà Đình Hải",
+      "Unnamed: 5": "Trà Đình Hải"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Xem / cập nhật thông tin cá nhân",
+      "Unnamed: 2": "Trà Đình Hải",
+      "Unnamed: 3": "Trà Đình Hải",
+      "Unnamed: 4": "Trà Đình Hải",
+      "Unnamed: 5": "Trà Đình Hải"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Khôi phục tài khoản/ mật khẩu",
+      "Unnamed: 2": "Trà Đình Hải",
+      "Unnamed: 3": "Trà Đình Hải",
+      "Unnamed: 4": "Trà Đình Hải",
+      "Unnamed: 5": "Trà Đình Hải"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Truy cập nội dung học tập",
+      "Unnamed: 2": "Trà Đình Hải",
+      "Unnamed: 3": "Trà Đình Hải",
+      "Unnamed: 4": "Trà Đình Hải",
+      "Unnamed: 5": "Trà Đình Hải"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Làm bài tập",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Tham gia bài kiểm tra",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Theo dõi tiến độ học tập",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Tương tác với giáo viên",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Tìm kiếm nội dung học tập.",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Thi đua học tập:",
+      "Unnamed: 2": "Võ Công Danh",
+      "Unnamed: 3": "Võ Công Danh",
+      "Unnamed: 4": "Võ Công Danh",
+      "Unnamed: 5": "Võ Công Danh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Tải tài liệu lý thuyết và bài tập.",
+      "Unnamed: 2": "Võ Công Danh",
+      "Unnamed: 3": "Võ Công Danh",
+      "Unnamed: 4": "Võ Công Danh",
+      "Unnamed: 5": "Võ Công Danh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Diễn đàn trao đổi. ",
+      "Unnamed: 2": "Võ Công Danh",
+      "Unnamed: 3": "Võ Công Danh",
+      "Unnamed: 4": "Võ Công Danh",
+      "Unnamed: 5": "Võ Công Danh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Nạp tiền vào tài khoản.",
+      "Unnamed: 2": "Võ Công Danh",
+      "Unnamed: 3": "Võ Công Danh",
+      "Unnamed: 4": "Võ Công Danh",
+      "Unnamed: 5": "Võ Công Danh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Thanh toán phí tải tài liệu ",
+      "Unnamed: 2": "Võ Công Danh",
+      "Unnamed: 3": "Võ Công Danh",
+      "Unnamed: 4": "Võ Công Danh",
+      "Unnamed: 5": "Võ Công Danh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+Báo cáo lỗi /  nội dung sai",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Nhận thông báo qua email/SMS về deadline, lịch học, bài kiểm tra",
+      "Unnamed: 2": "Đào Duy Khánh",
+      "Unnamed: 3": "Đào Duy Khánh",
+      "Unnamed: 4": "Đào Duy Khánh",
+      "Unnamed: 5": "Đào Duy Khánh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Đánh giá tài liệu đã mua.",
+      "Unnamed: 2": "Ngô Trần Thuận Khang",
+      "Unnamed: 3": "Ngô Trần Thuận Khang",
+      "Unnamed: 4": "Ngô Trần Thuận Khang",
+      "Unnamed: 5": "Ngô Trần Thuận Khang"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Xem danh sách tài liệu đã mua.",
+      "Unnamed: 2": "Ngô Trần Thuận Khang",
+      "Unnamed: 3": "Ngô Trần Thuận Khang",
+      "Unnamed: 4": "Ngô Trần Thuận Khang",
+      "Unnamed: 5": "Ngô Trần Thuận Khang"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Quản lý nội dung",
+      "Unnamed: 2": "Ngô Trần Thuận Khang",
+      "Unnamed: 3": "Ngô Trần Thuận Khang",
+      "Unnamed: 4": "Ngô Trần Thuận Khang",
+      "Unnamed: 5": "Ngô Trần Thuận Khang"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Quản lý học sinh",
+      "Unnamed: 2": "Ngô Trần Thuận Khang",
+      "Unnamed: 3": "Ngô Trần Thuận Khang",
+      "Unnamed: 4": "Ngô Trần Thuận Khang",
+      "Unnamed: 5": "Ngô Trần Thuận Khang"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Chấm bài và phản hồi",
+      "Unnamed: 2": "Ngô Trần Thuận Khang",
+      "Unnamed: 3": "Ngô Trần Thuận Khang",
+      "Unnamed: 4": "Ngô Trần Thuận Khang",
+      "Unnamed: 5": "Ngô Trần Thuận Khang"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Tạo lịch học/bài kiểm tra",
+      "Unnamed: 2": "Nguyễn Hữu Đạt",
+      "Unnamed: 3": "Nguyễn Hữu Đạt",
+      "Unnamed: 4": "Nguyễn Hữu Đạt",
+      "Unnamed: 5": "Nguyễn Hữu Đạt"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Tương tác với học sinh",
+      "Unnamed: 2": "Nguyễn Hữu Đạt",
+      "Unnamed: 3": "Nguyễn Hữu Đạt",
+      "Unnamed: 4": "Nguyễn Hữu Đạt",
+      "Unnamed: 5": "Nguyễn Hữu Đạt"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Cá nhân hóa nội dung",
+      "Unnamed: 2": "Nguyễn Hữu Đạt",
+      "Unnamed: 3": "Nguyễn Hữu Đạt",
+      "Unnamed: 4": "Nguyễn Hữu Đạt",
+      "Unnamed: 5": "Nguyễn Hữu Đạt"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Trao đổi nhóm với nhiều học sinh cùng lúc",
+      "Unnamed: 2": "Trà Đình Hải",
+      "Unnamed: 3": "Trà Đình Hải",
+      "Unnamed: 4": "Trà Đình Hải",
+      "Unnamed: 5": "Trà Đình Hải"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "' + Quản lý phản hồi học sinh, xử lý khiếu nại về nội dung giảng dạy",
+      "Unnamed: 2": "Nguyễn Hữu Đạt",
+      "Unnamed: 3": "Nguyễn Hữu Đạt",
+      "Unnamed: 4": "Nguyễn Hữu Đạt",
+      "Unnamed: 5": "Nguyễn Hữu Đạt"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "' + Xuất dữ liệu bài làm, điểm số ",
+      "Unnamed: 2": "Nguyễn Hữu Đạt",
+      "Unnamed: 3": "Nguyễn Hữu Đạt",
+      "Unnamed: 4": "Nguyễn Hữu Đạt",
+      "Unnamed: 5": "Nguyễn Hữu Đạt"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "+ Theo dõi doanh thu từ đề đã bán.",
+      "Unnamed: 2": "Nguyễn Hữu Đạt",
+      "Unnamed: 3": "Nguyễn Hữu Đạt",
+      "Unnamed: 4": "Nguyễn Hữu Đạt",
+      "Unnamed: 5": "Nguyễn Hữu Đạt"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Quản lý tài khoản",
+      "Unnamed: 2": "Đỗ Tiến Mạnh",
+      "Unnamed: 3": "Đỗ Tiến Mạnh",
+      "Unnamed: 4": "Đỗ Tiến Mạnh",
+      "Unnamed: 5": "Đỗ Tiến Mạnh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Quản lý nội dung",
+      "Unnamed: 2": "Đỗ Tiến Mạnh",
+      "Unnamed: 3": "Đỗ Tiến Mạnh",
+      "Unnamed: 4": "Đỗ Tiến Mạnh",
+      "Unnamed: 5": "Đỗ Tiến Mạnh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Quản lý quyền truy cập",
+      "Unnamed: 2": "Đỗ Tiến Mạnh",
+      "Unnamed: 3": "Đỗ Tiến Mạnh",
+      "Unnamed: 4": "Đỗ Tiến Mạnh",
+      "Unnamed: 5": "Đỗ Tiến Mạnh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": " + Phân tích dữ liệu hệ thống \nvà quản lí giao dịch, doanh thu.",
+      "Unnamed: 2": "Đỗ Tiến Mạnh",
+      "Unnamed: 3": "Đỗ Tiến Mạnh",
+      "Unnamed: 4": "Đỗ Tiến Mạnh",
+      "Unnamed: 5": "Đỗ Tiến Mạnh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "' + Giám sát lỗi hệ thống",
+      "Unnamed: 2": "Đỗ Tiến Mạnh",
+      "Unnamed: 3": "Đỗ Tiến Mạnh",
+      "Unnamed: 4": "Đỗ Tiến Mạnh",
+      "Unnamed: 5": "Đỗ Tiến Mạnh"
+    },
+    {
+      "Unnamed: 0": "",
+      "Unnamed: 1": "' + Quản lý thông báo toàn hệ thống",
+      "Unnamed: 2": "Đỗ Tiến Mạnh",
+      "Unnamed: 3": "Đỗ Tiến Mạnh",
+      "Unnamed: 4": "Đỗ Tiến Mạnh",
+      "Unnamed: 5": "Đỗ Tiến Mạnh"
+    }
+  ]
+}
