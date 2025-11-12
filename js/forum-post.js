@@ -162,21 +162,26 @@ class ForumPostPage {
         const container = document.getElementById('post-stats');
         if (!container) return;
 
+        const viewCount = this.normalizeCount(this.post.views);
+        const replyCount = this.normalizeCount(this.post.replies);
+        const watcherCount = this.normalizeCount(this.post.watchers);
+        const followerCount = this.normalizeCount(this.post.followers);
+
         container.innerHTML = `
             <div class="forum-stat">
-                <span class="forum-stat-value">${this.post.views}</span>
+                <span class="forum-stat-value">${viewCount}</span>
                 <span class="forum-stat-label">Lượt xem</span>
             </div>
             <div class="forum-stat">
-                <span class="forum-stat-value">${this.post.replies}</span>
+                <span class="forum-stat-value">${replyCount}</span>
                 <span class="forum-stat-label">Phản hồi</span>
             </div>
             <div class="forum-stat">
-                <span class="forum-stat-value">${this.post.watchers}</span>
+                <span class="forum-stat-value">${watcherCount}</span>
                 <span class="forum-stat-label">Đang theo dõi</span>
             </div>
             <div class="forum-stat">
-                <span class="forum-stat-value">${this.post.followers}</span>
+                <span class="forum-stat-value">${followerCount}</span>
                 <span class="forum-stat-label">Đã lưu</span>
             </div>
         `;
@@ -357,6 +362,7 @@ class ForumPostPage {
         reply.likes += 1;
         this.persistCurrentPost();
         this.renderReplies();
+        this.renderStats();
     }
 
     handleQuickReply(replyId) {
@@ -390,6 +396,7 @@ class ForumPostPage {
         this.post.repliesCount = this.post.replies.length;
         this.persistCurrentPost();
         this.renderReplies();
+        this.renderStats();
     }
 
     handleMarkSolution(replyId) {
@@ -400,6 +407,7 @@ class ForumPostPage {
         this.persistCurrentPost();
         this.renderHeader();
         this.renderReplies();
+        this.renderStats();
     }
 
     handleSubmitReply() {
@@ -430,6 +438,7 @@ class ForumPostPage {
 
         this.persistCurrentPost();
         this.renderReplies();
+        this.renderStats();
     }
 
     toggleFollow(button) {
@@ -456,6 +465,20 @@ class ForumPostPage {
         this.persistCurrentPost();
         this.renderHeader();
         this.renderReplies();
+        this.renderStats();
+    }
+
+    normalizeCount(value, fallback = 0) {
+        if (Array.isArray(value)) {
+            return value.length;
+        }
+
+        if (value === null || value === undefined) {
+            return fallback;
+        }
+
+        const numeric = Number(value);
+        return Number.isFinite(numeric) ? numeric : fallback;
     }
 
     persistCurrentPost() {
