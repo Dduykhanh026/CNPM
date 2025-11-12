@@ -80,10 +80,10 @@ class DashboardManager {
         
         if (eventElement) {
             // Update active menu item when navigation is triggered without page reload
-            document.querySelectorAll('.nav-menu a').forEach(a => {
-                a.style.color = '';
-                a.style.fontWeight = '';
-            });
+        document.querySelectorAll('.nav-menu a').forEach(a => {
+            a.style.color = '';
+            a.style.fontWeight = '';
+        });
             eventElement.style.color = 'var(--text-primary)';
             eventElement.style.fontWeight = '800';
         }
@@ -168,18 +168,22 @@ class DashboardManager {
                     break;
                 case 'showContentManagement':
                     dashboardContent.innerHTML = this.getAdminContentManagement();
+                    this.bindAdminContentEvents();
                     break;
                 case 'showPermissions':
                     dashboardContent.innerHTML = this.getAdminPermissions();
+                    this.bindAdminContentEvents();
                     break;
                 case 'showStatistics':
                     dashboardContent.innerHTML = this.getAdminStatistics();
+                    this.bindAdminMonitoringEvents();
                     break;
                 case 'showTransactions':
                     dashboardContent.innerHTML = this.getAdminTransactions();
                     break;
                 case 'showMonitoring':
                     dashboardContent.innerHTML = this.getAdminMonitoring();
+                    this.bindAdminMonitoringEvents();
                     break;
                 case 'showSystemNotifications':
                     dashboardContent.innerHTML = this.getAdminNotifications();
@@ -511,44 +515,64 @@ class DashboardManager {
 
     getContentCards(userType, limit = null) {
         const contents = [
-            { title: 'Đại số và Giải tích - Chương 1', subject: 'Toán', type: 'Bài giảng', students: 120 },
-            { title: 'Dao động điều hòa', subject: 'Vật Lý', type: 'Video', students: 95 },
-            { title: 'Hóa học hữu cơ - Cơ bản', subject: 'Hóa Học', type: 'Tài liệu', students: 88 },
-            { title: 'Bài tập Toán nâng cao', subject: 'Toán', type: 'Bài tập', students: 150 },
-            { title: 'Điện từ học', subject: 'Vật Lý', type: 'Bài giảng', students: 110 },
-            { title: 'Phản ứng hóa học', subject: 'Hóa Học', type: 'Video', students: 92 },
-            { title: 'Hình học không gian', subject: 'Toán', type: 'Bài giảng', students: 135 },
-            { title: 'Sóng cơ và sóng âm', subject: 'Vật Lý', type: 'Video', students: 105 },
-            { title: 'Cân bằng hóa học', subject: 'Hóa Học', type: 'Tài liệu', students: 98 },
-            { title: 'Lượng giác cơ bản', subject: 'Toán', type: 'Bài giảng', students: 128 },
-            { title: 'Quang học', subject: 'Vật Lý', type: 'Video', students: 112 },
-            { title: 'Điện hóa học', subject: 'Hóa Học', type: 'Bài giảng', students: 87 }
+            { title: 'Đại số và Giải tích - Chương 1', subject: 'Toán', type: 'Bài giảng', format: 'video', students: 120, price: 0 },
+            { title: 'Dao động điều hòa', subject: 'Vật Lý', type: 'Video', format: 'video', students: 95, price: 50000 },
+            { title: 'Hóa học hữu cơ - Cơ bản', subject: 'Hóa Học', type: 'Tài liệu', format: 'pdf', students: 88, price: 30000 },
+            { title: 'Bài tập Toán nâng cao', subject: 'Toán', type: 'Bài tập', format: 'exercise', students: 150, price: 0 },
+            { title: 'Điện từ học', subject: 'Vật Lý', type: 'Bài giảng', format: 'video', students: 110, price: 0 },
+            { title: 'Phản ứng hóa học', subject: 'Hóa Học', type: 'Video', format: 'video', students: 92, price: 40000 },
+            { title: 'Hình học không gian', subject: 'Toán', type: 'Bài giảng', format: 'video', students: 135, price: 0 },
+            { title: 'Sóng cơ và sóng âm', subject: 'Vật Lý', type: 'Video', format: 'video', students: 105, price: 45000 },
+            { title: 'Cân bằng hóa học', subject: 'Hóa Học', type: 'Tài liệu', format: 'pdf', students: 98, price: 0 },
+            { title: 'Lượng giác cơ bản', subject: 'Toán', type: 'Bài giảng', format: 'video', students: 128, price: 0 },
+            { title: 'Quang học', subject: 'Vật Lý', type: 'Video', format: 'video', students: 112, price: 50000 },
+            { title: 'Điện hóa học', subject: 'Hóa Học', type: 'Bài giảng', format: 'video', students: 87, price: 0 }
         ];
         
         // Limit số lượng hiển thị nếu được chỉ định
         const displayContents = limit ? contents.slice(0, limit) : contents;
 
-        return displayContents.map(content => `
-            <div class="content-card" data-subject="${content.subject}">
-                <div class="content-card-image"></div>
-                <div class="content-card-body">
-                    <h3 class="content-card-title">${content.title}</h3>
-                    <p class="content-card-description">
-                        <span class="badge badge-info">${content.subject}</span>
-                        <span class="badge badge-success">${content.type}</span>
-                    </p>
-                    <div class="content-card-footer">
-                        <div class="content-meta">
-                            <span>👥 ${content.students} học sinh</span>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-sm btn-primary" onclick="window.location.href='content.html'">Xem</button>
-                            ${userType === 'teacher' ? '<button class="btn btn-sm btn-secondary">Sửa</button>' : ''}
+        return displayContents.map(content => {
+            const priceLabel = content.price === 0
+                ? 'Miễn phí'
+                : `${this.formatCurrency(content.price)} VNĐ`;
+            const priceClass = content.price === 0 ? 'price-free' : 'price-paid';
+            const escapedTitle = content.title.replace(/'/g, "\\'");
+            const secondaryAction = content.price === 0
+                ? `<button class="btn btn-sm btn-secondary" onclick="downloadContent('${escapedTitle}')">Tải</button>`
+                : `<button class="btn btn-sm btn-secondary" onclick="purchaseDashboardContent('${escapedTitle}')">Mua</button>`;
+            
+            const actionButtons = [
+                `<button class="btn btn-sm btn-primary" onclick="window.location.href='content.html'">Xem</button>`,
+                secondaryAction
+            ];
+
+            if (userType === 'teacher') {
+                actionButtons.push('<button class="btn btn-sm btn-secondary">Sửa</button>');
+            }
+
+            return `
+                <div class="content-card" data-subject="${content.subject}">
+                    <div class="content-card-image"></div>
+                    <div class="content-card-body">
+                        <h3 class="content-card-title">${content.title}</h3>
+                        <p class="content-card-description">
+                            <span class="badge badge-info">${content.subject}</span>
+                            <span class="badge badge-success">${content.type}</span>
+                        </p>
+                        <div class="content-card-footer">
+                            <div class="content-meta">
+                                <span>👥 ${content.students} học sinh</span>
+                                <span class="content-price ${priceClass}">${priceLabel}</span>
+                            </div>
+                            <div class="action-buttons">
+                                ${actionButtons.join('')}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     getProgressData() {
@@ -597,6 +621,11 @@ class DashboardManager {
 
         const hue = Math.min(120, 20 + (percent - 50) * 2);
         return `hsl(${hue}, 80%, 50%)`;
+    }
+
+    formatCurrency(value) {
+        const numericValue = Number(value) || 0;
+        return numericValue.toLocaleString('vi-VN');
     }
 
     // ========== STUDENT FUNCTIONS ==========
@@ -2301,7 +2330,7 @@ class DashboardManager {
                 <h1>Quản Lý Tài Khoản</h1>
                 <p>Tìm kiếm, thêm, khóa/mở khóa tài khoản, thiết lập 2FA và theo dõi lịch sử hoạt động.</p>
             </div>
-
+            
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-users"></i></div>
@@ -2349,12 +2378,12 @@ class DashboardManager {
                     </div>
                     <div class="form-group">
                         <label>Vai trò</label>
-                        <select>
+                    <select>
                             <option>Tất cả</option>
                             <option>Học sinh</option>
                             <option>Giáo viên</option>
                             <option>Quản trị viên</option>
-                        </select>
+                    </select>
                     </div>
                     <div class="form-group">
                         <label>Trạng thái</label>
@@ -2375,28 +2404,28 @@ class DashboardManager {
                     </div>
                 </div>
             </div>
-
+            
             <div class="card">
                 <div class="table-wrapper">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Họ và Tên</th>
-                                <th>Email</th>
-                                <th>Vai Trò</th>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Họ và Tên</th>
+                            <th>Email</th>
+                            <th>Vai Trò</th>
                                 <th>2FA</th>
-                                <th>Trạng Thái</th>
+                            <th>Trạng Thái</th>
                                 <th>Đăng Nhập Cuối</th>
-                                <th>Thao Tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
                                 <td>USR-1201</td>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyenvana@example.com</td>
-                                <td><span class="badge badge-info">Học Sinh</span></td>
+                            <td>Nguyễn Văn A</td>
+                            <td>nguyenvana@example.com</td>
+                            <td><span class="badge badge-info">Học Sinh</span></td>
                                 <td><span class="badge badge-success">Đã bật</span></td>
                                 <td><span class="badge badge-success">Hoạt động</span></td>
                                 <td>10/12/2024 07:45</td>
@@ -2436,15 +2465,15 @@ class DashboardManager {
                                     <div class="draft-item-actions">
                                         <button class="btn btn-sm btn-primary">Mở khóa</button>
                                         <button class="btn btn-sm btn-secondary">Xem nhật ký</button>
-                                        <button class="btn btn-sm btn-danger">Xóa</button>
+                                <button class="btn btn-sm btn-danger">Xóa</button>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
             </div>
-
+            
             <div class="card">
                 <div class="card-header">
                     <div>
@@ -2496,8 +2525,11 @@ class DashboardManager {
                             <td>10/12/2024</td>
                             <td><span class="badge badge-warning">Chờ Duyệt</span></td>
                             <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-secondary" data-action="preview-content" data-content-id="CONTENT-001">Xem Trước</button>
                                 <button class="btn btn-sm btn-success">Duyệt</button>
                                 <button class="btn btn-sm btn-danger">Từ Chối</button>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -2509,6 +2541,13 @@ class DashboardManager {
                 <p>Kiểm duyệt câu hỏi, chủ đề thảo luận trong diễn đàn</p>
                 <button class="btn btn-secondary" style="margin-top: 10px;">Xem Diễn Đàn</button>
             </div>
+
+            <div class="modal" id="admin-content-preview-modal" aria-hidden="true">
+                <div class="modal-content modal-xl">
+                    <button class="modal-close" id="admin-content-preview-close" aria-label="Đóng">&times;</button>
+                    <div id="admin-content-preview-body"></div>
+                </div>
+            </div>
         `;
     }
 
@@ -2518,8 +2557,8 @@ class DashboardManager {
                 <h1>Quản Lý Phân Quyền</h1>
                 <p>Thiết lập ma trận quyền, chính sách truy cập và theo dõi audit log phân quyền.</p>
             </div>
-
-            <div class="card">
+            
+                <div class="card">
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Ma Trận Quyền Truy Cập</h2>
@@ -2594,8 +2633,8 @@ class DashboardManager {
                         </tbody>
                     </table>
                 </div>
-            </div>
-
+                </div>
+                
             <div class="grid grid-2">
                 <div class="card">
                     <h2 class="card-title">Chính Sách Bảo Mật</h2>
@@ -2609,38 +2648,69 @@ class DashboardManager {
                         <li>🛡️ Tài khoản đăng nhập sai quá 5 lần sẽ tự động khóa (6.3.1.2.4).</li>
                     </ul>
                 </div>
+                </div>
+                
                 <div class="card">
-                    <h2 class="card-title">Mẫu Vai Trò Tùy Chỉnh</h2>
-                    <p class="card-subtitle">Tạo các vai trò đặc thù theo yêu cầu khách hàng/đối tác.</p>
-                    <div class="draft-item">
-                        <div>
-                            <strong>Trợ giảng</strong>
-                            <div class="draft-item-meta">
-                                <span>Quyền: Xem nội dung lớp, phản hồi bài tập.</span>
-                                <span>Không được phép phê duyệt nội dung.</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-sm btn-secondary">Chỉnh sửa</button>
-                    </div>
-                    <div class="draft-item">
-                        <div>
-                            <strong>Kiểm duyệt viên</strong>
-                            <div class="draft-item-meta">
-                                <span>Quyền: Xem báo cáo vi phạm, đề xuất khóa nội dung.</span>
-                                <span>Không chỉnh sửa dữ liệu tài chính.</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-sm btn-secondary">Chỉnh sửa</button>
-                    </div>
+                <h2 class="card-title">Mẫu Vai Trò Tùy Chỉnh</h2>
+                <p class="card-subtitle">Tạo và quản lý các vai trò đặc thù theo yêu cầu.</p>
+                <div class="form-actions-inline">
+                    <button class="btn btn-primary" data-action="create-role">Tạo vai trò mới</button>
+                </div>
+                <div class="table-wrapper" style="margin-top: 16px;">
+                    <table class="table" id="role-table">
+                        <thead>
+                            <tr>
+                                <th>Tên vai trò</th>
+                                <th>Mô tả</th>
+                                <th>Quyền mặc định</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-role-id="ROLE-ASSISTANT">
+                                <td>Trợ giảng</td>
+                                <td>Hỗ trợ giáo viên quản lý lớp học.</td>
+                                <td>Truy cập lớp, phản hồi bài tập, không duyệt nội dung.</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-sm btn-secondary" data-action="edit-role" data-role-id="ROLE-ASSISTANT">Chỉnh sửa</button>
+                                        <button class="btn btn-sm btn-danger" data-action="delete-role" data-role-id="ROLE-ASSISTANT">Xóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-role-id="ROLE-MODERATOR">
+                                <td>Kiểm duyệt viên</td>
+                                <td>Giám sát diễn đàn và nội dung người dùng.</td>
+                                <td>Xem báo cáo, đề xuất khóa nội dung, không chỉnh sửa tài chính.</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-sm btn-secondary" data-action="edit-role" data-role-id="ROLE-MODERATOR">Chỉnh sửa</button>
+                                        <button class="btn btn-sm btn-danger" data-action="delete-role" data-role-id="ROLE-MODERATOR">Xóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-role-id="ROLE-INSPECTOR">
+                                <td>Thanh tra nội bộ</td>
+                                <td>Kiểm tra các thao tác admin và giáo viên.</td>
+                                <td>Xem audit log, truy cập báo cáo bảo mật, không chỉnh sửa nội dung.</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-sm btn-secondary" data-action="edit-role" data-role-id="ROLE-INSPECTOR">Chỉnh sửa</button>
+                                        <button class="btn btn-sm btn-danger" data-action="delete-role" data-role-id="ROLE-INSPECTOR">Xóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="card">
+                
+                <div class="card">
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Audit Log Phân Quyền</h2>
                         <p class="card-subtitle">Theo dõi thay đổi quyền truy cập và chính sách bảo mật (6.3.3.6).</p>
-                    </div>
+                </div>
                 </div>
                 <ul class="timeline">
                     <li>
@@ -2655,15 +2725,395 @@ class DashboardManager {
                         <strong>08/12/2024 16:20</strong><br>
                         Hệ thống tự động khóa quyền phê duyệt của Admin dự phòng do không kích hoạt 2FA trước hạn.
                     </li>
-                </ul>
+                    </ul>
+                </div>
+        `;
+    }
+
+    bindAdminContentEvents() {
+        const previewButtons = document.querySelectorAll('[data-action="preview-content"]');
+        previewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const contentId = button.getAttribute('data-content-id');
+                this.openAdminContentPreview(contentId);
+            });
+        });
+
+        const closeBtn = document.getElementById('admin-content-preview-close');
+        const modal = document.getElementById('admin-content-preview-modal');
+        if (closeBtn) {
+            closeBtn.onclick = () => this.closeAdminContentPreview();
+        }
+        if (modal) {
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    this.closeAdminContentPreview();
+                }
+            });
+        }
+
+        this.bindAdminMonitoringEvents();
+    }
+
+    bindAdminMonitoringEvents() {
+        const incidentTable = document.querySelector('[data-admin-incident-table]');
+        if (incidentTable) {
+            incidentTable.addEventListener('click', (event) => {
+                const button = event.target.closest('[data-action^="incident"]');
+                if (!button) return;
+
+                const incidentId = button.getAttribute('data-incident-id');
+                const action = button.getAttribute('data-action');
+
+                if (action === 'incident-detail') {
+                    this.openIncidentDetailModal(incidentId);
+                } else if (action === 'incident-confirm') {
+                    alert(`Đã xác nhận sự cố ${incidentId} (mô phỏng).`);
+                } else if (action === 'incident-close') {
+                    alert(`Đã đóng sự cố ${incidentId} (mô phỏng).`);
+                }
+            });
+        }
+
+        const incidentModal = document.getElementById('incident-detail-modal');
+        const incidentCloseBtn = document.getElementById('incident-detail-close');
+        if (incidentCloseBtn) {
+            incidentCloseBtn.onclick = () => this.closeIncidentDetailModal();
+        }
+        if (incidentModal) {
+            incidentModal.addEventListener('click', (event) => {
+                if (event.target === incidentModal) {
+                    this.closeIncidentDetailModal();
+                }
+            });
+        }
+    }
+
+    openAdminContentPreview(contentId) {
+        const modal = document.getElementById('admin-content-preview-modal');
+        const body = document.getElementById('admin-content-preview-body');
+        if (!modal || !body) return;
+
+        const data = this.getContentPreviewData(contentId);
+        if (!data) {
+            alert('Không tìm thấy bản nháp nội dung.');
+            return;
+        }
+
+        const attachments = data.attachments?.length
+            ? `<div class="preview-section">
+                    <h3>Tệp đính kèm</h3>
+                    <ul class="preview-attachments">
+                        ${data.attachments.map(file => `<li><i class="fa-solid fa-file-lines"></i> ${file}</li>`).join('')}
+                    </ul>
+               </div>`
+            : '';
+
+        const versionHistory = data.versionHistory?.length
+            ? `<div class="preview-section">
+                    <h3>Lịch sử chỉnh sửa</h3>
+                    <ul class="timeline">
+                        ${data.versionHistory.map(item => `<li><strong>${item.time}</strong><br>${item.note}</li>`).join('')}
+                    </ul>
+               </div>`
+            : '';
+
+        const notes = data.editorNotes?.length
+            ? `<div class="preview-section">
+                    <h3>Ghi chú từ biên tập</h3>
+                    <ul class="editor-notes">
+                        ${data.editorNotes.map(note => `<li>${note}</li>`).join('')}
+                    </ul>
+               </div>`
+            : '';
+
+        body.innerHTML = `
+            <div class="preview-header">
+                <div>
+                    <h2>${data.title}</h2>
+                    <p class="card-subtitle">Được gửi bởi ${data.author} • ${data.submittedAt}</p>
+                </div>
+                <span class="status-chip ${data.statusClass}">${data.statusLabel}</span>
+            </div>
+
+            <div class="preview-meta-grid">
+                <div>
+                    <span class="meta-label">Môn học</span>
+                    <span class="meta-value">${data.subject}</span>
+                </div>
+                <div>
+                    <span class="meta-label">Loại nội dung</span>
+                    <span class="meta-value">${data.type}</span>
+                </div>
+                <div>
+                    <span class="meta-label">Thời lượng</span>
+                    <span class="meta-value">${data.duration}</span>
+                </div>
+                <div>
+                    <span class="meta-label">Độ khó</span>
+                    <span class="meta-value">${data.level}</span>
+                </div>
+                <div>
+                    <span class="meta-label">Chương/Bài</span>
+                    <span class="meta-value">${data.module}</span>
+                </div>
+                <div>
+                    <span class="meta-label">Thẻ</span>
+                    <span class="meta-value">${data.tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}</span>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h3>Tóm tắt nội dung</h3>
+                <p>${data.summary}</p>
+            </div>
+
+            <div class="preview-section">
+                <h3>Nội dung mẫu</h3>
+                <div class="preview-body">${data.body}</div>
+            </div>
+
+            ${attachments}
+            ${versionHistory}
+            ${notes}
+
+            <div class="preview-actions">
+                <button class="btn btn-secondary" data-preview-action="reject">Từ chối</button>
+                <button class="btn btn-primary" data-preview-action="approve">Duyệt nội dung</button>
             </div>
         `;
+
+        const actionButtons = body.querySelectorAll('[data-preview-action]');
+        actionButtons.forEach(button => {
+            button.onclick = () => {
+                const action = button.getAttribute('data-preview-action');
+                if (action === 'approve') {
+                    alert('Đã duyệt nội dung (mô phỏng).');
+                } else {
+                    alert('Đã từ chối nội dung (mô phỏng).');
+                }
+                this.closeAdminContentPreview();
+            };
+        });
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeAdminContentPreview() {
+        const modal = document.getElementById('admin-content-preview-modal');
+        if (!modal) return;
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    getContentPreviewData(contentId = 'CONTENT-001') {
+        const dataset = {
+            'CONTENT-001': {
+                title: 'Giải tích hàm số - Bài giảng chi tiết',
+                author: 'Nguyễn Văn A',
+                submittedAt: '10/12/2024 09:15',
+                statusClass: 'pending',
+                statusLabel: 'Đang chờ duyệt',
+                subject: 'Toán',
+                type: 'Bài giảng Video + PDF',
+                duration: '45 phút',
+                level: 'Trung cấp',
+                module: 'Chương 3 - Ứng dụng đạo hàm',
+                tags: ['Đạo hàm', 'Cực trị', 'Ứng dụng'],
+                summary: 'Bài giảng giới thiệu các ứng dụng của đạo hàm trong việc tìm cực trị, xét tính đơn điệu và lập bảng biến thiên của hàm số. Nội dung đi kèm ví dụ minh hoạ, bài tập tự luyện và đáp án.',
+                body: `
+                    <p><strong>Mục tiêu học tập:</strong> Sau bài học, học sinh nắm được kỹ thuật xét dấu đạo hàm, tìm cực trị và dựng đồ thị hàm số bậc ba.</p>
+                    <p><strong>Cấu trúc bài:</strong></p>
+                    <ol>
+                        <li>Ôn tập nhanh khái niệm đạo hàm, bảng biến thiên.</li>
+                        <li>Ví dụ thực hành: Hàm bậc ba, hàm phân thức.</li>
+                        <li>Bài tập luyện tập có lời giải chi tiết.</li>
+                    </ol>
+                    <p><strong>Lưu ý:</strong> Video minh hoạ (15 phút đầu) + file PDF tổng hợp công thức (8 trang).</p>
+                `,
+                attachments: ['video_bai_giang.mp4', 'tong_hop_cong_thuc.pdf', 'bo_bai_tap_tu_luyen.docx'],
+                versionHistory: [
+                    { time: '10/12/2024 09:10', note: 'Giáo viên cập nhật thêm 5 bài tập mức vận dụng cao.' },
+                    { time: '09/12/2024 18:45', note: 'Bổ sung phần tổng kết cuối bài.' }
+                ],
+                editorNotes: [
+                    'Đề nghị kiểm tra lại phần minh hoạ đồ thị ở phút 08:30.',
+                    'Thêm phụ đề cho video để hỗ trợ học viên.'
+                ]
+            }
+        };
+
+        return dataset[contentId] || dataset['CONTENT-001'];
+    }
+
+    openIncidentDetailModal(incidentId = 'INC-20241210-01') {
+        const modal = document.getElementById('incident-detail-modal');
+        const body = document.getElementById('incident-detail-body');
+        if (!modal || !body) return;
+
+        const data = this.getIncidentDetailData(incidentId);
+        if (!data) {
+            alert('Không tìm thấy thông tin sự cố.');
+            return;
+        }
+
+        body.innerHTML = `
+            <div class="preview-header">
+                <div>
+                    <h2>Sự cố ${data.id}</h2>
+                    <p class="card-subtitle">${data.title}</p>
+                </div>
+                <span class="status-chip ${data.statusClass}">${data.status}</span>
+            </div>
+
+            <div class="incident-meta">
+                <div class="incident-meta-item">
+                    <span class="label">Mức độ</span>
+                    <span class="value">${data.severity}</span>
+                </div>
+                <div class="incident-meta-item">
+                    <span class="label">Dịch vụ ảnh hưởng</span>
+                    <span class="value">${data.service}</span>
+                </div>
+                <div class="incident-meta-item">
+                    <span class="label">Thời gian ghi nhận</span>
+                    <span class="value">${data.reportedAt}</span>
+                </div>
+                <div class="incident-meta-item">
+                    <span class="label">Người phụ trách</span>
+                    <span class="value">${data.assignee}</span>
+                </div>
+            </div>
+
+            <div class="incident-section">
+                <h3>Mô tả chi tiết</h3>
+                <p>${data.description}</p>
+            </div>
+
+            <div class="incident-section">
+                <h3>Tác động</h3>
+                <ul>
+                    ${data.impact.map(item => `<li>• ${item}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="incident-section">
+                <h3>Các bước xử lý</h3>
+                <ul>
+                    ${data.steps.map(item => `<li><strong>${item.time}</strong> - ${item.action}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="incident-section">
+                <h3>Khuyến nghị</h3>
+                <ul>
+                    ${data.recommendations.map(item => `<li>• ${item}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="incident-actions">
+                <button class="btn btn-secondary" data-action="incident-confirm" data-incident-id="${data.id}">Xác nhận</button>
+                <button class="btn btn-success" data-action="incident-close" data-incident-id="${data.id}">Đóng lỗi</button>
+            </div>
+        `;
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeIncidentDetailModal() {
+        const modal = document.getElementById('incident-detail-modal');
+        if (!modal) return;
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    getIncidentDetailData(incidentId = 'INC-20241210-01') {
+        const dataset = {
+            'INC-20241210-01': {
+                id: 'INC-20241210-01',
+                title: 'Lỗi đồng bộ điểm số',
+                status: 'Đang xử lý',
+                statusClass: 'pending',
+                severity: 'Critical',
+                service: 'API Đồng Bộ Điểm',
+                reportedAt: '10/12/2024 08:20',
+                assignee: 'Nguyễn Hoàng (DevOps)',
+                description: 'Hệ thống đồng bộ điểm giữa khoá học và bảng điểm tổng bị dừng do lỗi kết nối Redis. Một số điểm trung bình của học sinh chưa được cập nhật đúng.',
+                impact: [
+                    'Ảnh hưởng tới 320 học sinh khối 12.',
+                    'Bảng điểm cuối kỳ tạm thời hiển thị dữ liệu cũ.',
+                    'Giáo viên không thể xuất báo cáo điểm.'
+                ],
+                steps: [
+                    { time: '08:25', action: 'Phát hiện cảnh báo độ trễ từ hệ thống monitoring.' },
+                    { time: '08:30', action: 'Lock chức năng đồng bộ để tránh dữ liệu sai lệch.' },
+                    { time: '08:45', action: 'Khởi động lại cụm Redis và kiểm tra job đồng bộ.' }
+                ],
+                recommendations: [
+                    'Tăng số lượng instance dự phòng cho cụm Redis.',
+                    'Bổ sung cảnh báo khi job đồng bộ chậm hơn 2 phút.',
+                    'Gửi thông báo tới giáo viên và học sinh khi điểm được cập nhật.'
+                ]
+            },
+            'INC-20241208-04': {
+                id: 'INC-20241208-04',
+                title: 'Gateway thanh toán chậm',
+                status: 'Đã khôi phục',
+                statusClass: 'published',
+                severity: 'Major',
+                service: 'Gateway Thanh Toán VNPay',
+                reportedAt: '08/12/2024 21:05',
+                assignee: 'Trần Minh (Backend)',
+                description: 'VNPay bảo trì đột xuất dẫn tới thời gian phản hồi lâu. Một số giao dịch bị treo trạng thái chờ xác nhận.',
+                impact: [
+                    'Khoảng 45 giao dịch chờ xác nhận trong 15 phút.',
+                    'Học sinh không nhận được email xác nhận thanh toán ngay.'
+                ],
+                steps: [
+                    { time: '21:10', action: 'Liên hệ đầu mối VNPay để xác nhận bảo trì.' },
+                    { time: '21:15', action: 'Chuyển các giao dịch sang chế độ retry thủ công.' },
+                    { time: '21:30', action: 'Gửi thông báo tới học sinh bị ảnh hưởng.' }
+                ],
+                recommendations: [
+                    'Thiết lập kênh thông báo downtime của VNPay.',
+                    'Bổ sung giao diện theo dõi trạng thái giao dịch theo thời gian thực.'
+                ]
+            },
+            'INC-20241205-02': {
+                id: 'INC-20241205-02',
+                title: 'Lỗi hiển thị livestream',
+                status: 'Đã khắc phục',
+                statusClass: 'published',
+                severity: 'Minor',
+                service: 'Hệ thống Livestream',
+                reportedAt: '05/12/2024 19:40',
+                assignee: 'Lê Quỳnh (Frontend)',
+                description: 'Một số trình duyệt phiên bản cũ không tải được player livestream do thay đổi đường dẫn CDN.',
+                impact: [
+                    'Khoảng 30 học sinh không xem được livestream Toán.',
+                    'Số liệu thống kê viewer giảm tạm thời.'
+                ],
+                steps: [
+                    { time: '19:45', action: 'Rollback cấu hình CDN về phiên bản trước.' },
+                    { time: '19:50', action: 'Làm sạch cache CloudFront.' },
+                    { time: '20:00', action: 'Gửi hướng dẫn người dùng refresh trình duyệt.' }
+                ],
+                recommendations: [
+                    'Kiểm thử cross-browser trước khi cập nhật CDN.',
+                    'Thiết lập fallback player cho trình duyệt cũ.'
+                ]
+            }
+        };
+
+        return dataset[incidentId] || dataset['INC-20241210-01'];
     }
 
     getAdminStatistics() {
         return `
             <div class="dashboard-header">
-                <h1>Thống Kê Hệ Thống</h1>
+                <h1>Dashboard Doanh Thu</h1>
                 <p>Dashboard trực quan thể hiện thống kê về số lượng người dùng, lượt truy cập, doanh thu</p>
             </div>
             
@@ -2867,7 +3317,7 @@ class DashboardManager {
 
             <div class="card" style="margin-top: 20px;">
                 <h2 style="margin-bottom: 15px;">Nhật Ký Sự Cố</h2>
-                <table class="table">
+                <table class="table" data-admin-incident-table>
                     <thead>
                         <tr>
                             <th>Mã</th>
@@ -2875,6 +3325,7 @@ class DashboardManager {
                             <th>Mô Tả</th>
                             <th>Thời Gian</th>
                             <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -2884,6 +3335,13 @@ class DashboardManager {
                             <td>Lỗi đồng bộ điểm số</td>
                             <td>10/12/2024 08:20</td>
                             <td><span class="badge badge-warning">Đang xử lý</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-secondary" data-action="incident-detail" data-incident-id="INC-20241210-01">Xem chi tiết</button>
+                                    <button class="btn btn-sm btn-primary" data-action="incident-confirm" data-incident-id="INC-20241210-01">Xác nhận</button>
+                                    <button class="btn btn-sm btn-success" data-action="incident-close" data-incident-id="INC-20241210-01">Đóng lỗi</button>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>#INC-20241208-04</td>
@@ -2891,6 +3349,13 @@ class DashboardManager {
                             <td>Gateway thanh toán chậm</td>
                             <td>08/12/2024 21:05</td>
                             <td><span class="badge badge-success">Đã khôi phục</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-secondary" data-action="incident-detail" data-incident-id="INC-20241208-04">Xem chi tiết</button>
+                                    <button class="btn btn-sm btn-primary" data-action="incident-confirm" data-incident-id="INC-20241208-04">Xác nhận</button>
+                                    <button class="btn btn-sm btn-success" data-action="incident-close" data-incident-id="INC-20241208-04">Đóng lỗi</button>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>#INC-20241205-02</td>
@@ -2898,10 +3363,23 @@ class DashboardManager {
                             <td>Lỗi hiển thị livestream</td>
                             <td>05/12/2024 19:40</td>
                             <td><span class="badge badge-success">Đã khắc phục</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn btn-sm btn-secondary" data-action="incident-detail" data-incident-id="INC-20241205-02">Xem chi tiết</button>
+                                    <button class="btn btn-sm btn-primary" data-action="incident-confirm" data-incident-id="INC-20241205-02">Xác nhận</button>
+                                    <button class="btn btn-sm btn-success" data-action="incident-close" data-incident-id="INC-20241205-02">Đóng lỗi</button>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
                 <button class="btn btn-secondary" style="margin-top: 15px;">Xem nhật ký đầy đủ</button>
+            </div>
+            <div class="modal" id="incident-detail-modal" aria-hidden="true">
+                <div class="modal-content modal-xl">
+                    <button class="modal-close" id="incident-detail-close" aria-label="Đóng">&times;</button>
+                    <div id="incident-detail-body"></div>
+                </div>
             </div>
         `;
     }
@@ -3162,6 +3640,16 @@ function filterDashboard(subject) {
             card.style.display = 'none';
         }
     });
+}
+
+function downloadContent(title) {
+    alert(`Bắt đầu tải xuống nội dung "${title}" (mô phỏng).`);
+}
+
+function purchaseDashboardContent(title) {
+    if (confirm(`Bạn muốn mua nội dung "${title}"?`)) {
+        window.location.href = 'payment.html';
+    }
 }
 
 // Initialize dashboard when DOM is loaded

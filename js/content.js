@@ -435,7 +435,7 @@ class ContentManager {
                         </div>
                         <div class="action-buttons">
                             <button type="button" class="btn btn-sm btn-primary" onclick="viewContent(event, ${content.id})">Xem</button>
-                            ${content.price > 0 ? `<button type="button" class="btn btn-sm btn-secondary" onclick="purchaseContent(event, ${content.id})">Mua</button>` : ''}
+                            ${content.price > 0 ? `<button type="button" class="btn btn-sm btn-secondary" onclick="purchaseContent(event, ${content.id})">Mua</button>` : `<button type="button" class="btn btn-sm btn-secondary" onclick="downloadContentById(event, ${content.id})">Tải</button>`}
                         </div>
                     </div>
                 </div>
@@ -533,6 +533,14 @@ function purchaseContent(event, id) {
         alert('Đang chuyển đến trang thanh toán...');
         // In real app, redirect to payment page
     }
+}
+
+function downloadContentById(event, id) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    alert('Bắt đầu tải nội dung (mô phỏng).');
 }
 
 // Initialize when DOM is loaded

@@ -31,6 +31,7 @@ class ContentViewPage {
         this.renderOutline();
         this.renderInfoCards();
         this.setupActions();
+        this.setupReportModal();
     }
 
     redirectToListing() {
@@ -157,6 +158,12 @@ class ContentViewPage {
         const secondaryBtn = document.getElementById('secondary-action-btn');
         const actionTitle = document.getElementById('detail-action-title');
         const actionSubtitle = document.getElementById('detail-action-subtitle');
+        const downloadBtn = document.getElementById('download-action-btn');
+
+        if (downloadBtn) {
+            downloadBtn.style.display = 'none';
+            downloadBtn.onclick = null;
+        }
 
         if (secondaryBtn) {
             secondaryBtn.addEventListener('click', () => {
@@ -173,14 +180,23 @@ class ContentViewPage {
             actionTitle.textContent = 'Nội dung trả phí';
             actionSubtitle.textContent = 'Thanh toán để truy cập toàn bộ bài giảng và tài liệu.';
             primaryBtn.addEventListener('click', () => {
-                if (confirm('Bạn sẽ được chuyển đến trang thanh toán. Tiếp tục?')) {
-                    window.location.href = 'payment.html';
-                }
+                window.location.href = 'payment.html';
             });
+            if (downloadBtn) {
+                downloadBtn.style.display = 'none';
+            }
             return;
         }
 
         // Nội dung miễn phí
+        if (downloadBtn) {
+            downloadBtn.style.display = 'block';
+            downloadBtn.textContent = this.contentData.format === 'pdf'
+                ? 'Tải tài liệu'
+                : 'Tải nội dung';
+            downloadBtn.addEventListener('click', () => this.handleDownload());
+        }
+
         if (this.contentData.format === 'video') {
             primaryBtn.textContent = 'Phát video';
             primaryBtn.addEventListener('click', () => {
@@ -202,6 +218,122 @@ class ContentViewPage {
                 alert('Bắt đầu học nội dung này (prototype).');
             });
         }
+    }
+
+    handleDownload() {
+        if (!this.contentData) return;
+        alert(`Bắt đầu tải "${this.contentData.title}" (mô phỏng).`);
+    }
+
+    setupReportModal() {
+        this.reportButton = document.getElementById('report-action-btn');
+        this.reportModal = document.getElementById('content-report-modal');
+        this.reportCloseBtn = document.getElementById('content-report-close');
+        this.reportCancelBtn = document.getElementById('content-report-cancel');
+        this.reportForm = document.getElementById('content-report-form');
+        this.reportTypeSelect = document.getElementById('content-report-type');
+        this.reportDescription = document.getElementById('content-report-description');
+        this.reportContact = document.getElementById('content-report-contact');
+        this.reportSuccess = document.getElementById('content-report-success');
+        this.reportContentId = document.getElementById('content-report-id');
+        this.reportContentTitle = document.getElementById('content-report-content-title');
+
+        if (this.reportButton) {
+            this.reportButton.addEventListener('click', () => this.openReportModal());
+        }
+
+        if (this.reportCloseBtn) {
+            this.reportCloseBtn.addEventListener('click', () => this.closeReportModal());
+        }
+
+        if (this.reportCancelBtn) {
+            this.reportCancelBtn.addEventListener('click', () => this.closeReportModal());
+        }
+
+        if (this.reportModal) {
+            this.reportModal.addEventListener('click', (event) => {
+                if (event.target === this.reportModal) {
+                    this.closeReportModal();
+                }
+            });
+        }
+
+        if (this.reportForm) {
+            this.reportForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                this.submitReport();
+            });
+        }
+    }
+
+    openReportModal() {
+        if (!this.reportModal) return;
+
+        if (this.reportContentId) {
+            this.reportContentId.value = this.contentData ? this.contentData.id : '';
+        }
+
+        if (this.reportContentTitle) {
+            this.reportContentTitle.value = this.contentData ? this.contentData.title : '';
+        }
+
+        if (this.reportTypeSelect) {
+            this.reportTypeSelect.value = '';
+        }
+
+        if (this.reportDescription) {
+            this.reportDescription.value = '';
+        }
+
+        if (this.reportContact) {
+            this.reportContact.value = '';
+        }
+
+        if (this.reportSuccess) {
+            this.reportSuccess.style.display = 'none';
+        }
+
+        if (this.reportForm) {
+            this.reportForm.classList.remove('was-validated');
+        }
+
+        this.reportModal.classList.add('open');
+
+        if (this.reportTypeSelect) {
+            setTimeout(() => this.reportTypeSelect.focus(), 120);
+        }
+    }
+
+    closeReportModal() {
+        if (!this.reportModal) return;
+
+        this.reportModal.classList.remove('open');
+
+        if (this.reportForm) {
+            this.reportForm.reset();
+            this.reportForm.classList.remove('was-validated');
+        }
+
+        if (this.reportSuccess) {
+            this.reportSuccess.style.display = 'none';
+        }
+    }
+
+    submitReport() {
+        if (!this.reportForm) return;
+
+        if (!this.reportForm.checkValidity()) {
+            this.reportForm.classList.add('was-validated');
+            return;
+        }
+
+        if (this.reportSuccess) {
+            this.reportSuccess.style.display = 'block';
+        }
+
+        setTimeout(() => {
+            this.closeReportModal();
+        }, 1800);
     }
 
     generateOutline() {

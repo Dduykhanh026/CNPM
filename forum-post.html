@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Bài Viết Diễn Đàn - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="forum-detail" id="forum-post-root">
+            <div class="forum-main">
+                <div class="card" id="post-header"></div>
+                <div class="card" id="post-body"></div>
+                <div class="card" id="post-guidelines"></div>
+                <div class="card" id="reply-form"></div>
+                <div class="card" id="replies-wrapper">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Các Phản Hồi</h2>
+                            <p class="card-subtitle">Trao đổi và cập nhật liên tục cùng cộng đồng KH33.</p>
+                        </div>
+                    </div>
+                    <div id="replies-container"></div>
+                </div>
+            </div>
+            <aside class="forum-sidebar">
+                <div class="card" id="post-stats"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Hoạt Động Gần Đây</h2>
+                        </div>
+                    </div>
+                    <ul class="timeline" id="activity-timeline"></ul>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Bài Viết Liên Quan</h2>
+                        </div>
+                    </div>
+                    <div id="related-posts"></div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/forum.js"></script>
+    <script src="js/forum-post.js"></script>
+</body>
+</html>
+

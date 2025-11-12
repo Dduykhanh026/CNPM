@@ -2,6 +2,13 @@
 class TeacherRevenueManager {
     constructor() {
         this.dataset = this.buildDataset();
+        this.withdrawalState = {
+            step: 1,
+            request: null,
+            otp: null,
+            otpExpiresAt: null,
+            attempts: 0
+        };
         this.cacheDom();
         this.init();
     }
@@ -80,13 +87,7 @@ class TeacherRevenueManager {
             this.modalCloseBtn.addEventListener('click', () => this.closeModal());
         }
 
-        if (this.modal) {
-            this.modal.addEventListener('click', (event) => {
-                if (event.target === this.modal) {
-                    this.closeModal();
-                }
-            });
-        }
+        this.bindModalOverlayClose();
     }
 
     renderStats() {
@@ -165,53 +166,27 @@ class TeacherRevenueManager {
 
     openWithdrawalModal() {
         if (!this.modal || !this.modalBody) return;
-        this.modalBody.innerHTML = `
-            <h3>Tạo yêu cầu rút tiền</h3>
-            <p class="card-subtitle">Số dư khả dụng: ${this.formatCurrency(this.dataset.stats.balanceAvailable)}</p>
-            <form id="withdrawal-form" class="grid grid-2" style="margin-top: 16px;">
-                <div class="form-group">
-                    <label for="withdraw-amount">Số tiền</label>
-                    <input type="number" id="withdraw-amount" min="500000" step="50000" value="1000000" required>
-                </div>
-                <div class="form-group">
-                    <label for="withdraw-bank">Ngân hàng</label>
-                    <select id="withdraw-bank">
-                        <option value="vcb">Vietcombank - ****4567</option>
-                        <option value="mb">MB Bank - ****7890</option>
-                        <option value="tpb">TPBank - ****1234</option>
-                    </select>
-                </div>
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label for="withdraw-note">Ghi chú (tùy chọn)</label>
-                    <textarea id="withdraw-note" rows="3" placeholder="Thêm ghi chú cho bộ phận kế toán..."></textarea>
-                </div>
-                <div class="form-actions-inline" style="grid-column: 1 / -1;">
-                    <button type="button" class="btn btn-secondary" id="cancel-withdrawal">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
-                </div>
-            </form>
-        `;
-        this.modal.classList.add('open');
-        document.body.style.overflow = 'hidden';
-
-        const form = document.getElementById('withdrawal-form');
-        const cancelBtn = document.getElementById('cancel-withdrawal');
-        if (form) {
-            form.addEventListener('submit', (event) => {
-                event.preventDefault();
-                alert('Đã gửi yêu cầu rút tiền. Bộ phận kế toán sẽ xử lý trong 1-2 ngày làm việc (mô phỏng).');
-                this.closeModal();
-            });
-        }
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', () => this.closeModal());
-        }
+        this.withdrawalState = {
+            step: 1,
+            request: null,
+            otp: null,
+            otpExpiresAt: null,
+            attempts: 0
+        };
+        this.renderWithdrawalStep1();
     }
 
     closeModal() {
         if (!this.modal) return;
         this.modal.classList.remove('open');
         document.body.style.overflow = '';
+        this.withdrawalState = {
+            step: 1,
+            request: null,
+            otp: null,
+            otpExpiresAt: null,
+            attempts: 0
+        };
     }
 
     renderStatusChip(status) {
@@ -226,6 +201,228 @@ class TeacherRevenueManager {
 
     formatCurrency(value) {
         return value.toLocaleString('vi-VN') + ' VNĐ';
+    }
+
+    renderWithdrawalStep1() {
+        if (!this.modal || !this.modalBody) return;
+        this.modalBody.innerHTML = `
+            <div class="modal-step" data-step="1">
+                <h3>Tạo yêu cầu rút tiền</h3>
+                <p class="card-subtitle">Số dư khả dụng: ${this.formatCurrency(this.dataset.stats.balanceAvailable)}</p>
+                <form id="withdrawal-form-step1" class="grid grid-2" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label for="withdraw-amount">Số tiền</label>
+                        <input type="number" id="withdraw-amount" min="500000" step="50000" value="1000000" required>
+                        <small class="text-muted">Tối thiểu 500.000 VNĐ, tối đa toàn bộ số dư.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="withdraw-bank">Ngân hàng</label>
+                        <select id="withdraw-bank">
+                            <option value="vcb">Vietcombank - ****4567</option>
+                            <option value="mb">MB Bank - ****7890</option>
+                            <option value="tpb">TPBank - ****1234</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="withdraw-note">Ghi chú (tùy chọn)</label>
+                        <textarea id="withdraw-note" rows="3" placeholder="Thêm ghi chú cho bộ phận tài chính..."></textarea>
+                    </div>
+                    <div class="form-actions-inline" style="grid-column: 1 / -1;">
+                        <button type="button" class="btn btn-secondary" id="cancel-withdrawal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Tiếp tục</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        this.modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        this.bindWithdrawalStep1();
+    }
+
+    bindWithdrawalStep1() {
+        const form = document.getElementById('withdrawal-form-step1');
+        const cancelBtn = document.getElementById('cancel-withdrawal');
+        if (form) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const amount = Number(document.getElementById('withdraw-amount').value);
+                const bank = document.getElementById('withdraw-bank').value;
+                const note = document.getElementById('withdraw-note').value.trim();
+
+                if (!this.validateWithdrawalAmount(amount)) {
+                    alert('Số tiền rút không hợp lệ.');
+                    return;
+                }
+
+                this.withdrawalState.request = { amount, bank, note };
+                this.sendOtpForWithdrawal();
+                this.renderWithdrawalStep2();
+            });
+        }
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.closeModal());
+        }
+    }
+
+    renderWithdrawalStep2() {
+        if (!this.modal || !this.modalBody) return;
+        const maskedBank = this.maskBankAccount(this.withdrawalState.request.bank);
+        this.modalBody.innerHTML = `
+            <div class="modal-step" data-step="2">
+                <h3>Xác thực OTP</h3>
+                <p class="card-subtitle">Mã OTP đã được gửi tới số điện thoại/email đăng ký tài khoản giáo viên.</p>
+                <div class="alert alert-info">
+                    (Mô phỏng) Mã OTP của bạn là <strong>${this.withdrawalState.otp}</strong>. Mã hết hạn sau 2 phút.
+                </div>
+                <form id="withdrawal-form-step2" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label for="withdraw-otp">Nhập mã OTP gồm 6 chữ số</label>
+                        <input type="text" id="withdraw-otp" maxlength="6" pattern="\\d{6}" required placeholder="______">
+                        <small class="text-muted">Yêu cầu rút: ${this.formatCurrency(this.withdrawalState.request.amount)} tới ${maskedBank}</small>
+                    </div>
+                    <div class="form-actions-inline">
+                        <button type="button" class="btn btn-secondary" id="back-withdrawal">Quay lại</button>
+                        <button type="submit" class="btn btn-primary">Xác nhận OTP</button>
+                        <button type="button" class="btn btn-secondary" id="resend-otp">Gửi lại mã</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        this.bindWithdrawalStep2();
+    }
+
+    bindWithdrawalStep2() {
+        const form = document.getElementById('withdrawal-form-step2');
+        const backBtn = document.getElementById('back-withdrawal');
+        const resendBtn = document.getElementById('resend-otp');
+
+        if (form) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const inputOtp = document.getElementById('withdraw-otp').value.trim();
+
+                const validation = this.validateOtp(inputOtp);
+                if (!validation.valid) {
+                    alert(validation.message);
+                    return;
+                }
+
+                this.finalizeWithdrawal();
+                this.renderWithdrawalStep3();
+            });
+        }
+
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                this.renderWithdrawalStep1();
+            });
+        }
+
+        if (resendBtn) {
+            resendBtn.addEventListener('click', () => {
+                this.sendOtpForWithdrawal(true);
+                this.renderWithdrawalStep2();
+            });
+        }
+    }
+
+    renderWithdrawalStep3() {
+        if (!this.modal || !this.modalBody) return;
+        this.modalBody.innerHTML = `
+            <div class="modal-step" data-step="3">
+                <h3>Yêu cầu đã được gửi</h3>
+                <p class="card-subtitle">Bộ phận tài chính sẽ xử lý trong 1-2 ngày làm việc.</p>
+                <div class="alert alert-success">
+                    Tạo yêu cầu rút ${this.formatCurrency(this.withdrawalState.request.amount)} thành công. Mã OTP đã được xác thực.
+                </div>
+                <button class="btn btn-primary" id="close-withdrawal-success">Hoàn tất</button>
+            </div>
+        `;
+        const closeBtn = document.getElementById('close-withdrawal-success');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeModal();
+                this.refreshWithdrawalsHistory();
+            });
+        }
+    }
+
+    validateWithdrawalAmount(amount) {
+        return amount >= 500000 && amount <= this.dataset.stats.balanceAvailable;
+    }
+
+    sendOtpForWithdrawal(isResend = false) {
+        const otp = this.generateOtp();
+        const expiresAt = Date.now() + 2 * 60 * 1000; // 2 phút
+        this.withdrawalState.otp = otp;
+        this.withdrawalState.otpExpiresAt = expiresAt;
+        this.withdrawalState.attempts = 0;
+
+        if (isResend) {
+            alert('Đã gửi lại mã OTP. Vui lòng kiểm tra tin nhắn/email của bạn.');
+        }
+    }
+
+    generateOtp() {
+        return String(Math.floor(100000 + Math.random() * 900000));
+    }
+
+    validateOtp(inputOtp) {
+        if (!this.withdrawalState.otp || !this.withdrawalState.otpExpiresAt) {
+            return { valid: false, message: 'Chưa có mã OTP hợp lệ. Vui lòng yêu cầu lại.' };
+        }
+
+        if (Date.now() > this.withdrawalState.otpExpiresAt) {
+            return { valid: false, message: 'Mã OTP đã hết hạn. Vui lòng yêu cầu lại.' };
+        }
+
+        if (inputOtp !== this.withdrawalState.otp) {
+            this.withdrawalState.attempts += 1;
+            if (this.withdrawalState.attempts >= 3) {
+                this.sendOtpForWithdrawal(true);
+                return { valid: false, message: 'Bạn đã nhập sai quá 3 lần. Mã OTP mới đã được gửi lại.' };
+            }
+            return { valid: false, message: 'Mã OTP không chính xác. Vui lòng thử lại.' };
+        }
+
+        return { valid: true };
+    }
+
+    finalizeWithdrawal() {
+        this.dataset.withdrawals.unshift({
+            date: new Date().toLocaleDateString('vi-VN'),
+            amount: this.withdrawalState.request.amount,
+            bank: this.maskBankAccount(this.withdrawalState.request.bank),
+            status: 'Đang xử lý'
+        });
+
+        this.dataset.stats.balanceAvailable = Math.max(
+            0,
+            this.dataset.stats.balanceAvailable - this.withdrawalState.request.amount
+        );
+    }
+
+    refreshWithdrawalsHistory() {
+        this.renderWithdrawals();
+        this.renderStats();
+    }
+
+    maskBankAccount(code) {
+        const map = {
+            vcb: 'Vietcombank - ****4567',
+            mb: 'MB Bank - ****7890',
+            tpb: 'TPBank - ****1234'
+        };
+        return map[code] || 'Tài khoản ngân hàng';
+    }
+
+    bindModalOverlayClose() {
+        if (!this.modal) return;
+        this.modal.addEventListener('click', (event) => {
+            if (event.target === this.modal) {
+                this.closeModal();
+            }
+        });
     }
 }
 

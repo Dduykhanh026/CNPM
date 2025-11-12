@@ -197,7 +197,7 @@ class AuthManager {
 
         const activeBtn = document.querySelector(`[data-tab=\"${tabName}\"]`);
         const activeContent = document.getElementById(`${tabName}-tab`);
-
+        
         if (activeBtn) activeBtn.classList.add('active');
         if (activeContent) activeContent.classList.add('active');
     }
@@ -234,7 +234,7 @@ class AuthManager {
         this.currentUser = this.buildSessionUser(user);
         this.saveUser();
         this.showAlert('Đăng nhập thành công! Đang chuyển hướng...', 'success');
-
+        
         setTimeout(() => {
             window.location.href = `dashboard.html?role=${role}`;
         }, 900);
@@ -302,7 +302,7 @@ class AuthManager {
         this.currentUser = this.buildSessionUser(user);
         this.saveUser();
         this.showAlert('Đăng ký thành công! Đang chuyển hướng...', 'success');
-
+        
         setTimeout(() => {
             window.location.href = `dashboard.html?role=${role}`;
         }, 900);
@@ -565,7 +565,7 @@ class AuthManager {
         const saved = localStorage.getItem(this.storageKey);
         if (saved) {
             try {
-                this.currentUser = JSON.parse(saved);
+            this.currentUser = JSON.parse(saved);
             } catch (error) {
                 console.warn('Không thể tải thông tin phiên đăng nhập, thực hiện đăng xuất.', error);
                 this.logout();

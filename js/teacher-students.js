@@ -184,6 +184,7 @@ class TeacherStudentManager {
 
     init() {
         if (!this.root) return;
+        this.recalculateAggregates();
         this.renderStats();
         this.renderClassTable();
         this.populateClassFilter();
@@ -219,9 +220,16 @@ class TeacherStudentManager {
             this.studentTableBody.addEventListener('click', (event) => {
                 const button = event.target.closest('button[data-student]');
                 if (!button) return;
-                const student = this.dataset.students.find(item => item.id === button.dataset.student);
+                const studentId = button.dataset.student;
+                const action = button.dataset.action || 'view';
+                const student = this.dataset.students.find(item => item.id === studentId);
                 if (!student) return;
-                this.openStudentModal(student);
+
+                if (action === 'view') {
+                    this.openStudentModal(student);
+                } else if (action === 'delete') {
+                    this.removeStudent(student);
+                }
             });
         }
 
@@ -344,7 +352,10 @@ class TeacherStudentManager {
                 <td>${student.engagement}</td>
                 <td>${this.renderStudentStatus(student.status)}</td>
                 <td>
-                    <button class="btn btn-sm btn-secondary" data-student="${student.id}">Hồ sơ</button>
+                    <div class="table-actions">
+                        <button class="btn btn-sm btn-secondary" data-action="view" data-student="${student.id}">Hồ sơ</button>
+                        <button class="btn btn-sm btn-danger" data-action="delete" data-student="${student.id}">Xóa</button>
+                    </div>
                 </td>
             </tr>
         `).join('');
@@ -407,6 +418,81 @@ class TeacherStudentManager {
         if (!this.modal) return;
         this.modal.classList.remove('open');
         document.body.style.overflow = '';
+    }
+
+    removeStudent(student) {
+        if (!confirm(`Bạn có chắc chắn muốn xóa học sinh ${student.name}?`)) {
+            return;
+        }
+
+        this.dataset.students = this.dataset.students.filter(item => item.id !== student.id);
+        this.dataset.interventions = this.dataset.interventions.filter(item => item.student !== student.name);
+
+        this.recalculateAggregates();
+        const currentClass = this.filters.classId;
+        this.renderStats();
+        this.renderClassTable();
+        this.populateClassFilter(currentClass);
+        this.renderStudentTable();
+        this.renderTierDistribution();
+        this.renderInterventionList();
+        alert('Đã xóa học sinh khỏi danh sách (mô phỏng).');
+    }
+
+    recalculateAggregates() {
+        const students = this.dataset.students;
+        const total = students.length;
+
+        this.dataset.stats.totalStudents = total;
+        this.dataset.stats.onTrack = students.filter(s => s.status === 'ontrack').length;
+        this.dataset.stats.atRisk = total - this.dataset.stats.onTrack;
+        this.dataset.stats.classes = this.dataset.classes.length;
+
+        this.dataset.classes = this.dataset.classes.map(cls => {
+            const classStudents = students.filter(s => s.classId === cls.id);
+            const size = classStudents.length;
+            const avgScore = size
+                ? classStudents.reduce((sum, s) => sum + s.averageScore, 0) / size
+                : 0;
+            const avgProgress = size
+                ? Math.round(classStudents.reduce((sum, s) => sum + s.progress, 0) / size)
+                : 0;
+            const atRisk = classStudents.filter(s => s.status !== 'ontrack').length;
+            return {
+                ...cls,
+                size,
+                averageScore: Number(avgScore.toFixed(1)),
+                progress: avgProgress,
+                atRisk
+            };
+        });
+
+        this.dataset.tiers = this.calculateTierDistribution(students, total);
+    }
+
+    calculateTierDistribution(students, total) {
+        if (total === 0) {
+            return [
+                { name: 'Xuất sắc', percentage: 0, description: 'Điểm > 9.0, tiến độ > 90%' },
+                { name: 'Khá giỏi', percentage: 0, description: 'Điểm 7.5 - 9.0, tiến độ > 75%' },
+                { name: 'Đang đạt', percentage: 0, description: 'Điểm 6.5 - 7.5, cần duy trì' },
+                { name: 'Cần chú ý', percentage: 0, description: 'Điểm < 6.5 hoặc tiến độ < 60%' }
+            ];
+        }
+
+        const excellent = students.filter(s => s.averageScore > 9 && s.progress > 90).length;
+        const good = students.filter(s => s.averageScore > 7.5 && s.averageScore <= 9 && s.progress > 75).length;
+        const average = students.filter(s => s.averageScore >= 6.5 && s.averageScore <= 7.5).length;
+        const attention = students.filter(s => s.averageScore < 6.5 || s.progress < 60).length;
+
+        const toPercent = (value) => Math.round((value / total) * 100);
+
+        return [
+            { name: 'Xuất sắc', percentage: toPercent(excellent), description: 'Điểm > 9.0, tiến độ > 90%' },
+            { name: 'Khá giỏi', percentage: toPercent(good), description: 'Điểm 7.5 - 9.0, tiến độ > 75%' },
+            { name: 'Đang đạt', percentage: toPercent(average), description: 'Điểm 6.5 - 7.5, cần duy trì' },
+            { name: 'Cần chú ý', percentage: toPercent(attention), description: 'Điểm < 6.5 hoặc tiến độ < 60%' }
+        ];
     }
 
     renderStudentStatus(status) {
