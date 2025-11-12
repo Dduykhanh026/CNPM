@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Học Sinh - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Giáo Viên</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="teacher-students-root">
+        <div class="dashboard-header">
+            <h1>Quản Lý Học Sinh</h1>
+            <p>Quản lý danh sách lớp, theo dõi tiến độ, mức độ tham gia và can thiệp kịp thời.</p>
+        </div>
+
+        <div class="stats-grid" id="teacher-students-stats"></div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Lớp & Nhóm Học Tập</h2>
+                    <p class="card-subtitle">Tổng quan các lớp hiện tại, sĩ số, tỉ lệ hoàn thành nội dung.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <button class="btn btn-secondary" id="import-students">Import danh sách</button>
+                    <button class="btn btn-primary" id="add-student-group">Tạo lớp mới</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Lớp/Nhóm</th>
+                            <th>Sĩ số</th>
+                            <th>Tiến độ trung bình</th>
+                            <th>Điểm trung bình</th>
+                            <th>Học sinh rủi ro</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacher-class-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Danh Sách Học Sinh</h2>
+                    <p class="card-subtitle">Lọc theo lớp, mức độ hoàn thành hoặc cảnh báo để can thiệp.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <select id="student-filter-class"></select>
+                    <select id="student-filter-status">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="ontrack">Đang đạt</option>
+                        <option value="warning">Cần chú ý</option>
+                        <option value="critical">Nguy cơ cao</option>
+                    </select>
+                    <input type="search" id="student-search" placeholder="Tìm theo tên, mã học sinh...">
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Học sinh</th>
+                            <th>Lớp</th>
+                            <th>Điểm trung bình</th>
+                            <th>Tiến độ</th>
+                            <th>Mức độ tham gia</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacher-student-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Phân Tầng Học Lực</h2>
+                        <p class="card-subtitle">Nhóm học sinh theo mức độ để cá nhân hóa nội dung.</p>
+                    </div>
+                </div>
+                <div id="tier-distribution"></div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Học Sinh Cần Can Thiệp</h2>
+                        <p class="card-subtitle">Danh sách học sinh có tín hiệu cần hỗ trợ sớm.</p>
+                    </div>
+                </div>
+                <div id="intervention-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="teacher-students-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="teacher-students-modal-close" aria-label="Đóng">&times;</button>
+            <div id="teacher-students-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/teacher-students.js"></script>
+</body>
+</html>
+

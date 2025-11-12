@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hỗ Trợ & Báo Cáo - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="support-root">
+        <div class="dashboard-header">
+            <h1>Trung Tâm Hỗ Trợ</h1>
+            <p>Báo cáo lỗi nội dung, theo dõi xử lý và truy cập kho hướng dẫn tự học.</p>
+        </div>
+
+        <div class="stats-grid" id="support-stats"></div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Gửi Báo Cáo / Yêu Cầu Hỗ Trợ</h2>
+                        <p class="card-subtitle">Cung cấp chi tiết để đội ngũ dễ dàng xử lý.</p>
+                    </div>
+                    <div class="card-actions-inline">
+                        <button class="btn btn-secondary" id="load-draft-report">Mở bản nháp gần đây</button>
+                    </div>
+                </div>
+                <form id="support-form" class="grid grid-2">
+                    <div class="form-group">
+                        <label for="support-title">Tiêu đề</label>
+                        <input type="text" id="support-title" placeholder="Ví dụ: Lỗi hiển thị công thức bài giảng Toán">
+                    </div>
+                    <div class="form-group">
+                        <label for="support-category">Danh mục</label>
+                        <select id="support-category">
+                            <option value="content">Nội dung bài giảng</option>
+                            <option value="exercise">Đề/đáp án bài tập</option>
+                            <option value="payment">Thanh toán</option>
+                            <option value="system">Lỗi hệ thống</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="support-priority">Mức độ ưu tiên</label>
+                        <select id="support-priority">
+                            <option value="low">Thấp</option>
+                            <option value="medium">Trung bình</option>
+                            <option value="high">Cao</option>
+                            <option value="urgent">Khẩn cấp</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="support-related-link">Liên kết liên quan</label>
+                        <input type="url" id="support-related-link" placeholder="Dán link bài giảng/bài tập nếu có">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="support-description">Mô tả chi tiết</label>
+                        <textarea id="support-description" rows="4" placeholder="Trình bày cụ thể vấn đề gặp phải..."></textarea>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="support-attachments">Minh chứng (tùy chọn)</label>
+                        <input type="file" id="support-attachments" multiple>
+                        <small class="text-muted">Chấp nhận ảnh (PNG/JPG) hoặc PDF dưới 5MB.</small>
+                    </div>
+                    <div class="form-actions-inline" style="grid-column: 1 / -1;">
+                        <button type="button" class="btn btn-secondary" id="save-draft-support">Lưu bản nháp</button>
+                        <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
+                    </div>
+                </form>
+                <div id="support-form-alert"></div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Kho Kiến Thức Nhanh</h2>
+                        <p class="card-subtitle">Hướng dẫn xử lý các tình huống phổ biến.</p>
+                    </div>
+                </div>
+                <div id="knowledge-base"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Danh Sách Báo Cáo</h2>
+                    <p class="card-subtitle">Theo dõi trạng thái xử lý và trao đổi với đội ngũ hỗ trợ.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <select id="support-filter-status">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="open">Đang xử lý</option>
+                        <option value="pending">Chờ phản hồi</option>
+                        <option value="resolved">Đã giải quyết</option>
+                    </select>
+                    <input type="search" id="support-search" placeholder="Tìm theo tiêu đề, mã yêu cầu...">
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã yêu cầu</th>
+                            <th>Tiêu đề</th>
+                            <th>Loại</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày cập nhật</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="support-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="support-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="support-modal-close" aria-label="Đóng">&times;</button>
+            <div id="support-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/support.js"></script>
+</body>
+</html>
+

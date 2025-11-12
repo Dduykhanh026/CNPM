@@ -1,4 +1,4 @@
-# Nền Tảng Học Trực Tuyến - Toán, Vật Lý, Hóa Học
+# KH33 - Toán, Vật Lý, Hóa Học
 
 ## Mô Tả Dự Án
 

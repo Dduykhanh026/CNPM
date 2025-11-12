@@ -38,7 +38,7 @@ class ContentViewPage {
     }
 
     updatePageMeta() {
-        document.title = `${this.contentData.title} - Nền Tảng Học Trực Tuyến`;
+        document.title = `${this.contentData.title} - KH33`;
     }
 
     renderBadges() {

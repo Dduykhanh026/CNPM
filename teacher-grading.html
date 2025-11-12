@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chấm Bài & Phản Hồi - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Giáo Viên</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="teacher-grading-root">
+        <div class="dashboard-header">
+            <h1>Chấm Bài & Phản Hồi</h1>
+            <p>Quản lý bài nộp, áp dụng rubrics và gửi phản hồi chi tiết cho học sinh.</p>
+        </div>
+
+        <div class="stats-grid" id="grading-stats"></div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Hàng Đợi Chấm Bài</h2>
+                    <p class="card-subtitle">Ưu tiên dựa trên deadline và mức độ ưu tiên của lớp học.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <select id="grading-filter-type">
+                        <option value="all">Tất cả dạng bài</option>
+                        <option value="essay">Tự luận</option>
+                        <option value="quiz">Trắc nghiệm</option>
+                        <option value="project">Dự án</option>
+                    </select>
+                    <select id="grading-filter-priority">
+                        <option value="all">Tất cả ưu tiên</option>
+                        <option value="high">Ưu tiên cao</option>
+                        <option value="normal">Ưu tiên thường</option>
+                        <option value="low">Ưu tiên thấp</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Bài nộp</th>
+                            <th>Lớp</th>
+                            <th>Học sinh</th>
+                            <th>Thời hạn</th>
+                            <th>Ưu tiên</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grading-queue-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Rubrics Chấm Điểm</h2>
+                        <p class="card-subtitle">Tiêu chí đánh giá được cấu hình theo từng dạng bài.</p>
+                    </div>
+                </div>
+                <div id="rubric-list"></div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Phản Hồi Gần Đây</h2>
+                        <p class="card-subtitle">Theo dõi phản hồi đã gửi và mức độ hài lòng của học sinh.</p>
+                    </div>
+                </div>
+                <div id="recent-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="grading-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="grading-modal-close" aria-label="Đóng">&times;</button>
+            <div id="grading-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/teacher-grading.js"></script>
+</body>
+</html>
+

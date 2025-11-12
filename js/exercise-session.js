@@ -38,7 +38,7 @@ class ExerciseSessionPage {
 
     updateMetaInfo() {
         const { title, subject, difficulty, type, duration, questions } = this.exerciseData;
-        document.title = `${title} - Nền Tảng Học Trực Tuyến`;
+        document.title = `${title} - KH33`;
 
         this.setText('exercise-title', title);
         this.setText('exercise-subject-badge', subject);

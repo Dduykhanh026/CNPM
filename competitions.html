@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuộc Thi & Thi Đua - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="competitions-root">
+        <div class="dashboard-header">
+            <h1>Thi Đua & Cuộc Thi</h1>
+            <p>Kết nối các sân chơi học thuật, theo dõi bảng xếp hạng và thành tích cá nhân.</p>
+        </div>
+
+        <div class="stats-grid" id="competition-stats"></div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Cuộc Thi Đang Mở</h2>
+                    <p class="card-subtitle">Chọn cuộc thi phù hợp và đăng ký để tích lũy huy chương, điểm thưởng.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <select id="competition-filter-status">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="open">Đang mở</option>
+                        <option value="ongoing">Đang diễn ra</option>
+                        <option value="completed">Đã hoàn thành</option>
+                    </select>
+                    <select id="competition-filter-subject">
+                        <option value="all">Tất cả bộ môn</option>
+                        <option value="math">Toán</option>
+                        <option value="physics">Vật Lý</option>
+                        <option value="chemistry">Hóa Học</option>
+                    </select>
+                    <input type="search" id="competition-search" placeholder="Tìm theo tên cuộc thi hoặc mã">
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cuộc thi</th>
+                            <th>Môn</th>
+                            <th>Hình thức</th>
+                            <th>Lịch trình</th>
+                            <th>Giải thưởng</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="competition-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Cuộc Thi Của Tôi</h2>
+                        <p class="card-subtitle">Theo dõi tiến độ từng vòng đấu và lịch thi của các cuộc thi đã đăng ký.</p>
+                    </div>
+                </div>
+                <div id="my-competitions"></div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Bảng Xếp Hạng Tổng</h2>
+                        <p class="card-subtitle">Điểm tích lũy theo mùa giải hiện tại. Top 10 sẽ nhận huy hiệu đặc biệt.</p>
+                    </div>
+                    <div class="card-actions-inline">
+                        <select id="leaderboard-filter">
+                            <option value="all">Tất cả môn</option>
+                            <option value="math">Toán</option>
+                            <option value="physics">Vật Lý</option>
+                            <option value="chemistry">Hóa Học</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Hạng</th>
+                                <th>Thí Sinh</th>
+                                <th>Lớp</th>
+                                <th>Môn mạnh</th>
+                                <th>Điểm</th>
+                                <th>Huy chương</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Lịch Thi Chi Tiết</h2>
+                    <p class="card-subtitle">Mốc thời gian của các vòng đấu, nhận thông báo tự động ngay khi có cập nhật.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <button class="btn btn-secondary" id="subscribe-competition-updates">Bật nhắc lịch</button>
+                </div>
+            </div>
+            <ul class="timeline" id="competition-timeline"></ul>
+        </div>
+    </div>
+
+    <div class="modal" id="competition-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="competition-modal-close" aria-label="Đóng">&times;</button>
+            <div id="competition-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/competitions.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,631 @@
+Xây dựng nền tảng học trực tuyến Toán, Vật Lý và Hóa học cho học sinh trung học
+
+
+Software Requirements Specification
+Version 1.0
+
+
+MỤC LỤC
+
+DOCUMENT HISTORY
+
+
+REFERENCE DOCUMENTS
+
+
+     
+DISTRIBUTION LIST AND APPROVALS
+
+
+INTRODUCTION
+Purpose
+Tài liệu Software Requirements Specification (SRS) này mô tả một cách chi tiết, đầy đủ và thống nhất các yêu cầu cho hệ thống “Nền tảng học trực tuyến Toán, Vật lý và Hóa học cho học sinh trung học”.
+Mục đích của tài liệu:
+Xác định rõ các chức năng cốt lõi, yêu cầu phi chức năng, ràng buộc hệ thống, giao diện tổng quan và tương tác với các hệ thống/bên thứ ba (nếu có).
+Làm cơ sở cho các hoạt động:
+Phân tích, thiết kế kiến trúc và cơ sở dữ liệu.
+Phát triển, kiểm thử, triển khai và bảo trì hệ thống.
+Đảm bảo các bên liên quan (khách hàng/nhà trường, giáo viên, học sinh, nhóm phát triển, nhóm kiểm thử) có nhận thức thống nhất về phạm vi và hành vi của hệ thống.
+Hỗ trợ quá trình xem xét, góp ý, điều chỉnh yêu cầu với khách hàng trước khi triển khai, hạn chế hiểu sai, thiếu sót hoặc phát sinh ngoài phạm vi.
+
+In scope
+Phạm vi của hệ thống trong tài liệu này bao gồm:
+Đối tượng sử dụng
+Admin
+Quản lý tài khoản (giáo viên, học sinh).
+Quản lý phân quyền, cấu hình hệ thống, danh mục môn học, lớp học.
+Quản lý nội dung vi phạm, báo cáo, log hoạt động.
+Giáo viên
+Tạo, chỉnh sửa, quản lý khóa học và lớp học trực tuyến.
+Tải lên và quản lý nội dung bài giảng (video, tài liệu, bài tập, đề kiểm tra).
+Tạo đề, cấu hình bài kiểm tra trắc nghiệm/tự luận, chấm điểm (nếu cần), xem kết quả và thống kê học tập.
+Tương tác với học sinh qua hệ thống (thông báo, diễn đàn/lớp, khung chat nhóm/bình luận trong lớp học).
+Học sinh
+Đăng ký/ghi danh lớp học được phân quyền hoặc cho phép.
+Truy cập nội dung học tập môn Toán, Vật lý, Hóa học.
+Làm bài tập, bài kiểm tra online; xem kết quả và tiến độ học tập.
+Tương tác với giáo viên (hỏi đáp trong phạm vi lớp, nhận thông báo).
+Phạm vi chức năng
+Quản lý người dùng (đăng ký, đăng nhập, quên mật khẩu, cập nhật thông tin cơ bản).
+Quản lý khóa học, lớp học, nội dung bài giảng cho 3 môn: Toán, Vật lý, Hóa học ở bậc trung học.
+Quản lý bài kiểm tra:
+Tạo đề, cấu hình thời gian, số câu hỏi.
+Chấm điểm tự động cho trắc nghiệm, lưu kết quả.
+Thống kê & báo cáo cơ bản:
+Thống kê kết quả học tập của học sinh theo khóa học/lớp.
+Thống kê số lượng học sinh tham gia khóa học.
+Quản lý thông báo và kênh trao đổi trong hệ thống (thông báo từ Admin/giáo viên, trao đổi trong lớp học).
+Hệ thống chạy trên nền web, hỗ trợ truy cập bằng trình duyệt phổ biến.
+Out of Scope (Ngoài phạm vi)
+Các chức năng sau không nằm trong phạm vi của phiên bản hệ thống được mô tả trong tài liệu này (trừ khi có tài liệu bổ sung riêng):
+Hỗ trợ tất cả môn học khác ngoài Toán, Vật lý, Hóa học.
+Tích hợp thanh toán học phí online, ví điện tử, ngân hàng.
+Ứng dụng di động native (Android/iOS) riêng biệt (chỉ hỗ trợ web).
+Tự động xếp thời khóa biểu phức tạp của toàn trường.
+Hệ thống thi offline, quét bài giấy, nhận dạng chữ viết tay.
+Tích hợp sâu với SIS/LMS hiện có của nhà trường (chỉ dừng ở mức có thể mở rộng trong tương lai).
+Các tính năng mạng xã hội nâng cao (kết bạn, newsfeed, livestream ngoài phạm vi lớp học).
+Các cơ chế AI chấm bài tự luận nâng cao (nếu có sẽ được đặc tả trong tài liệu khác).
+                      
+OVERVIEW
+Actors
+
+System Use Case Diagram
+Sơ đồ sau đây cung cấp một cái nhìn tổng quan về các nhóm chức năng, tác nhân tham gia vào Xây dựng nền tảng học trực tuyến Toán, Vật Lý và Hóa học cho học sinh trung học: 
+Học sinh
+Quản lí tài  khoản
+
+Làm bài tập
+
+Tham gia bài kiểm tra
+
+Theo dõi tiến độ học tập
+
+
+Diễn đàn và Tương tác với giáo viên
+
+ Tìm kiếm và tải nội dung học tập
+
+Thi đua học tập
+
+
+Nạp tiền vào tài khoản
+
+
+Báo cáo lỗi /  nội dung sai
+
+Nhận thông báo qua email/SMS về deadline, lịch học, bài kiểm tra
+
+Giáo viên
+Quản lý nội dung
+
+
+
+
+
+
+
+
+
+
+
+Quản lý học sinh
+
+Chấm bài và phản hồi
+
+Tạo lịch học/bài kiểm tra
+
+Tương tác với học sinh
+
+Cá nhân hóa nội dung
+
+Trao đổi nhóm với nhiều học sinh cùng lúc
+
+Quản lý phản hồi học sinh, xử lý khiếu nại về nội dung giảng dạy
+
+
+Theo dõi doanh thu từ đề đã bán và rút tiền
+
+Admin
+Quản lý tài khoản
+5.2.3.1.1 Quản lý thông tin cá nhân
+
+				5.2.3.1.2 Quản lý tài khoản User
+
+Quản lý nội dung
+
+Quản lý quyền truy cập
+
+Phân tích dữ liệu hệ thống và quản lý giao dịch, doanh thu
+
+Giám sát lỗi hệ thống
+
+Quản lý thông báo toàn hệ thống
+
+FUNCTIONAL DESCRIPTION
+Học sinh
+Quản lý tài khoản cá nhân
+
+
+6.1.1.1 Đăng nhập
+
+
+
+
+6.1.1.2 Đăng ký
+   
+
+
+
+
+  
+                       6.1.1.3 Khôi phục tài khoản 
+                         6.1.1.3.1 Tìm tài khoản
+
+
+
+                         6.1.1.3.2 Xác thực OTP
+
+
+ 
+                  6.1.1.4 Đổi mật khẩu
+
+
+ 
+                   5.1.1.5 Xem chi tiết thông tin cá nhân
+
+
+
+Truy cập nội dung học tập
+
+
+6.1.2.1 Trang chủ 
+
+
+                6.1.2.2 Bài giảng
+
+
+                      6.1.2.3 Bài tập 
+
+
+
+                  6.1.2.4 Đánh giá 
+
+
+
+
+
+Làm bài tập
+
+
+Tham gia bài kiểm tra
+
+Theo dõi tiến độ học tập
+
+Tương tác với giáo viên
+
+ Tìm kiếm nội dung học tập
+Thi đua học tập
+
+
+
+
+
+
+
+Xem, tìm kiếm và đăng ký cuộc thi đấu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Xem, tìm kiếm cuộc thi đã đăng ký 
+
+
+
+
+Tham gia cuộc thi
+
+
+
+
+
+
+Làm bài thi trong vòng thi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Xem kết quả vòng đấu
+
+
+
+Xem xếp kết quả cuộc thi
+
+
+
+
+
+Mua và Tải tài liệu lý thuyết và bài tập
+
+
+
+
+
+
+
+Mua & tải tài liệu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Đánh giá và tải tài liệu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Diễn đàn trao đổi
+Hiển thị các câu hỏi
+
+
+
+
+Xem câu hỏi và trả lời
+
+
+
+
+
+Chỉnh sửa câu trả lời
+
+
+
+
+
+Xóa câu trả lời
+
+
+
+
+	
+Đặt câu hỏi
+
+
+
+	
+Xem livestream 
+
+
+
+
+
+
+
+
+
+
+
+
+Nạp tiền vào tài khoản
+
+
+
+Báo cáo lỗi /  nội dung sai
+
+Nhận thông báo qua email/SMS về deadline, lịch học, bài kiểm tra
+
+Giáo viên
+Quản lý tài khoản cá nhân
+
+
+
+6.2.1.1 Đăng nhập.
+
+
+
+
+                           5.2.1.2 Chỉnh sửa mật khẩu
+
+
+
+
+6.2.1.3 Khôi phục tài khoản
+ 6.2.1.3.1 Tìm tài khoản
+
+
+
+ 6.2.1.3.2 Xác thực OTP
+
+
+
+6.2.1.4 Xem chi tiết thông tin
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       6.2.2 .Quản lí nội dung
+              6.2.2.1 Tìm kiếm nội dung 
+
+
+                 5.2.2.2 Tải lên bài giảng
+
+
+
+
+     
+             5.2.2.3 Tạo bài kiểm tra hoặc bộ đề
+
+ 
+             5.2.2.4 Cập nhật / sửa/ xoá các bài giảng bộ đề 
+
+
+
+
+
+ 
+             
+
+
+ 5.2.2.5 Ẩn bài giảng
+
+ 
+
+
+Quản lý học sinh
+                     5.2.3.1 Xem danh sách học sinh
+
+ 
+                 5.2.3.2 Theo dõi điểm số 
+
+ 
+               5.2.3.4 Theo dõi tiến độ học tập
+
+  
+
+     
+
+
+
+  5.2.3.5  Theo dõi mức độ tham gia
+ 
+
+ 
+  
+
+   5.2.3.6 Thêm hoặc xoá học sinh
+
+
+
+
+ 
+
+Chấm bài và phản hồi
+                              5.2.4.1 Chấm bài 
+
+
+  
+                 5.2.4.2 Nhận xét bài làm và giải đáp thắc mắc 
+
+
+
+ 
+ 
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+Tạo lịch học/bài kiểm tra
+
+Cá nhân hóa nội dung
+
+Trao đổi nhóm với nhiều học sinh cùng lúc
+
+
+
+
+
+Quản lý phản hồi học sinh, xử lý khiếu nại về nội dung giảng dạy
+
+
+
+
+Theo dõi doanh thu từ đề đã bán 
+
+ 
+
+Admin
+Quản lý tài khoản
+6.3.1.1. Quản lý thông tin cá nhân
+6.3.1.1.1 Đăng nhập
+
+	
+ 6.3.1.1.2 Chỉnh sửa mật khẩu
+
+
+
+
+
+ 			6.3.1.2. Quản lý tài khoản user
+ 
+6.3.1.2.1 Hiển thị danh sách tài khoản
+
+
+
+6.3.1.2.2 Tạo tài khoản
+
+
+6.3.1.2.3 Chỉnh sửa tài khoản
+
+
+
+6.3.1.2.4 Xóa tài khoản
+
+
+
+Quản lý nội dung
+
+
+6.3.2.1 Danh sách nội dung
+
+
+
+
+			6.3.2.2 Xóa nội dung
+
+
+ 
+
+
+			6.3.2.3 Xem chi tiết/ chỉnh sửa
+
+ 
+ 
+
+
+			6.3.2.4 Phê duyệt nội dung
+
+Quản lý quyền truy cập
+
+
+6.3.3.1 Hiển thị danh sách vai trò
+
+
+
+
+			6.3.3.2 Xóa vai trò
+
+
+
+
+			6.3.3.3 Chỉnh sửa vai trò
+
+
+
+
+			6.3.3.4  Tạo vai trò 
+
+
+
+
+			6.3.3.5  Ma trận quyền 
+ 
+
+
+6.3.3.6  Audit log
+
+
+
+Phân tích dữ liệu hệ thống và quản lý giao dịch, doanh thu
+6.3.4.1 Dashboard doanh thu
+
+
+
+6.3.4.2 Giao dịch
+
+
+
+
+Giám sát lỗi hệ thống
+
+
+6.3.5.1 Danh sách lỗi hệ thống
+
+
+		6.3.5.2 Đóng lỗi
+
+
+		6.3.5.3 Xác nhận lỗi 
+
+
+		6.3.5.4 Xem chi tiết 
+
+
+Quản lý thông báo toàn hệ thống
+
+
+		6.3.6.1 Thông báo toàn hệ thống
+
+
+
+6.3.6.2 Xóa thông báo
+
+
+
+6.3.6.3 Tạo thông báo 
+
+
+
+6.3.6.4 Chỉnh sửa thông báo
+
+
+
+NON-FUNCTIONAL REQUIREMENTS AND OTHERS
+Performance
+
+Scalability
+Security
+Browser
+Reliability
+Interfaces
+Assumptions

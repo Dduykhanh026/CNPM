@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Tâm Kỳ Thi - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="tests-root">
+        <div class="dashboard-header">
+            <h1>Trung Tâm Kỳ Thi</h1>
+            <p>Theo dõi lịch thi, làm bài trực tuyến và quản lý kết quả tại một nơi.</p>
+        </div>
+
+        <div class="stats-grid" id="tests-stats"></div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Kỳ Thi Sắp Diễn Ra</h2>
+                    <p class="card-subtitle">Đăng ký, xem hướng dẫn và bắt đầu làm bài trực tuyến theo thời gian quy định.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <select id="tests-filter-status">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="registered">Đã đăng ký</option>
+                        <option value="available">Mở đăng ký</option>
+                        <option value="closed">Đã khóa</option>
+                    </select>
+                    <select id="tests-filter-subject">
+                        <option value="all">Tất cả môn</option>
+                        <option value="math">Toán</option>
+                        <option value="physics">Vật Lý</option>
+                        <option value="chemistry">Hóa Học</option>
+                    </select>
+                    <input type="search" id="tests-search" placeholder="Tìm theo tên kỳ thi, mã thi...">
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Kỳ Thi</th>
+                            <th>Môn</th>
+                            <th>Hình Thức</th>
+                            <th>Thời Gian</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcoming-tests-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-2" id="active-assessment-region">
+            <div class="card" id="active-assessment-card">
+                <h2 class="card-title">Phiên Thi Đang Mở</h2>
+                <p class="card-subtitle">Tiếp tục làm bài hoặc xem lại hướng dẫn trước khi nộp.</p>
+                <div id="active-assessment-content"></div>
+            </div>
+            <div class="card">
+                <h2 class="card-title">Ghi Chú & Chuẩn Bị</h2>
+                <ul class="timeline" id="assessment-prep-timeline"></ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Lịch Sử Kết Quả</h2>
+                    <p class="card-subtitle">Xem lại điểm số, thống kê và tải chứng nhận cho các kỳ thi đã hoàn thành.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <button class="btn btn-secondary" id="export-history-btn">Xuất báo cáo PDF</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã Thi</th>
+                            <th>Kỳ Thi</th>
+                            <th>Môn</th>
+                            <th>Điểm</th>
+                            <th>Xếp Loại</th>
+                            <th>Ngày Thi</th>
+                            <th>Chứng Chỉ</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Khuyến Nghị Ôn Tập</h2>
+                    <p class="card-subtitle">Tổng hợp nội dung đề xuất dựa trên kết quả và năng lực hiện tại.</p>
+                </div>
+            </div>
+            <div id="revision-recommendations" class="grid grid-3"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="assessment-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="assessment-modal-close" aria-label="Đóng">&times;</button>
+            <div id="assessment-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/tests.js"></script>
+</body>
+</html>
+

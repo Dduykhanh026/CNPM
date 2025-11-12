@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo">Nền Tảng Học Trực Tuyến</div>
+            <div class="nav-logo">KH33</div>
             <ul class="nav-menu" id="nav-menu"></ul>
             <div class="nav-user">
                 <div class="user-avatar" id="user-avatar">U</div>
@@ -26,70 +26,215 @@
     <div class="container">
         <div class="dashboard-header">
             <h1>Quản Lý Nội Dung</h1>
-            <p>Tải lên bài giảng, tạo bài tập, bài kiểm tra, bộ đề có phí hoặc miễn phí</p>
+            <p>Tải lên bài giảng, tạo bài tập, bài kiểm tra, bộ đề có phí hoặc miễn phí và theo dõi hiệu quả xuất bản.</p>
         </div>
 
-        <div class="card" style="margin-bottom: 20px;">
-            <button class="btn btn-primary" onclick="showCreateContent()">Tạo Nội Dung Mới</button>
-        </div>
+        <div class="stats-grid" id="content-stats"></div>
 
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Tìm kiếm nội dung...">
-            <button class="btn btn-primary" onclick="searchContent()">Tìm Kiếm</button>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Bộ Lọc Nâng Cao</h2>
+                <button class="btn btn-primary" onclick="showCreateContent()">Tạo Nội Dung Mới</button>
+            </div>
+            <form id="content-filter-form">
+                <div class="grid grid-4">
+                    <div class="form-group">
+                        <label for="filter-search">Từ khóa</label>
+                        <input type="text" id="filter-search" placeholder="Tên nội dung, mã, người tạo...">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-subject">Môn học</label>
+                        <select id="filter-subject">
+                            <option value="all">Tất cả</option>
+                            <option value="math">Toán</option>
+                            <option value="physics">Vật Lý</option>
+                            <option value="chemistry">Hóa Học</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-type">Loại nội dung</label>
+                        <select id="filter-type">
+                            <option value="all">Tất cả</option>
+                            <option value="lecture">Bài giảng</option>
+                            <option value="video">Video</option>
+                            <option value="exercise">Bài tập</option>
+                            <option value="exam">Bài kiểm tra</option>
+                            <option value="material">Tài liệu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-status">Trạng thái</label>
+                        <select id="filter-status">
+                            <option value="all">Tất cả</option>
+                            <option value="published">Đã duyệt</option>
+                            <option value="pending">Chờ duyệt</option>
+                            <option value="draft">Bản nháp</option>
+                            <option value="hidden">Đã ẩn</option>
+                            <option value="rejected">Bị từ chối</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-pricing">Giá</label>
+                        <select id="filter-pricing">
+                            <option value="all">Tất cả</option>
+                            <option value="free">Miễn phí</option>
+                            <option value="paid">Có phí</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-visibility">Phạm vi hiển thị</label>
+                        <select id="filter-visibility">
+                            <option value="all">Tất cả</option>
+                            <option value="public">Công khai</option>
+                            <option value="private">Riêng tư</option>
+                            <option value="locked">Đã khóa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions-inline">
+                    <button type="submit" class="btn btn-primary">Áp Dụng</button>
+                    <button type="button" class="btn btn-secondary" id="filter-reset-btn">Xóa Bộ Lọc</button>
+                    <button type="button" class="btn btn-secondary" id="filter-export-btn">Xuất Danh Sách</button>
+                </div>
+            </form>
         </div>
 
         <div class="card">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tiêu Đề</th>
-                        <th>Môn Học</th>
-                        <th>Loại</th>
-                        <th>Giá</th>
-                        <th>Trạng Thái</th>
-                        <th>Ngày Tạo</th>
-                        <th>Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="content-table">
-                    <tr>
-                        <td>Đại số và Giải tích - Chương 1</td>
-                        <td>Toán</td>
-                        <td>Bài giảng</td>
-                        <td>Miễn phí</td>
-                        <td><span class="badge badge-success">Đã Duyệt</span></td>
-                        <td>05/12/2024</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">Sửa</button>
-                            <button class="btn btn-sm btn-danger">Xóa</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Dao động điều hòa</td>
-                        <td>Vật Lý</td>
-                        <td>Video</td>
-                        <td>50,000 VNĐ</td>
-                        <td><span class="badge badge-success">Đã Duyệt</span></td>
-                        <td>03/12/2024</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">Sửa</button>
-                            <button class="btn btn-sm btn-danger">Xóa</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Bài tập Hóa học hữu cơ</td>
-                        <td>Hóa Học</td>
-                        <td>Bài tập</td>
-                        <td>Miễn phí</td>
-                        <td><span class="badge badge-warning">Chờ Duyệt</span></td>
-                        <td>10/12/2024</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">Sửa</button>
-                            <button class="btn btn-sm btn-danger">Xóa</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Danh Sách Nội Dung</h2>
+                    <p class="card-subtitle">Theo dõi hiệu suất và trạng thái phê duyệt của các bài giảng, bài tập, đề thi.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <button type="button" class="btn btn-secondary" id="bulk-visibility-btn">Ẩn/Hiển nội dung đã chọn</button>
+                    <button type="button" class="btn btn-secondary" id="bulk-feature-btn">Đánh dấu nổi bật</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="select-all-contents"></th>
+                            <th>Mã</th>
+                            <th>Tiêu Đề</th>
+                            <th>Môn</th>
+                            <th>Loại</th>
+                            <th>Giá</th>
+                            <th>Học Sinh</th>
+                            <th>Lượt Xem</th>
+                            <th>Đánh Giá</th>
+                            <th>Trạng Thái</th>
+                            <th>Cập Nhật</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="content-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Chờ Phê Duyệt</h2>
+                    <p class="card-subtitle">Các nội dung mới hoặc cập nhật yêu cầu phê duyệt từ Admin.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <button type="button" class="btn btn-secondary" id="pending-bulk-approve">Phê duyệt tất cả</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Tiêu Đề</th>
+                            <th>Môn</th>
+                            <th>Loại</th>
+                            <th>Người Tạo</th>
+                            <th>Ngày Gửi</th>
+                            <th>Ghi Chú</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Bản Nháp & Nội Dung Bị Ẩn</h2>
+                    <p class="card-subtitle">Hoàn thiện hoặc khôi phục các nội dung chưa xuất bản.</p>
+                </div>
+            </div>
+            <div id="draft-list"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Lịch Sử Hoạt Động</h2>
+                    <p class="card-subtitle">Nhật ký chỉnh sửa, phê duyệt và phản hồi từ hệ thống.</p>
+                </div>
+            </div>
+            <ul class="timeline" id="content-activity"></ul>
+        </div>
+    </div>
+
+    <div class="modal" id="content-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Tạo nội dung mới</h2>
+                <button type="button" class="modal-close" onclick="closeCreateContent()">×</button>
+            </div>
+            <form id="content-create-form">
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="create-title">Tiêu đề</label>
+                        <input type="text" id="create-title" required placeholder="Ví dụ: Luyện tập tích phân nâng cao">
+                    </div>
+                    <div class="form-group">
+                        <label for="create-subject">Môn học</label>
+                        <select id="create-subject" required>
+                            <option value="math">Toán</option>
+                            <option value="physics">Vật Lý</option>
+                            <option value="chemistry">Hóa Học</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-type">Loại nội dung</label>
+                        <select id="create-type" required>
+                            <option value="lecture">Bài giảng</option>
+                            <option value="video">Video</option>
+                            <option value="exercise">Bài tập</option>
+                            <option value="exam">Bài kiểm tra</option>
+                            <option value="material">Tài liệu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-price">Giá bán (VNĐ)</label>
+                        <input type="number" id="create-price" min="0" step="10000" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="create-visibility">Phạm vi hiển thị</label>
+                        <select id="create-visibility" required>
+                            <option value="public">Công khai</option>
+                            <option value="private">Riêng tư</option>
+                            <option value="locked">Chỉ lớp được chỉ định</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-description">Mô tả ngắn</label>
+                        <textarea id="create-description" rows="4" placeholder="Mục tiêu học tập, nội dung chính, yêu cầu đầu vào..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeCreateContent()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Gửi phê duyệt</button>
+                </div>
+            </form>
         </div>
     </div>
 

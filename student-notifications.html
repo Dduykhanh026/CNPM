@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Báo & Nhắc Lịch - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="notifications-root">
+        <div class="dashboard-header">
+            <h1>Trung Tâm Thông Báo</h1>
+            <p>Quản lý thông báo học tập, nhắc lịch ôn tập và cấu hình kênh nhận tin.</p>
+        </div>
+
+        <div class="stats-grid" id="notifications-stats"></div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Tùy Chọn Nhận Tin</h2>
+                        <p class="card-subtitle">Chọn kênh thông báo mong muốn cho từng loại sự kiện.</p>
+                    </div>
+                    <div class="card-actions-inline">
+                        <button class="btn btn-secondary" id="restore-default-preferences">Khôi phục mặc định</button>
+                    </div>
+                </div>
+                <form id="notifications-preferences" class="grid grid-2"></form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Tự Động Hóa Nhắc Lịch</h2>
+                        <p class="card-subtitle">Thiết lập các rule tự động gửi nhắc nhở theo nhu cầu.</p>
+                    </div>
+                    <div class="card-actions-inline">
+                        <button class="btn btn-secondary" id="add-automation-rule">Thêm rule mới</button>
+                    </div>
+                </div>
+                <div id="automation-rules"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Hộp Thư Thông Báo</h2>
+                    <p class="card-subtitle">Xem, đánh dấu và lọc thông báo theo loại sự kiện.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <select id="notifications-filter-type">
+                        <option value="all">Tất cả phân loại</option>
+                        <option value="deadline">Deadline & bài tập</option>
+                        <option value="exam">Kỳ thi & cuộc thi</option>
+                        <option value="livestream">Livestream & lớp học</option>
+                        <option value="system">Thông báo hệ thống</option>
+                        <option value="payment">Thanh toán & khuyến mãi</option>
+                    </select>
+                    <select id="notifications-filter-status">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="unread">Chưa đọc</option>
+                        <option value="read">Đã đọc</option>
+                        <option value="pinned">Đã ghim</option>
+                    </select>
+                    <input type="search" id="notifications-search" placeholder="Tìm theo tiêu đề, nội dung...">
+                </div>
+            </div>
+            <div id="notifications-alert-container"></div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>Nội dung</th>
+                            <th>Loại</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="notifications-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Lịch Nhắc Học Tập</h2>
+                    <p class="card-subtitle">Các nhắc lịch sắp tới cho bài tập, kỳ thi, livestream.</p>
+                </div>
+                <div class="card-actions-inline">
+                    <button class="btn btn-secondary" id="sync-calendar">Đồng bộ với Google Calendar</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Thời gian nhắc</th>
+                            <th>Sự kiện</th>
+                            <th>Kênh gửi</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reminder-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="notifications-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="notifications-modal-close" aria-label="Đóng">&times;</button>
+            <div id="notifications-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/student-notifications.js"></script>
+</body>
+</html>
+

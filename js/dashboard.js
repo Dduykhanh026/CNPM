@@ -43,9 +43,6 @@ class DashboardManager {
             userAvatarEl.textContent = this.currentUser.name.charAt(0).toUpperCase();
         }
 
-        // Load navigation menu
-        this.loadNavigation();
-
         // Check if there's an action parameter in URL
         const params = new URLSearchParams(window.location.search);
         const action = params.get('action');
@@ -77,96 +74,18 @@ class DashboardManager {
         return params.get('role') || 'student';
     }
 
-    loadNavigation() {
-        const navMenu = document.getElementById('nav-menu');
-        const role = this.currentUser.role || this.getRoleFromURL();
-        
-        // Get current page/action from URL
-        const params = new URLSearchParams(window.location.search);
-        const action = params.get('action');
-        const currentPage = action ? action.replace('show', '').toLowerCase() : 'dashboard';
-        
-        let menuItems = [];
-        
-        if (role === 'student') {
-            menuItems = [
-                { text: 'Trang Chủ', href: 'dashboard.html', action: null, active: currentPage === 'dashboard' },
-                { text: 'Nội Dung Học Tập', href: 'content.html', action: null, active: currentPage === 'content' },
-                { text: 'Bài Tập', href: 'exercises.html', action: null, active: currentPage === 'exercises' },
-                { text: 'Bài Kiểm Tra', href: '#', action: 'showTests', active: currentPage === 'tests' },
-                { text: 'Tiến Độ Học Tập', href: '#', action: 'showProgress', active: currentPage === 'progress' },
-                { text: 'Tương Tác GV', href: '#', action: 'showTeacherInteraction', active: currentPage === 'teacher-interaction' },
-                { text: 'Diễn Đàn', href: 'forum.html', action: null, active: currentPage === 'forum' },
-                { text: 'Thanh Toán', href: 'payment.html', action: null, active: currentPage === 'payment' },
-                { text: 'Tài Khoản', href: '#', action: 'showProfile', active: currentPage === 'profile' }
-            ];
-        } else if (role === 'teacher') {
-            menuItems = [
-                { text: 'Trang Chủ', href: 'dashboard.html', action: null, active: currentPage === 'dashboard' },
-                { text: 'Quản Lý Nội Dung', href: '#', action: 'showContentManagement', active: currentPage === 'content-management' },
-                { text: 'Quản Lý Học Sinh', href: '#', action: 'showStudentManagement', active: currentPage === 'student-management' },
-                { text: 'Chấm Bài', href: '#', action: 'showGrading', active: currentPage === 'grading' },
-                { text: 'Lịch Học', href: '#', action: 'showSchedule', active: currentPage === 'schedule' },
-                { text: 'Livestream', href: '#', action: 'showLivestream', active: currentPage === 'livestream' },
-                { text: 'Tài Khoản', href: '#', action: 'showProfile', active: currentPage === 'profile' }
-            ];
-        } else if (role === 'admin') {
-            menuItems = [
-                { text: 'Trang Chủ', href: 'dashboard.html', action: null, active: currentPage === 'dashboard' },
-                { text: 'Quản Lý Tài Khoản', href: '#', action: 'showAccountManagement', active: currentPage === 'account-management' },
-                { text: 'Quản Lý Nội Dung', href: '#', action: 'showContentManagement', active: currentPage === 'content-management' },
-                { text: 'Phân Quyền', href: '#', action: 'showPermissions', active: currentPage === 'permissions' },
-                { text: 'Thống Kê', href: '#', action: 'showStatistics', active: currentPage === 'statistics' },
-                { text: 'Giao Dịch', href: '#', action: 'showTransactions', active: currentPage === 'transactions' },
-                { text: 'Tài Khoản', href: '#', action: 'showProfile', active: currentPage === 'profile' }
-            ];
-        }
-
-        navMenu.innerHTML = '';
-        menuItems.forEach(item => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.textContent = item.text;
-            
-            if (item.action) {
-                a.href = '#';
-                a.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.handleMenuAction(item.action, a);
-                });
-            } else {
-                a.href = item.href;
-            }
-            
-            if (item.active) {
-                a.style.color = 'var(--text-primary)';
-                a.style.fontWeight = '800';
-                a.style.transform = 'scale(1.29)';
-                a.style.transformOrigin = 'center';
-            }
-            
-            li.appendChild(a);
-            navMenu.appendChild(li);
-        });
-    }
-
     handleMenuAction(action, eventElement = null) {
         const dashboardContent = document.getElementById('dashboard-content');
         const role = this.currentUser.role || this.getRoleFromURL();
         
-        // Update active menu item
-        document.querySelectorAll('.nav-menu a').forEach(a => {
-            a.style.color = '';
-            a.style.fontWeight = '';
-            a.style.transform = '';
-            a.style.transformOrigin = '';
-        });
-        
         if (eventElement) {
+            // Update active menu item when navigation is triggered without page reload
+            document.querySelectorAll('.nav-menu a').forEach(a => {
+                a.style.color = '';
+                a.style.fontWeight = '';
+            });
             eventElement.style.color = 'var(--text-primary)';
             eventElement.style.fontWeight = '800';
-            eventElement.style.transform = 'scale(1.29)';
-            eventElement.style.transformOrigin = 'center';
         }
         
         if (role === 'student') {
@@ -183,8 +102,17 @@ class DashboardManager {
                 case 'showProgress':
                     dashboardContent.innerHTML = this.getStudentProgress();
                     break;
+                case 'showCompetitions':
+                    dashboardContent.innerHTML = this.getStudentCompetitions();
+                    break;
+                case 'showResources':
+                    dashboardContent.innerHTML = this.getStudentResources();
+                    break;
                 case 'showTeacherInteraction':
                     dashboardContent.innerHTML = this.getTeacherInteraction();
+                    break;
+                case 'showIssueReporting':
+                    dashboardContent.innerHTML = this.getStudentIssueReporting();
                     break;
                 case 'showForum':
                     window.location.href = 'forum.html';
@@ -192,6 +120,9 @@ class DashboardManager {
                 case 'showPayment':
                     window.location.href = 'payment.html';
                     return;
+                case 'showNotifications':
+                    dashboardContent.innerHTML = this.getStudentNotifications();
+                    break;
                 case 'showProfile':
                     dashboardContent.innerHTML = this.getProfile();
                     break;
@@ -215,6 +146,15 @@ class DashboardManager {
                 case 'showLivestream':
                     dashboardContent.innerHTML = this.getTeacherLivestream();
                     break;
+                case 'showPersonalization':
+                    dashboardContent.innerHTML = this.getTeacherPersonalization();
+                    break;
+                case 'showFeedback':
+                    dashboardContent.innerHTML = this.getTeacherFeedback();
+                    break;
+                case 'showRevenue':
+                    dashboardContent.innerHTML = this.getTeacherRevenue();
+                    break;
                 case 'showProfile':
                     dashboardContent.innerHTML = this.getProfile();
                     break;
@@ -237,6 +177,12 @@ class DashboardManager {
                     break;
                 case 'showTransactions':
                     dashboardContent.innerHTML = this.getAdminTransactions();
+                    break;
+                case 'showMonitoring':
+                    dashboardContent.innerHTML = this.getAdminMonitoring();
+                    break;
+                case 'showSystemNotifications':
+                    dashboardContent.innerHTML = this.getAdminNotifications();
                     break;
                 case 'showProfile':
                     dashboardContent.innerHTML = this.getProfile();
@@ -1040,6 +986,366 @@ class DashboardManager {
         `;
     }
 
+    getStudentCompetitions() {
+        return `
+            <div class="dashboard-header">
+                <h1>Thi Đua & Cuộc Thi</h1>
+                <p>Đăng ký tham gia, theo dõi tiến độ và bảng xếp hạng thi đua học tập</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Cuộc Thi Đang Mở Đăng Ký</h2>
+                    <div style="margin-bottom: 15px;">
+                        <p><strong>🏆 Olympic Toán 12:</strong> Bắt đầu 05/01/2025</p>
+                        <p><strong>Hình thức:</strong> 50 câu trắc nghiệm + 2 bài tự luận</p>
+                        <button class="btn btn-sm btn-primary">Đăng Ký Ngay</button>
+                    </div>
+                    <hr>
+                    <div style="margin: 15px 0;">
+                        <p><strong>🏆 Thách thức Vật Lý:</strong> Bắt đầu 12/01/2025</p>
+                        <p><strong>Hình thức:</strong> 30 câu trắc nghiệm thời gian thực</p>
+                        <button class="btn btn-sm btn-primary">Đăng Ký Ngay</button>
+                    </div>
+                    <hr>
+                    <div>
+                        <p><strong>🏆 Đấu Trường Hóa Học:</strong> Bắt đầu 20/01/2025</p>
+                        <p><strong>Hình thức:</strong> Bài thi thực nghiệm mô phỏng</p>
+                        <button class="btn btn-sm btn-primary">Đăng Ký Ngay</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Cuộc Thi Của Tôi</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tên Cuộc Thi</th>
+                                <th>Trạng Thái</th>
+                                <th>Thời Gian</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cuộc thi Thi Đua Toán</td>
+                                <td><span class="badge badge-success">Đang Tham Gia</span></td>
+                                <td>Đến 31/12/2024</td>
+                                <td><button class="btn btn-sm btn-secondary">Vào Phòng Thi</button></td>
+                            </tr>
+                            <tr>
+                                <td>Đấu Trường Vật Lý</td>
+                                <td><span class="badge badge-warning">Sắp Diễn Ra</span></td>
+                                <td>15/01/2025</td>
+                                <td><button class="btn btn-sm btn-primary">Xem Chi Tiết</button></td>
+                            </tr>
+                            <tr>
+                                <td>Hóa Học Ứng Dụng</td>
+                                <td><span class="badge badge-success">Đã Hoàn Thành</span></td>
+                                <td>10/11/2024</td>
+                                <td><button class="btn btn-sm btn-secondary">Xem Kết Quả</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Bảng Xếp Hạng Thi Đua</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Hạng</th>
+                            <th>Học Sinh</th>
+                            <th>Môn Thi</th>
+                            <th>Điểm</th>
+                            <th>Huy Hiệu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🥇 1</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>Toán</td>
+                            <td>985</td>
+                            <td><span class="badge badge-success">Chuyên Gia</span></td>
+                        </tr>
+                        <tr>
+                            <td>🥈 2</td>
+                            <td>Trần Thị B</td>
+                            <td>Vật Lý</td>
+                            <td>960</td>
+                            <td><span class="badge badge-info">Xuất Sắc</span></td>
+                        </tr>
+                        <tr>
+                            <td>🥉 3</td>
+                            <td>Lê Văn C</td>
+                            <td>Hóa Học</td>
+                            <td>942</td>
+                            <td><span class="badge badge-warning">Nổi Bật</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Phạm Thị D</td>
+                            <td>Toán</td>
+                            <td>915</td>
+                            <td><span class="badge badge-info">Xuất Sắc</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    getStudentResources() {
+        return `
+            <div class="dashboard-header">
+                <h1>Tài Liệu Đã Mua & Đánh Giá</h1>
+                <p>Quản lý tài liệu đã mua, tải xuống và gửi đánh giá phản hồi</p>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 15px;">Danh Sách Tài Liệu</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên Tài Liệu</th>
+                            <th>Môn</th>
+                            <th>Ngày Mua</th>
+                            <th>Đánh Giá</th>
+                            <th>Tải Xuống</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bộ đề thi thử THPT Quốc gia - Toán</td>
+                            <td>Toán</td>
+                            <td>02/12/2024</td>
+                            <td>
+                                <span class="badge badge-success">⭐⭐⭐⭐☆</span>
+                                <button class="btn btn-sm btn-secondary">Chỉnh Sửa</button>
+                            </td>
+                            <td><button class="btn btn-sm btn-primary">Tải PDF</button></td>
+                        </tr>
+                        <tr>
+                            <td>Chuyên đề Dao động cơ học</td>
+                            <td>Vật Lý</td>
+                            <td>28/11/2024</td>
+                            <td>
+                                <span class="badge badge-warning">Chưa Đánh Giá</span>
+                                <button class="btn btn-sm btn-secondary">Đánh Giá</button>
+                            </td>
+                            <td><button class="btn btn-sm btn-primary">Tải Video</button></td>
+                        </tr>
+                        <tr>
+                            <td>Sổ tay phản ứng hữu cơ</td>
+                            <td>Hóa Học</td>
+                            <td>20/11/2024</td>
+                            <td>
+                                <span class="badge badge-success">⭐⭐⭐⭐⭐</span>
+                                <button class="btn btn-sm btn-secondary">Chỉnh Sửa</button>
+                            </td>
+                            <td><button class="btn btn-sm btn-primary">Tải PDF</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Gửi Đánh Giá Nhanh</h2>
+                <form>
+                    <div class="form-group">
+                        <label>Chọn Tài Liệu</label>
+                        <select>
+                            <option>Bộ đề thi thử THPT Quốc gia - Toán</option>
+                            <option>Chuyên đề Dao động cơ học</option>
+                            <option>Sổ tay phản ứng hữu cơ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mức Đánh Giá</label>
+                        <select>
+                            <option>⭐⭐⭐⭐⭐ - Tuyệt vời</option>
+                            <option>⭐⭐⭐⭐ - Rất tốt</option>
+                            <option>⭐⭐⭐ - Tốt</option>
+                            <option>⭐⭐ - Trung bình</option>
+                            <option>⭐ - Cần cải thiện</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nhận Xét</label>
+                        <textarea rows="4" placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi Đánh Giá</button>
+                </form>
+            </div>
+        `;
+    }
+
+    getStudentIssueReporting() {
+        return `
+            <div class="dashboard-header">
+                <h1>Báo Cáo Nội Dung / Lỗi</h1>
+                <p>Thông báo nhanh nội dung sai lệch, sự cố kỹ thuật hoặc hành vi vi phạm</p>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 15px;">Gửi Báo Cáo Mới</h2>
+                <form>
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Loại Báo Cáo</label>
+                            <select>
+                                <option>Nội dung sai</option>
+                                <option>Lỗi kỹ thuật</option>
+                                <option>Hành vi vi phạm</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Môn Học</label>
+                            <select>
+                                <option>Toán</option>
+                                <option>Vật Lý</option>
+                                <option>Hóa Học</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Liên Kết hoặc ID Nội Dung</label>
+                        <input type="text" placeholder="Ví dụ: content-12345">
+                    </div>
+                    <div class="form-group">
+                        <label>Mô Tả Chi Tiết</label>
+                        <textarea rows="5" placeholder="Mô tả vấn đề gặp phải..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Đính Kèm (tùy chọn)</label>
+                        <input type="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi Báo Cáo</button>
+                </form>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Lịch Sử Báo Cáo</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã Báo Cáo</th>
+                            <th>Loại</th>
+                            <th>Ngày Gửi</th>
+                            <th>Trạng Thái</th>
+                            <th>Phản Hồi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#BR-20241210</td>
+                            <td>Nội dung sai</td>
+                            <td>10/12/2024</td>
+                            <td><span class="badge badge-success">Đã xử lý</span></td>
+                            <td>Đã điều chỉnh lời giải câu 5.</td>
+                        </tr>
+                        <tr>
+                            <td>#BR-20241205</td>
+                            <td>Lỗi kỹ thuật</td>
+                            <td>05/12/2024</td>
+                            <td><span class="badge badge-warning">Đang xử lý</span></td>
+                            <td>Đang kiểm tra video không phát được.</td>
+                        </tr>
+                        <tr>
+                            <td>#BR-20241128</td>
+                            <td>Hành vi vi phạm</td>
+                            <td>28/11/2024</td>
+                            <td><span class="badge badge-success">Đã xử lý</span></td>
+                            <td>Tài khoản vi phạm đã bị chặn.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    getStudentNotifications() {
+        return `
+            <div class="dashboard-header">
+                <h1>Thông Báo & Nhắc Nhở</h1>
+                <p>Thiết lập thông báo qua email/SMS và xem lịch nhắc học tập cá nhân</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Tùy Chọn Thông Báo</h2>
+                    <form>
+                        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong>Email</strong>
+                                <p style="color: var(--text-light); margin-top: 4px;">Nhận thông báo deadline, lịch học qua email</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong>SMS</strong>
+                                <p style="color: var(--text-light); margin-top: 4px;">Thông báo ngắn cho các sự kiện quan trọng</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong>Thông báo trong ứng dụng</strong>
+                                <p style="color: var(--text-light); margin-top: 4px;">Hiển thị trên dashboard</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lưu Thiết Lập</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Lịch Nhắc Học Tập</h2>
+                    <div style="margin-bottom: 15px; padding: 15px; background: var(--bg-secondary); border-radius: 12px;">
+                        <p><strong>Toán - Bài kiểm tra chương 3</strong></p>
+                        <p>🔔 Nhắc lúc 18:00 ngày 14/12/2024</p>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 15px; background: var(--bg-secondary); border-radius: 12px;">
+                        <p><strong>Vật Lý - Livestream ôn tập</strong></p>
+                        <p>🔔 Nhắc trước 30 phút (13:30, 18/12/2024)</p>
+                    </div>
+                    <div style="padding: 15px; background: var(--bg-secondary); border-radius: 12px;">
+                        <p><strong>Hóa Học - Nộp bài tập</strong></p>
+                        <p>🔔 Nhắc lúc 20:00 ngày 19/12/2024</p>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 15px;">Thêm Lịch Nhắc</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Thông Báo Gần Đây</h2>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                        <strong>✅ Hoàn thành Bài tập Hóa học hữu cơ</strong> - Cộng 5 điểm thưởng thi đua.
+                    </li>
+                    <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                        <strong>📅 Lịch livestream Toán nâng cao</strong> - 15:00, 15/12/2024. Đừng quên tham gia!
+                    </li>
+                    <li style="padding: 12px 0;">
+                        <strong>⚠️ Nội dung mới cần xem</strong> - Chuyên đề Dao động cơ học vừa cập nhật.
+                    </li>
+                </ul>
+            </div>
+        `;
+    }
+
     getForum() {
         return `
             <div class="dashboard-header">
@@ -1729,59 +2035,437 @@ class DashboardManager {
         `;
     }
 
-    // ========== ADMIN FUNCTIONS ==========
-    
-    getAdminAccountManagement() {
+    getTeacherPersonalization() {
         return `
             <div class="dashboard-header">
-                <h1>Quản Lý Tài Khoản</h1>
-                <p>Tìm kiếm, thêm, xóa, chỉnh sửa tài khoản của học sinh, giáo viên và quản trị viên</p>
+                <h1>Cá Nhân Hóa Nội Dung</h1>
+                <p>Phân nhóm học sinh và gợi ý nội dung phù hợp theo năng lực</p>
             </div>
-            
-            <div class="card" style="margin-bottom: 20px;">
-                <div class="search-bar">
-                    <input type="text" placeholder="Tìm kiếm theo tên, email..." style="flex: 1;">
-                    <select>
-                        <option>Tất Cả</option>
-                        <option>Học Sinh</option>
-                        <option>Giáo Viên</option>
-                        <option>Quản Trị Viên</option>
-                    </select>
-                    <button class="btn btn-primary">Tìm Kiếm</button>
-                    <button class="btn btn-secondary" onclick="window.location.href='admin-accounts.html'">Thêm Tài Khoản</button>
-                </div>
-            </div>
-            
+
             <div class="card">
+                <h2 style="margin-bottom: 15px;">Phân Nhóm Học Sinh</h2>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Họ và Tên</th>
-                            <th>Email</th>
-                            <th>Vai Trò</th>
+                            <th>Nhóm</th>
+                            <th>Tiêu Chí</th>
+                            <th>Số Học Sinh</th>
+                            <th>Nội Dung Gợi Ý</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nhóm Nền Tảng</td>
+                            <td>Điểm TB < 7.0</td>
+                            <td>28</td>
+                            <td>Bài giảng cơ bản, video minh họa</td>
+                            <td><button class="btn btn-sm btn-primary">Điều Chỉnh</button></td>
+                        </tr>
+                        <tr>
+                            <td>Nhóm Khá</td>
+                            <td>7.0 ≤ Điểm TB < 8.5</td>
+                            <td>35</td>
+                            <td>Bài tập tự luyện, đề ôn tập chương</td>
+                            <td><button class="btn btn-sm btn-primary">Điều Chỉnh</button></td>
+                        </tr>
+                        <tr>
+                            <td>Nhóm Nâng Cao</td>
+                            <td>Điểm TB ≥ 8.5</td>
+                            <td>18</td>
+                            <td>Đề thi thử, topic chuyên sâu</td>
+                            <td><button class="btn btn-sm btn-primary">Điều Chỉnh</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid grid-2" style="margin-top: 20px;">
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Gợi Ý Nội Dung Mới</h2>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                            📘 Đề thi thử THPT quốc gia - Chuyên đề Hàm số (phù hợp Nhóm Khá)
+                        </li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                            🎥 Video giải chi tiết Dao động điều hòa (phù hợp Nhóm Nền Tảng)
+                        </li>
+                        <li style="padding: 12px 0;">
+                            🧪 Bộ thí nghiệm ảo phản ứng oxi hóa khử (phù hợp Nhóm Nâng Cao)
+                        </li>
+                    </ul>
+                    <button class="btn btn-secondary" style="margin-top: 15px;">Xem Chi Tiết Gợi Ý</button>
+                </div>
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Thiết Lập Quy Tắc Cá Nhân Hóa</h2>
+                    <form>
+                        <div class="form-group">
+                            <label>Tiêu Chí</label>
+                            <select>
+                                <option>Điểm trung bình</option>
+                                <option>Tỷ lệ hoàn thành bài tập</option>
+                                <option>Mức độ tham gia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngưỡng Phân Nhóm</label>
+                            <input type="text" placeholder="Ví dụ: < 6.5 → cần hỗ trợ">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lưu Quy Tắc</button>
+                    </form>
+                </div>
+            </div>
+        `;
+    }
+
+    getTeacherFeedback() {
+        return `
+            <div class="dashboard-header">
+                <h1>Phản Hồi & Khiếu Nại</h1>
+                <p>Tiếp nhận phản hồi từ học sinh và xử lý khiếu nại liên quan nội dung giảng dạy</p>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 15px;">Phản Hồi Gần Đây</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Học Sinh</th>
+                            <th>Chủ Đề</th>
+                            <th>Ngày Gửi</th>
                             <th>Trạng Thái</th>
                             <th>Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
                             <td>Nguyễn Văn A</td>
-                            <td>nguyenvana@example.com</td>
-                            <td><span class="badge badge-info">Học Sinh</span></td>
-                            <td><span class="badge badge-success">Hoạt Động</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">Sửa</button>
-                                <button class="btn btn-sm btn-danger">Xóa</button>
-                            </td>
+                            <td>Cần giải thích thêm ví dụ bài 4</td>
+                            <td>10/12/2024</td>
+                            <td><span class="badge badge-warning">Chưa phản hồi</span></td>
+                            <td><button class="btn btn-sm btn-primary">Phản Hồi</button></td>
+                        </tr>
+                        <tr>
+                            <td>Trần Thị B</td>
+                            <td>Livestream bị gián đoạn</td>
+                            <td>09/12/2024</td>
+                            <td><span class="badge badge-success">Đã xử lý</span></td>
+                            <td><button class="btn btn-sm btn-secondary">Xem</button></td>
+                        </tr>
+                        <tr>
+                            <td>Lê Văn C</td>
+                            <td>Khiếu nại điểm bài tập</td>
+                            <td>08/12/2024</td>
+                            <td><span class="badge badge-info">Đang xử lý</span></td>
+                            <td><button class="btn btn-sm btn-primary">Cập Nhật</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn btn-primary" onclick="window.location.href='admin-accounts.html'">Quản Lý Đầy Đủ</button>
+
+            <div class="grid grid-2" style="margin-top: 20px;">
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Mẫu Phản Hồi Nhanh</h2>
+                    <form>
+                        <div class="form-group">
+                            <label>Chọn Học Sinh</label>
+                            <select>
+                                <option>Nguyễn Văn A</option>
+                                <option>Trần Thị B</option>
+                                <option>Lê Văn C</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phản Hồi</label>
+                            <textarea rows="5" placeholder="Nhập phản hồi chi tiết..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Gửi</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Thống Kê Mức Độ Hài Lòng</h2>
+                    <p><strong>Điểm trung bình:</strong> 4.6 / 5</p>
+                    <p><strong>Phản hồi tích cực:</strong> 82%</p>
+                    <p><strong>Phản hồi cần cải thiện:</strong> 12%</p>
+                    <p><strong>Khiếu nại:</strong> 6%</p>
+                    <button class="btn btn-secondary" style="margin-top: 15px;">Xem Báo Cáo Chi Tiết</button>
+                </div>
+            </div>
+        `;
+    }
+
+    getTeacherRevenue() {
+        return `
+            <div class="dashboard-header">
+                <h1>Doanh Thu & Rút Tiền</h1>
+                <p>Theo dõi doanh thu từ nội dung có phí và thực hiện rút tiền</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="stat-info">
+                        <h3>12.5M</h3>
+                        <p>Doanh Thu Tháng Này (VNĐ)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <div class="stat-info">
+                        <h3>68.4M</h3>
+                        <p>Doanh Thu Năm Nay (VNĐ)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-download"></i></div>
+                    <div class="stat-info">
+                        <h3>420</h3>
+                        <p>Lượt Mua Tài Liệu</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="stat-info">
+                        <h3>5.0M</h3>
+                        <p>Số Dư Có Thể Rút</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2" style="margin-top: 20px;">
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Yêu Cầu Rút Tiền</h2>
+                    <form>
+                        <div class="form-group">
+                            <label>Số Tiền (VNĐ)</label>
+                            <input type="number" min="100000" step="50000" value="1000000">
+                        </div>
+                        <div class="form-group">
+                            <label>Phương Thức</label>
+                            <select>
+                                <option>Tài khoản ngân hàng</option>
+                                <option>MoMo</option>
+                                <option>VNPay</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ghi Chú</label>
+                            <textarea rows="3" placeholder="Thông tin bổ sung (nếu có)..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Gửi Yêu Cầu</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Lịch Sử Giao Dịch</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Loại</th>
+                                <th>Số Tiền</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10/12/2024</td>
+                                <td>Mua tài liệu</td>
+                                <td>120,000 VNĐ</td>
+                                <td><span class="badge badge-success">Đã nhận</span></td>
+                            </tr>
+                            <tr>
+                                <td>05/12/2024</td>
+                                <td>Rút tiền</td>
+                                <td>2,000,000 VNĐ</td>
+                                <td><span class="badge badge-success">Hoàn tất</span></td>
+                            </tr>
+                            <tr>
+                                <td>01/12/2024</td>
+                                <td>Mua bài giảng</td>
+                                <td>80,000 VNĐ</td>
+                                <td><span class="badge badge-success">Đã nhận</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" style="margin-top: 15px;">Xuất Báo Cáo</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // ========== ADMIN FUNCTIONS ==========
+    
+    getAdminAccountManagement() {
+        return `
+            <div class="dashboard-header">
+                <h1>Quản Lý Tài Khoản</h1>
+                <p>Tìm kiếm, thêm, khóa/mở khóa tài khoản, thiết lập 2FA và theo dõi lịch sử hoạt động.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3>1,250</h3>
+                        <p>Tài khoản đang hoạt động</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-user-lock"></i></div>
+                    <div class="stat-info">
+                        <h3>32</h3>
+                        <p>Tài khoản bị khóa</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+                    <div class="stat-info">
+                        <h3>18</h3>
+                        <p>Chờ xác minh email</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="stat-info">
+                        <h3>72%</h3>
+                        <p>Tỷ lệ bật 2FA</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Bộ lọc & thao tác nhanh</h2>
+                    <div class="card-actions-inline">
+                        <button class="btn btn-primary" onclick="window.location.href='admin-accounts.html'">Thêm Tài Khoản</button>
+                        <button class="btn btn-secondary">Xuất CSV</button>
+                        <button class="btn btn-secondary">Kích hoạt 2FA hàng loạt</button>
+                    </div>
+                </div>
+                <div class="grid grid-4">
+                    <div class="form-group">
+                        <label>Từ khóa</label>
+                        <input type="text" placeholder="Tên, email, số điện thoại...">
+                    </div>
+                    <div class="form-group">
+                        <label>Vai trò</label>
+                        <select>
+                            <option>Tất cả</option>
+                            <option>Học sinh</option>
+                            <option>Giáo viên</option>
+                            <option>Quản trị viên</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select>
+                            <option>Tất cả</option>
+                            <option>Hoạt động</option>
+                            <option>Tạm khóa</option>
+                            <option>Chờ kích hoạt</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>2FA</label>
+                        <select>
+                            <option>Tất cả</option>
+                            <option>Đã bật</option>
+                            <option>Chưa bật</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Họ và Tên</th>
+                                <th>Email</th>
+                                <th>Vai Trò</th>
+                                <th>2FA</th>
+                                <th>Trạng Thái</th>
+                                <th>Đăng Nhập Cuối</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>USR-1201</td>
+                                <td>Nguyễn Văn A</td>
+                                <td>nguyenvana@example.com</td>
+                                <td><span class="badge badge-info">Học Sinh</span></td>
+                                <td><span class="badge badge-success">Đã bật</span></td>
+                                <td><span class="badge badge-success">Hoạt động</span></td>
+                                <td>10/12/2024 07:45</td>
+                                <td>
+                                    <div class="draft-item-actions">
+                                        <button class="btn btn-sm btn-secondary">Đặt lại mật khẩu</button>
+                                        <button class="btn btn-sm btn-secondary">Gán vai trò</button>
+                                        <button class="btn btn-sm btn-danger">Khóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>USR-0982</td>
+                                <td>Trần Thị B</td>
+                                <td>tranthib@example.com</td>
+                                <td><span class="badge badge-success">Giáo Viên</span></td>
+                                <td><span class="badge badge-warning">Chưa bật</span></td>
+                                <td><span class="badge badge-success">Hoạt động</span></td>
+                                <td>09/12/2024 21:10</td>
+                                <td>
+                                    <div class="draft-item-actions">
+                                        <button class="btn btn-sm btn-secondary">Yêu cầu bật 2FA</button>
+                                        <button class="btn btn-sm btn-secondary">Phân lớp</button>
+                                        <button class="btn btn-sm btn-danger">Khóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>USR-0650</td>
+                                <td>Lê Văn C</td>
+                                <td>levanc@example.com</td>
+                                <td><span class="badge badge-info">Học Sinh</span></td>
+                                <td><span class="badge badge-danger">Chưa bật</span></td>
+                                <td><span class="badge badge-warning">Tạm khóa</span></td>
+                                <td>07/12/2024 18:25</td>
+                                <td>
+                                    <div class="draft-item-actions">
+                                        <button class="btn btn-sm btn-primary">Mở khóa</button>
+                                        <button class="btn btn-sm btn-secondary">Xem nhật ký</button>
+                                        <button class="btn btn-sm btn-danger">Xóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Nhật ký thao tác gần đây</h2>
+                        <p class="card-subtitle">Theo dõi các hành động quan trọng trên hệ thống tài khoản.</p>
+                    </div>
+                </div>
+                <ul class="timeline">
+                    <li>
+                        <strong>10/12/2024 09:12</strong><br>
+                        Admin A khóa tài khoản USR-0650 do vi phạm chính sách nội dung.
+                    </li>
+                    <li>
+                        <strong>09/12/2024 22:45</strong><br>
+                        Admin B kích hoạt 2FA bắt buộc cho nhóm giáo viên.
+                    </li>
+                    <li>
+                        <strong>09/12/2024 17:30</strong><br>
+                        Hệ thống gửi email xác minh lại cho 12 tài khoản chưa kích hoạt.
+                    </li>
+                </ul>
             </div>
         `;
     }
@@ -1832,45 +2516,146 @@ class DashboardManager {
         return `
             <div class="dashboard-header">
                 <h1>Quản Lý Phân Quyền</h1>
-                <p>Phân quyền cho các nhóm người dùng (học sinh, giáo viên, admin)</p>
+                <p>Thiết lập ma trận quyền, chính sách truy cập và theo dõi audit log phân quyền.</p>
             </div>
-            
-            <div class="grid grid-3">
-                <div class="card">
-                    <h3>Học Sinh</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 8px 0;">✅ Xem nội dung học tập</li>
-                        <li style="padding: 8px 0;">✅ Làm bài tập</li>
-                        <li style="padding: 8px 0;">✅ Tham gia diễn đàn</li>
-                        <li style="padding: 8px 0;">❌ Quản lý nội dung</li>
-                        <li style="padding: 8px 0;">❌ Xem thống kê hệ thống</li>
-                    </ul>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">Chỉnh Sửa</button>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Ma Trận Quyền Truy Cập</h2>
+                        <p class="card-subtitle">Định nghĩa hành động cho từng nhóm người dùng theo SRS 6.3.3.</p>
+                    </div>
+                    <div class="card-actions-inline">
+                        <button class="btn btn-secondary">Tải xuống ma trận</button>
+                        <button class="btn btn-secondary">So sánh phiên bản</button>
+                    </div>
                 </div>
-                
-                <div class="card">
-                    <h3>Giáo Viên</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 8px 0;">✅ Quản lý nội dung</li>
-                        <li style="padding: 8px 0;">✅ Quản lý học sinh</li>
-                        <li style="padding: 8px 0;">✅ Chấm bài</li>
-                        <li style="padding: 8px 0;">✅ Livestream</li>
-                        <li style="padding: 8px 0;">❌ Quản lý tài khoản</li>
-                    </ul>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">Chỉnh Sửa</button>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Quyền</th>
+                                <th>Học Sinh</th>
+                                <th>Giáo Viên</th>
+                                <th>Admin</th>
+                                <th>Ghi Chú</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Xem & học nội dung</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>Quyền cơ bản cho tất cả vai trò</td>
+                            </tr>
+                            <tr>
+                                <td>Tạo/Chỉnh sửa nội dung</td>
+                                <td>✘</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>6.2.2 - Giáo viên được phép biên soạn</td>
+                            </tr>
+                            <tr>
+                                <td>Phê duyệt nội dung</td>
+                                <td>✘</td>
+                                <td>✘</td>
+                                <td>✔</td>
+                                <td>6.3.2.4 - Chỉ Admin</td>
+                            </tr>
+                            <tr>
+                                <td>Quản lý tài khoản</td>
+                                <td>✘</td>
+                                <td>✘</td>
+                                <td>✔</td>
+                                <td>6.3.1 - Admin quản trị hệ thống</td>
+                            </tr>
+                            <tr>
+                                <td>Xem báo cáo/Doanh thu</td>
+                                <td>Giới hạn</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>Học sinh chỉ xem tiến độ cá nhân</td>
+                            </tr>
+                            <tr>
+                                <td>Livestream & tương tác lớp</td>
+                                <td>✘</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>6.2.4 - Giáo viên chủ động livestream</td>
+                            </tr>
+                            <tr>
+                                <td>Quản lý thông báo</td>
+                                <td>Nhận</td>
+                                <td>Nhận/Gửi lớp</td>
+                                <td>✔</td>
+                                <td>6.3.6 - Admin gửi thông báo toàn hệ thống</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                
+            </div>
+
+            <div class="grid grid-2">
                 <div class="card">
-                    <h3>Quản Trị Viên</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 8px 0;">✅ Tất cả quyền</li>
-                        <li style="padding: 8px 0;">✅ Quản lý tài khoản</li>
-                        <li style="padding: 8px 0;">✅ Kiểm duyệt nội dung</li>
-                        <li style="padding: 8px 0;">✅ Thống kê hệ thống</li>
-                        <li style="padding: 8px 0;">✅ Phân quyền</li>
+                    <h2 class="card-title">Chính Sách Bảo Mật</h2>
+                    <div class="draft-item-meta" style="margin-bottom: 16px;">
+                        <span>Phiên bản chính sách: 2.1 (ban hành 01/12/2024)</span>
+                    </div>
+                    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
+                        <li>🔐 Bắt buộc 2FA cho Admin và Giáo viên.</li>
+                        <li>📁 Phân tách dữ liệu theo lớp học, quyền xem chi tiết điểm số chỉ dành cho giáo viên phụ trách.</li>
+                        <li>🗂️ Lưu trữ nhật ký truy cập tối thiểu 180 ngày.</li>
+                        <li>🛡️ Tài khoản đăng nhập sai quá 5 lần sẽ tự động khóa (6.3.1.2.4).</li>
                     </ul>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">Chỉnh Sửa</button>
                 </div>
+                <div class="card">
+                    <h2 class="card-title">Mẫu Vai Trò Tùy Chỉnh</h2>
+                    <p class="card-subtitle">Tạo các vai trò đặc thù theo yêu cầu khách hàng/đối tác.</p>
+                    <div class="draft-item">
+                        <div>
+                            <strong>Trợ giảng</strong>
+                            <div class="draft-item-meta">
+                                <span>Quyền: Xem nội dung lớp, phản hồi bài tập.</span>
+                                <span>Không được phép phê duyệt nội dung.</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-secondary">Chỉnh sửa</button>
+                    </div>
+                    <div class="draft-item">
+                        <div>
+                            <strong>Kiểm duyệt viên</strong>
+                            <div class="draft-item-meta">
+                                <span>Quyền: Xem báo cáo vi phạm, đề xuất khóa nội dung.</span>
+                                <span>Không chỉnh sửa dữ liệu tài chính.</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-secondary">Chỉnh sửa</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Audit Log Phân Quyền</h2>
+                        <p class="card-subtitle">Theo dõi thay đổi quyền truy cập và chính sách bảo mật (6.3.3.6).</p>
+                    </div>
+                </div>
+                <ul class="timeline">
+                    <li>
+                        <strong>10/12/2024 08:40</strong><br>
+                        Admin B chỉnh sửa quyền Livestream cho vai trò Giáo viên, giới hạn 200 người tham gia đồng thời.
+                    </li>
+                    <li>
+                        <strong>09/12/2024 19:05</strong><br>
+                        Admin A tạo vai trò “Kiểm duyệt viên” và cấp quyền đọc báo cáo vi phạm.
+                    </li>
+                    <li>
+                        <strong>08/12/2024 16:20</strong><br>
+                        Hệ thống tự động khóa quyền phê duyệt của Admin dự phòng do không kích hoạt 2FA trước hạn.
+                    </li>
+                </ul>
             </div>
         `;
     }
@@ -2004,6 +2789,221 @@ class DashboardManager {
                         <button class="btn btn-secondary">Xuất Báo Cáo Excel</button>
                     </div>
                 </div>
+            </div>
+        `;
+    }
+
+    getAdminMonitoring() {
+        return `
+            <div class="dashboard-header">
+                <h1>Giám Sát Lỗi Hệ Thống</h1>
+                <p>Theo dõi tình trạng dịch vụ, cảnh báo lỗi và nhật ký sự cố</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-server"></i></div>
+                    <div class="stat-info">
+                        <h3>99.95%</h3>
+                        <p>Uptime 30 ngày gần nhất</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-info">
+                        <h3>2</h3>
+                        <p>Sự cố mở</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bug"></i></div>
+                    <div class="stat-info">
+                        <h3>14</h3>
+                        <p>Lỗi đã xử lý tuần này</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="stat-info">
+                        <h3>Không</h3>
+                        <p>Sự cố bảo mật</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Tình Trạng Dịch Vụ</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Dịch Vụ</th>
+                            <th>Trạng Thái</th>
+                            <th>Thời Gian Kiểm Tra</th>
+                            <th>Ghi Chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>API Học Sinh</td>
+                            <td><span class="badge badge-success">Hoạt động</span></td>
+                            <td>10/12/2024 10:15</td>
+                            <td>Không có lỗi</td>
+                        </tr>
+                        <tr>
+                            <td>Gateway Thanh Toán</td>
+                            <td><span class="badge badge-warning">Gián đoạn nhẹ</span></td>
+                            <td>10/12/2024 09:42</td>
+                            <td>Đang bảo trì VNPay</td>
+                        </tr>
+                        <tr>
+                            <td>Hệ thống Livestream</td>
+                            <td><span class="badge badge-success">Hoạt động</span></td>
+                            <td>10/12/2024 10:05</td>
+                            <td>Độ trễ dưới 300ms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Nhật Ký Sự Cố</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Mức Độ</th>
+                            <th>Mô Tả</th>
+                            <th>Thời Gian</th>
+                            <th>Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#INC-20241210-01</td>
+                            <td><span class="badge badge-danger">Critical</span></td>
+                            <td>Lỗi đồng bộ điểm số</td>
+                            <td>10/12/2024 08:20</td>
+                            <td><span class="badge badge-warning">Đang xử lý</span></td>
+                        </tr>
+                        <tr>
+                            <td>#INC-20241208-04</td>
+                            <td><span class="badge badge-warning">Major</span></td>
+                            <td>Gateway thanh toán chậm</td>
+                            <td>08/12/2024 21:05</td>
+                            <td><span class="badge badge-success">Đã khôi phục</span></td>
+                        </tr>
+                        <tr>
+                            <td>#INC-20241205-02</td>
+                            <td><span class="badge badge-info">Minor</span></td>
+                            <td>Lỗi hiển thị livestream</td>
+                            <td>05/12/2024 19:40</td>
+                            <td><span class="badge badge-success">Đã khắc phục</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-secondary" style="margin-top: 15px;">Xem nhật ký đầy đủ</button>
+            </div>
+        `;
+    }
+
+    getAdminNotifications() {
+        return `
+            <div class="dashboard-header">
+                <h1>Thông Báo Hệ Thống</h1>
+                <p>Tạo thông báo toàn hệ thống và theo dõi lịch sử gửi</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Tạo Thông Báo Mới</h2>
+                    <form>
+                        <div class="form-group">
+                            <label>Tiêu Đề</label>
+                            <input type="text" placeholder="Ví dụ: Bảo trì hệ thống 12/12">
+                        </div>
+                        <div class="form-group">
+                            <label>Nội Dung</label>
+                            <textarea rows="4" placeholder="Nhập nội dung thông báo..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Đối Tượng</label>
+                            <select>
+                                <option>Tất cả người dùng</option>
+                                <option>Chỉ học sinh</option>
+                                <option>Chỉ giáo viên</option>
+                                <option>Chỉ quản trị viên</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kênh Gửi</label>
+                            <div style="display: flex; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 6px;">
+                                    <input type="checkbox" checked> In-app
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px;">
+                                    <input type="checkbox"> Email
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px;">
+                                    <input type="checkbox"> SMS
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Gửi Thông Báo</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2 style="margin-bottom: 15px;">Lịch Sử Gửi</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tiêu Đề</th>
+                                <th>Ngày Gửi</th>
+                                <th>Đối Tượng</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bảo trì hệ thống 12/12</td>
+                                <td>09/12/2024</td>
+                                <td>Tất cả</td>
+                                <td><span class="badge badge-success">Đã gửi</span></td>
+                            </tr>
+                            <tr>
+                                <td>Livestream Toán nâng cao</td>
+                                <td>08/12/2024</td>
+                                <td>Học sinh</td>
+                                <td><span class="badge badge-success">Đã gửi</span></td>
+                            </tr>
+                            <tr>
+                                <td>Hướng dẫn cập nhật nội dung</td>
+                                <td>05/12/2024</td>
+                                <td>Giáo viên</td>
+                                <td><span class="badge badge-success">Đã gửi</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" style="margin-top: 15px;">Xem toàn bộ lịch sử</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Mẫu Thông Báo Mặc Định</h2>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                        📢 Thông báo bảo trì định kỳ
+                        <button class="btn btn-sm btn-secondary" style="float: right;">Sử dụng</button>
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                        🎓 Thông báo lịch thi quan trọng
+                        <button class="btn btn-sm btn-secondary" style="float: right;">Sử dụng</button>
+                    </li>
+                    <li style="padding: 10px 0;">
+                        🧾 Cập nhật điều khoản sử dụng
+                        <button class="btn btn-sm btn-secondary" style="float: right;">Sử dụng</button>
+                    </li>
+                </ul>
             </div>
         `;
     }
