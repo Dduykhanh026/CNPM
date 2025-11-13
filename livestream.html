@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestream - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .livestream-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            background: #000;
+            overflow: hidden;
+        }
+
+        .livestream-header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            z-index: 100;
+        }
+
+        .livestream-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .livestream-title h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .live-badge {
+            background: var(--danger-color);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .livestream-main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .video-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #000;
+        }
+
+        .video-player {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #000;
+        }
+
+        .video-placeholder {
+            color: #fff;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .video-placeholder i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .video-controls-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-section:hover .video-controls-overlay {
+            opacity: 1;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: var(--primary-color);
+        }
+
+        .control-btn.danger {
+            background: var(--danger-color);
+        }
+
+        .sidebar {
+            width: 400px;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border-color);
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .sidebar-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .viewers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .viewer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .viewer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .viewer-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .message-sender {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .message-content {
+            background: var(--bg-secondary);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-left: 32px;
+            word-wrap: break-word;
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-primary);
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .send-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .like-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .like-btn:hover {
+            color: var(--danger-color);
+        }
+
+        .like-btn.liked {
+            color: var(--danger-color);
+        }
+
+        .teacher-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .viewer-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .livestream-main {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 300px;
+            }
+
+            .video-controls-overlay {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="livestream-container">
+        <div class="livestream-header">
+            <div class="livestream-title">
+                <span class="live-badge">LIVE</span>
+                <h2 id="stream-title">Livestream Toán - Đại số</h2>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="viewer-count">
+                    <i class="fas fa-users"></i>
+                    <span id="viewer-count">0</span> người đang xem
+                </div>
+                <div class="teacher-controls" id="teacher-controls" style="display: none;">
+                    <button class="control-btn" id="mic-control" title="Bật/Tắt Microphone">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn" id="camera-control" title="Bật/Tắt Camera">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="control-btn danger" id="end-stream-btn" title="Kết thúc livestream">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="livestream-main">
+            <div class="video-section">
+                <div class="video-player" id="video-player">
+                    <div class="video-placeholder">
+                        <i class="fas fa-video"></i>
+                        <p>Livestream video sẽ hiển thị ở đây</p>
+                    </div>
+                </div>
+                <div class="video-controls-overlay">
+                    <button class="control-btn" id="play-pause-btn" title="Phát/Tạm dừng">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn" id="volume-btn" title="Âm lượng">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <button class="control-btn" id="fullscreen-btn" title="Toàn màn hình">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-tabs">
+                    <button class="sidebar-tab active" data-tab="chat">
+                        <i class="fas fa-comments"></i> Chat
+                    </button>
+                    <button class="sidebar-tab" data-tab="viewers">
+                        <i class="fas fa-users"></i> Người xem
+                    </button>
+                </div>
+
+                <div class="sidebar-content" id="sidebar-content">
+                    <!-- Chat or viewers list will be loaded here -->
+                </div>
+
+                <div class="chat-input-area" id="chat-input-area" style="display: none;">
+                    <div class="chat-input-row">
+                        <input 
+                            type="text" 
+                            id="chat-input" 
+                            class="chat-input" 
+                            placeholder="Nhập tin nhắn..."
+                            maxlength="200"
+                        >
+                        <button class="like-btn" id="like-btn" title="Thích">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button class="send-btn" id="send-btn" title="Gửi">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/livestream.js"></script>
+</body>
+</html>
+
