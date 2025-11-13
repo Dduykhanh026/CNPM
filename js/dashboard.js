@@ -187,6 +187,7 @@ class DashboardManager {
                     break;
                 case 'showSystemNotifications':
                     dashboardContent.innerHTML = this.getAdminNotifications();
+                    this.bindNotificationEvents();
                     break;
                 case 'showProfile':
                     dashboardContent.innerHTML = this.getProfile();
@@ -2650,6 +2651,67 @@ class DashboardManager {
                 </div>
                 </div>
                 
+                <div class="card" id="create-role-form-container" style="display: none; margin-bottom: 20px;">
+                    <div class="card-header">
+                        <h3>Tạo vai trò mới</h3>
+                        <p class="card-subtitle">Nhập thông tin để tạo vai trò tùy chỉnh mới.</p>
+                    </div>
+                    <form id="create-role-form" class="grid grid-2" style="margin-top: 16px;">
+                        <div class="form-group">
+                            <label for="create-role-name">Tên vai trò</label>
+                            <input type="text" id="create-role-name" required placeholder="Ví dụ: Trợ giảng">
+                        </div>
+                        <div class="form-group">
+                            <label for="create-role-id">Mã vai trò</label>
+                            <input type="text" id="create-role-id" required placeholder="Ví dụ: ROLE-ASSISTANT" pattern="ROLE-[A-Z0-9-]+">
+                            <small class="text-muted">Định dạng: ROLE-XXXXX (chữ in hoa, số và dấu gạch ngang)</small>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="create-role-description">Mô tả</label>
+                            <textarea id="create-role-description" required placeholder="Mô tả chức năng và nhiệm vụ của vai trò..." rows="3"></textarea>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="create-role-permissions">Quyền mặc định</label>
+                            <textarea id="create-role-permissions" required placeholder="Mô tả các quyền mặc định của vai trò..." rows="3"></textarea>
+                        </div>
+                        <div class="form-actions-inline" style="grid-column: 1 / -1;">
+                            <button type="button" class="btn btn-secondary" id="cancel-create-role">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Tạo vai trò</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" id="edit-role-form-container" style="display: none; margin-bottom: 20px;">
+                    <div class="card-header">
+                        <h3>Chỉnh sửa vai trò</h3>
+                        <p class="card-subtitle">Cập nhật thông tin vai trò bên dưới.</p>
+                    </div>
+                    <form id="edit-role-form" class="grid grid-2" style="margin-top: 16px;">
+                        <input type="hidden" id="edit-role-id">
+                        <div class="form-group">
+                            <label for="edit-role-name">Tên vai trò</label>
+                            <input type="text" id="edit-role-name" required placeholder="Ví dụ: Trợ giảng">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-role-code">Mã vai trò</label>
+                            <input type="text" id="edit-role-code" required readonly style="background: var(--bg-secondary);">
+                            <small class="text-muted">Mã vai trò không thể thay đổi</small>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="edit-role-description">Mô tả</label>
+                            <textarea id="edit-role-description" required placeholder="Mô tả chức năng và nhiệm vụ của vai trò..." rows="3"></textarea>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="edit-role-permissions">Quyền mặc định</label>
+                            <textarea id="edit-role-permissions" required placeholder="Mô tả các quyền mặc định của vai trò..." rows="3"></textarea>
+                        </div>
+                        <div class="form-actions-inline" style="grid-column: 1 / -1;">
+                            <button type="button" class="btn btn-secondary" id="cancel-edit-role">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật vai trò</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="card">
                 <h2 class="card-title">Mẫu Vai Trò Tùy Chỉnh</h2>
                 <p class="card-subtitle">Tạo và quản lý các vai trò đặc thù theo yêu cầu.</p>
@@ -2752,7 +2814,382 @@ class DashboardManager {
             });
         }
 
+        // Role management events
+        this.bindRoleManagementEvents();
+
         this.bindAdminMonitoringEvents();
+    }
+
+    bindNotificationEvents() {
+        const notificationForm = document.getElementById('notification-form');
+        const notificationsTable = document.getElementById('notifications-table');
+        const cancelBtn = document.getElementById('cancel-notification-btn');
+        const formTitle = document.getElementById('notification-form-title');
+        const submitBtn = document.getElementById('notification-submit-btn');
+
+        // Xử lý submit form
+        if (notificationForm) {
+            notificationForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                this.handleNotificationSubmit();
+            });
+        }
+
+        // Xử lý nút hủy
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                this.resetNotificationForm();
+            });
+        }
+
+        // Xử lý các nút trong bảng
+        if (notificationsTable) {
+            notificationsTable.addEventListener('click', (event) => {
+                const button = event.target.closest('button[data-action]');
+                if (!button) return;
+
+                const action = button.getAttribute('data-action');
+                const id = button.getAttribute('data-id');
+
+                if (action === 'edit-notification') {
+                    this.editNotification(id);
+                } else if (action === 'delete-notification') {
+                    this.deleteNotification(id);
+                }
+            });
+        }
+    }
+
+    handleNotificationSubmit() {
+        const id = document.getElementById('notification-id').value;
+        const title = document.getElementById('notification-title').value.trim();
+        const content = document.getElementById('notification-content').value.trim();
+        const target = document.getElementById('notification-target').value;
+        const inapp = document.getElementById('channel-inapp').checked;
+        const email = document.getElementById('channel-email').checked;
+        const sms = document.getElementById('channel-sms').checked;
+
+        if (!title || !content) {
+            alert('Vui lòng điền đầy đủ tiêu đề và nội dung.');
+            return;
+        }
+
+        if (!inapp && !email && !sms) {
+            alert('Vui lòng chọn ít nhất một kênh gửi.');
+            return;
+        }
+
+        const tableBody = document.getElementById('notifications-table-body');
+        if (!tableBody) return;
+
+        const targetText = {
+            'all': 'Tất cả',
+            'student': 'Học sinh',
+            'teacher': 'Giáo viên',
+            'admin': 'Quản trị viên'
+        };
+
+        if (id) {
+            // Cập nhật thông báo hiện có
+            const row = tableBody.querySelector(`tr[data-notification-id="${id}"]`);
+            if (row) {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 4) {
+                    cells[0].textContent = title;
+                    cells[2].textContent = targetText[target] || target;
+                }
+            }
+            alert(`Đã cập nhật thông báo "${title}" thành công (mô phỏng).`);
+        } else {
+            // Tạo thông báo mới
+            const today = new Date();
+            const dateStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+            const newId = `NOTIF-${String(Date.now()).slice(-6)}`;
+
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-notification-id', newId);
+            newRow.innerHTML = `
+                <td>${title}</td>
+                <td>${dateStr}</td>
+                <td>${targetText[target] || target}</td>
+                <td><span class="badge badge-success">Đã gửi</span></td>
+                <td>
+                    <div class="table-actions">
+                        <button class="btn btn-sm btn-secondary" data-action="edit-notification" data-id="${newId}">Chỉnh sửa</button>
+                        <button class="btn btn-sm btn-danger" data-action="delete-notification" data-id="${newId}">Xóa</button>
+                    </div>
+                </td>
+            `;
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+            alert(`Đã gửi thông báo "${title}" thành công (mô phỏng).`);
+        }
+
+        this.resetNotificationForm();
+    }
+
+    editNotification(id) {
+        const row = document.querySelector(`tr[data-notification-id="${id}"]`);
+        if (!row) return;
+
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 3) return;
+
+        // Lấy dữ liệu từ bảng (mô phỏng - trong thực tế sẽ lấy từ database)
+        const title = cells[0].textContent.trim();
+        const targetText = cells[2].textContent.trim();
+        
+        // Map lại giá trị target
+        let target = 'all';
+        if (targetText === 'Học sinh') target = 'student';
+        else if (targetText === 'Giáo viên') target = 'teacher';
+        else if (targetText === 'Quản trị viên') target = 'admin';
+
+        // Điền form
+        document.getElementById('notification-id').value = id;
+        document.getElementById('notification-title').value = title;
+        document.getElementById('notification-content').value = `Nội dung thông báo: ${title}`; // Mô phỏng
+        document.getElementById('notification-target').value = target;
+        
+        // Hiển thị form chỉnh sửa
+        const formTitle = document.getElementById('notification-form-title');
+        const submitBtn = document.getElementById('notification-submit-btn');
+        const cancelBtn = document.getElementById('cancel-notification-btn');
+        
+        if (formTitle) formTitle.textContent = 'Chỉnh sửa Thông Báo';
+        if (submitBtn) submitBtn.textContent = 'Cập nhật Thông Báo';
+        if (cancelBtn) cancelBtn.style.display = 'inline-block';
+
+        // Scroll to form
+        const formCard = document.querySelector('#notification-form').closest('.card');
+        if (formCard) {
+            formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    deleteNotification(id) {
+        const row = document.querySelector(`tr[data-notification-id="${id}"]`);
+        if (!row) return;
+
+        const title = row.querySelector('td:first-child')?.textContent || 'thông báo này';
+        
+        if (confirm(`Bạn có chắc chắn muốn xóa thông báo "${title}"?`)) {
+            row.remove();
+            alert(`Đã xóa thông báo "${title}" thành công (mô phỏng).`);
+        }
+    }
+
+    resetNotificationForm() {
+        const form = document.getElementById('notification-form');
+        const formTitle = document.getElementById('notification-form-title');
+        const submitBtn = document.getElementById('notification-submit-btn');
+        const cancelBtn = document.getElementById('cancel-notification-btn');
+
+        if (form) form.reset();
+        document.getElementById('notification-id').value = '';
+        document.getElementById('channel-inapp').checked = true;
+        
+        if (formTitle) formTitle.textContent = 'Tạo Thông Báo Mới';
+        if (submitBtn) submitBtn.textContent = 'Gửi Thông Báo';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+    }
+
+    bindRoleManagementEvents() {
+        // Create role button
+        const createRoleBtn = document.querySelector('[data-action="create-role"]');
+        if (createRoleBtn) {
+            createRoleBtn.addEventListener('click', () => this.showCreateRoleForm());
+        }
+
+        // Cancel create role
+        const cancelCreateBtn = document.getElementById('cancel-create-role');
+        if (cancelCreateBtn) {
+            cancelCreateBtn.addEventListener('click', () => this.hideCreateRoleForm());
+        }
+
+        // Create role form submit
+        const createRoleForm = document.getElementById('create-role-form');
+        if (createRoleForm) {
+            createRoleForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveNewRole();
+            });
+        }
+
+        // Cancel edit role
+        const cancelEditBtn = document.getElementById('cancel-edit-role');
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', () => this.hideEditRoleForm());
+        }
+
+        // Edit role form submit
+        const editRoleForm = document.getElementById('edit-role-form');
+        if (editRoleForm) {
+            editRoleForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveRoleEdit();
+            });
+        }
+
+        // Role table actions (edit, delete)
+        const roleTable = document.getElementById('role-table');
+        if (roleTable) {
+            roleTable.addEventListener('click', (event) => {
+                const button = event.target.closest('button[data-action]');
+                if (!button) return;
+
+                const action = button.getAttribute('data-action');
+                const roleId = button.getAttribute('data-role-id');
+
+                if (action === 'edit-role') {
+                    this.showEditRoleForm(roleId);
+                } else if (action === 'delete-role') {
+                    this.deleteRole(roleId);
+                }
+            });
+        }
+    }
+
+    showCreateRoleForm() {
+        const formContainer = document.getElementById('create-role-form-container');
+        const editFormContainer = document.getElementById('edit-role-form-container');
+        
+        if (editFormContainer) editFormContainer.style.display = 'none';
+        if (formContainer) {
+            formContainer.style.display = 'block';
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    hideCreateRoleForm() {
+        const formContainer = document.getElementById('create-role-form-container');
+        const form = document.getElementById('create-role-form');
+        if (formContainer) formContainer.style.display = 'none';
+        if (form) form.reset();
+    }
+
+    showEditRoleForm(roleId) {
+        const formContainer = document.getElementById('edit-role-form-container');
+        const createFormContainer = document.getElementById('create-role-form-container');
+        
+        if (createFormContainer) createFormContainer.style.display = 'none';
+        
+        // Get role data from table
+        const roleRow = document.querySelector(`tr[data-role-id="${roleId}"]`);
+        if (!roleRow) {
+            alert('Không tìm thấy vai trò.');
+            return;
+        }
+
+        const cells = roleRow.querySelectorAll('td');
+        if (cells.length < 3) {
+            alert('Dữ liệu vai trò không hợp lệ.');
+            return;
+        }
+
+        // Populate form
+        document.getElementById('edit-role-id').value = roleId;
+        document.getElementById('edit-role-code').value = roleId;
+        document.getElementById('edit-role-name').value = cells[0].textContent.trim();
+        document.getElementById('edit-role-description').value = cells[1].textContent.trim();
+        document.getElementById('edit-role-permissions').value = cells[2].textContent.trim();
+
+        if (formContainer) {
+            formContainer.style.display = 'block';
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    hideEditRoleForm() {
+        const formContainer = document.getElementById('edit-role-form-container');
+        const form = document.getElementById('edit-role-form');
+        if (formContainer) formContainer.style.display = 'none';
+        if (form) form.reset();
+    }
+
+    saveNewRole() {
+        const name = document.getElementById('create-role-name').value.trim();
+        const id = document.getElementById('create-role-id').value.trim();
+        const description = document.getElementById('create-role-description').value.trim();
+        const permissions = document.getElementById('create-role-permissions').value.trim();
+
+        // Validate
+        if (!name || !id || !description || !permissions) {
+            alert('Vui lòng điền đầy đủ thông tin.');
+            return;
+        }
+
+        // Check if role ID already exists
+        const existingRole = document.querySelector(`tr[data-role-id="${id}"]`);
+        if (existingRole) {
+            alert('Mã vai trò đã tồn tại. Vui lòng chọn mã khác.');
+            return;
+        }
+
+        // Add new role to table
+        const tbody = document.querySelector('#role-table tbody');
+        if (!tbody) return;
+
+        const newRow = document.createElement('tr');
+        newRow.setAttribute('data-role-id', id);
+        newRow.innerHTML = `
+            <td>${name}</td>
+            <td>${description}</td>
+            <td>${permissions}</td>
+            <td>
+                <div class="table-actions">
+                    <button class="btn btn-sm btn-secondary" data-action="edit-role" data-role-id="${id}">Chỉnh sửa</button>
+                    <button class="btn btn-sm btn-danger" data-action="delete-role" data-role-id="${id}">Xóa</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(newRow);
+
+        this.hideCreateRoleForm();
+        alert(`Đã tạo vai trò "${name}" thành công (mô phỏng).`);
+    }
+
+    saveRoleEdit() {
+        const roleId = document.getElementById('edit-role-id').value;
+        const name = document.getElementById('edit-role-name').value.trim();
+        const description = document.getElementById('edit-role-description').value.trim();
+        const permissions = document.getElementById('edit-role-permissions').value.trim();
+
+        // Validate
+        if (!name || !description || !permissions) {
+            alert('Vui lòng điền đầy đủ thông tin.');
+            return;
+        }
+
+        // Update role in table
+        const roleRow = document.querySelector(`tr[data-role-id="${roleId}"]`);
+        if (!roleRow) {
+            alert('Không tìm thấy vai trò để cập nhật.');
+            return;
+        }
+
+        const cells = roleRow.querySelectorAll('td');
+        if (cells.length >= 3) {
+            cells[0].textContent = name;
+            cells[1].textContent = description;
+            cells[2].textContent = permissions;
+        }
+
+        this.hideEditRoleForm();
+        alert(`Đã cập nhật vai trò "${name}" thành công (mô phỏng).`);
+    }
+
+    deleteRole(roleId) {
+        if (!confirm('Bạn có chắc chắn muốn xóa vai trò này không?')) return;
+
+        const roleRow = document.querySelector(`tr[data-role-id="${roleId}"]`);
+        if (!roleRow) {
+            alert('Không tìm thấy vai trò để xóa.');
+            return;
+        }
+
+        const roleName = roleRow.querySelector('td:first-child')?.textContent || roleId;
+        roleRow.remove();
+        alert(`Đã xóa vai trò "${roleName}" thành công (mô phỏng).`);
     }
 
     bindAdminMonitoringEvents() {
@@ -3391,79 +3828,104 @@ class DashboardManager {
                 <p>Tạo thông báo toàn hệ thống và theo dõi lịch sử gửi</p>
             </div>
 
-            <div class="grid grid-2">
-                <div class="card">
-                    <h2 style="margin-bottom: 15px;">Tạo Thông Báo Mới</h2>
-                    <form>
+            <div class="card">
+                <h2 style="margin-bottom: 15px;" id="notification-form-title">Tạo Thông Báo Mới</h2>
+                <form id="notification-form">
+                    <input type="hidden" id="notification-id">
+                    <div class="grid grid-2">
                         <div class="form-group">
                             <label>Tiêu Đề</label>
-                            <input type="text" placeholder="Ví dụ: Bảo trì hệ thống 12/12">
-                        </div>
-                        <div class="form-group">
-                            <label>Nội Dung</label>
-                            <textarea rows="4" placeholder="Nhập nội dung thông báo..."></textarea>
+                            <input type="text" id="notification-title" required placeholder="Ví dụ: Bảo trì hệ thống 12/12">
                         </div>
                         <div class="form-group">
                             <label>Đối Tượng</label>
-                            <select>
-                                <option>Tất cả người dùng</option>
-                                <option>Chỉ học sinh</option>
-                                <option>Chỉ giáo viên</option>
-                                <option>Chỉ quản trị viên</option>
+                            <select id="notification-target" required>
+                                <option value="all">Tất cả người dùng</option>
+                                <option value="student">Chỉ học sinh</option>
+                                <option value="teacher">Chỉ giáo viên</option>
+                                <option value="admin">Chỉ quản trị viên</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Kênh Gửi</label>
-                            <div style="display: flex; gap: 12px;">
-                                <label style="display: flex; align-items: center; gap: 6px;">
-                                    <input type="checkbox" checked> In-app
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 6px;">
-                                    <input type="checkbox"> Email
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 6px;">
-                                    <input type="checkbox"> SMS
-                                </label>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nội Dung</label>
+                        <textarea id="notification-content" rows="4" required placeholder="Nhập nội dung thông báo..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Kênh Gửi</label>
+                        <div style="display: flex; gap: 12px;">
+                            <label style="display: flex; align-items: center; gap: 6px;">
+                                <input type="checkbox" id="channel-inapp" checked> In-app
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px;">
+                                <input type="checkbox" id="channel-email"> Email
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px;">
+                                <input type="checkbox" id="channel-sms"> SMS
+                            </label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Gửi Thông Báo</button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="form-actions-inline">
+                        <button type="button" class="btn btn-secondary" id="cancel-notification-btn" style="display: none;">Hủy</button>
+                        <button type="submit" class="btn btn-primary" id="notification-submit-btn">Gửi Thông Báo</button>
+                    </div>
+                </form>
+            </div>
 
-                <div class="card">
-                    <h2 style="margin-bottom: 15px;">Lịch Sử Gửi</h2>
-                    <table class="table">
+            <div class="card" style="margin-top: 20px;">
+                <h2 style="margin-bottom: 15px;">Lịch Sử Gửi</h2>
+                <div class="table-wrapper">
+                    <table class="table" id="notifications-table">
                         <thead>
                             <tr>
                                 <th>Tiêu Đề</th>
                                 <th>Ngày Gửi</th>
                                 <th>Đối Tượng</th>
                                 <th>Trạng Thái</th>
+                                <th>Thao Tác</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
+                        <tbody id="notifications-table-body">
+                            <tr data-notification-id="NOTIF-001">
                                 <td>Bảo trì hệ thống 12/12</td>
                                 <td>09/12/2024</td>
                                 <td>Tất cả</td>
                                 <td><span class="badge badge-success">Đã gửi</span></td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-sm btn-secondary" data-action="edit-notification" data-id="NOTIF-001">Chỉnh sửa</button>
+                                        <button class="btn btn-sm btn-danger" data-action="delete-notification" data-id="NOTIF-001">Xóa</button>
+                                    </div>
+                                </td>
                             </tr>
-                            <tr>
+                            <tr data-notification-id="NOTIF-002">
                                 <td>Livestream Toán nâng cao</td>
                                 <td>08/12/2024</td>
                                 <td>Học sinh</td>
                                 <td><span class="badge badge-success">Đã gửi</span></td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-sm btn-secondary" data-action="edit-notification" data-id="NOTIF-002">Chỉnh sửa</button>
+                                        <button class="btn btn-sm btn-danger" data-action="delete-notification" data-id="NOTIF-002">Xóa</button>
+                                    </div>
+                                </td>
                             </tr>
-                            <tr>
+                            <tr data-notification-id="NOTIF-003">
                                 <td>Hướng dẫn cập nhật nội dung</td>
                                 <td>05/12/2024</td>
                                 <td>Giáo viên</td>
                                 <td><span class="badge badge-success">Đã gửi</span></td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-sm btn-secondary" data-action="edit-notification" data-id="NOTIF-003">Chỉnh sửa</button>
+                                        <button class="btn btn-sm btn-danger" data-action="delete-notification" data-id="NOTIF-003">Xóa</button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-secondary" style="margin-top: 15px;">Xem toàn bộ lịch sử</button>
                 </div>
+                <button class="btn btn-secondary" style="margin-top: 15px;">Xem toàn bộ lịch sử</button>
             </div>
 
             <div class="card" style="margin-top: 20px;">

@@ -43,6 +43,47 @@
             </div>
         </div>
 
+        <div class="card" id="edit-account-form-container" style="display: none; margin-bottom: 20px;">
+            <div class="card-header">
+                <h3>Chỉnh sửa tài khoản</h3>
+                <p class="card-subtitle">Cập nhật thông tin tài khoản bên dưới.</p>
+            </div>
+            <form id="edit-account-form" class="grid grid-2" style="margin-top: 16px;">
+                <input type="hidden" id="edit-account-id">
+                <div class="form-group">
+                    <label for="edit-account-name">Họ và tên</label>
+                    <input type="text" id="edit-account-name" required placeholder="Ví dụ: Nguyễn Văn A">
+                </div>
+                <div class="form-group">
+                    <label for="edit-account-email">Email</label>
+                    <input type="email" id="edit-account-email" required placeholder="example@kh33.vn">
+                </div>
+                <div class="form-group">
+                    <label for="edit-account-phone">Số điện thoại</label>
+                    <input type="tel" id="edit-account-phone" required placeholder="0912345678" pattern="0\\d{9}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-account-role">Vai trò</label>
+                    <select id="edit-account-role" required>
+                        <option value="student">Học Sinh</option>
+                        <option value="teacher">Giáo Viên</option>
+                        <option value="admin">Quản Trị Viên</option>
+                    </select>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="edit-account-status">Trạng thái</label>
+                    <select id="edit-account-status">
+                        <option value="active">Hoạt động</option>
+                        <option value="locked">Tạm khóa</option>
+                    </select>
+                </div>
+                <div class="form-actions-inline" style="grid-column: 1 / -1;">
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-account">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật tài khoản</button>
+                </div>
+            </form>
+        </div>
+
         <div class="card">
             <table class="table">
                 <thead>

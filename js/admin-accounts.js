@@ -49,6 +49,9 @@ class AdminAccountManager {
         this.modal = document.getElementById('admin-account-modal');
         this.modalBody = document.getElementById('admin-account-modal-body');
         this.modalCloseBtn = document.getElementById('admin-account-modal-close');
+        this.editFormContainer = document.getElementById('edit-account-form-container');
+        this.editForm = document.getElementById('edit-account-form');
+        this.cancelEditBtn = document.getElementById('cancel-edit-account');
     }
 
     init() {
@@ -81,6 +84,17 @@ class AdminAccountManager {
                 if (event.target === this.modal) {
                     this.closeModal();
                 }
+            });
+        }
+
+        if (this.cancelEditBtn) {
+            this.cancelEditBtn.addEventListener('click', () => this.hideEditForm());
+        }
+
+        if (this.editForm) {
+            this.editForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                this.saveAccountEdit();
             });
         }
 
@@ -283,7 +297,79 @@ class AdminAccountManager {
     }
 
     editAccount(id) {
-        alert(`Chỉnh sửa tài khoản ${id} (mô phỏng).`);
+        const account = this.accounts.find(acc => acc.id === id);
+        if (!account) {
+            alert('Không tìm thấy tài khoản.');
+            return;
+        }
+
+        // Populate form with account data
+        document.getElementById('edit-account-id').value = account.id;
+        document.getElementById('edit-account-name').value = account.name;
+        document.getElementById('edit-account-email').value = account.email;
+        document.getElementById('edit-account-phone').value = account.phone;
+        document.getElementById('edit-account-role').value = account.role;
+        document.getElementById('edit-account-status').value = account.status;
+
+        // Show the form
+        this.showEditForm();
+
+        // Scroll to form
+        this.editFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    showEditForm() {
+        if (this.editFormContainer) {
+            this.editFormContainer.style.display = 'block';
+        }
+    }
+
+    hideEditForm() {
+        if (this.editFormContainer) {
+            this.editFormContainer.style.display = 'none';
+            if (this.editForm) {
+                this.editForm.reset();
+            }
+        }
+    }
+
+    saveAccountEdit() {
+        const id = document.getElementById('edit-account-id').value;
+        const name = document.getElementById('edit-account-name').value.trim();
+        const email = document.getElementById('edit-account-email').value.trim();
+        const phone = document.getElementById('edit-account-phone').value.trim();
+        const role = document.getElementById('edit-account-role').value;
+        const status = document.getElementById('edit-account-status').value;
+
+        // Validate
+        const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        const phonePattern = /^0\d{9}$/;
+
+        if (!name || !emailPattern.test(email) || !phonePattern.test(phone)) {
+            alert('Vui lòng kiểm tra lại thông tin đã nhập.');
+            return;
+        }
+
+        // Find and update account
+        const accountIndex = this.accounts.findIndex(acc => acc.id === id);
+        if (accountIndex === -1) {
+            alert('Không tìm thấy tài khoản để cập nhật.');
+            return;
+        }
+
+        // Update account
+        this.accounts[accountIndex] = {
+            ...this.accounts[accountIndex],
+            name,
+            email,
+            phone,
+            role,
+            status
+        };
+
+        this.hideEditForm();
+        alert('Đã cập nhật tài khoản thành công (mô phỏng).');
+        this.renderAccounts();
     }
 
     deleteAccount(id) {

@@ -387,6 +387,10 @@ class TeacherStudentManager {
 
     openStudentModal(student) {
         if (!this.modal || !this.modalBody) return;
+        
+        // Tạo dữ liệu điểm chi tiết cho 3 môn học
+        const subjectScores = this.getSubjectScores(student);
+        
         this.modalBody.innerHTML = `
             <h3>${student.name}</h3>
             <p class="text-muted">Lớp: ${student.className} • Mã HS: ${student.id}</p>
@@ -398,6 +402,36 @@ class TeacherStudentManager {
                     <li>Mức độ tham gia: <strong>${student.engagement}</strong></li>
                     <li>Trạng thái: ${this.renderStudentStatus(student.status)}</li>
                 </ul>
+            </div>
+            <div class="detail-section">
+                <h4>Chi tiết điểm 3 môn học</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 12px;">
+                    ${subjectScores.map(subject => `
+                        <div style="background: var(--bg-secondary); border-radius: 12px; padding: 16px;">
+                            <h5 style="margin-bottom: 8px; color: var(--text-primary);">${subject.name}</h5>
+                            <div style="font-size: 32px; font-weight: 700; color: var(--primary-color); margin-bottom: 8px;">
+                                ${subject.average}
+                            </div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                                Điểm trung bình
+                            </div>
+                            <div style="border-top: 1px solid var(--border-color); padding-top: 12px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px;">
+                                    <span style="color: var(--text-secondary);">Điểm giữa kỳ:</span>
+                                    <strong style="color: var(--text-primary);">${subject.midterm}</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px;">
+                                    <span style="color: var(--text-secondary);">Điểm cuối kỳ:</span>
+                                    <strong style="color: var(--text-primary);">${subject.final}</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                                    <span style="color: var(--text-secondary);">Điểm thường xuyên:</span>
+                                    <strong style="color: var(--text-primary);">${subject.regular}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
             <div class="detail-section">
                 <h4>Hoạt động gần đây</h4>
@@ -412,6 +446,54 @@ class TeacherStudentManager {
         `;
         this.modal.classList.add('open');
         document.body.style.overflow = 'hidden';
+    }
+
+    getSubjectScores(student) {
+        // Tạo dữ liệu điểm mẫu dựa trên điểm trung bình và môn học của học sinh
+        const baseScore = student.averageScore;
+        const variation = 0.5; // Biến thiên điểm
+        
+        // Xác định môn học chính từ lớp
+        let mainSubject = 'Toán';
+        if (student.className.includes('Vật Lý') || student.className.includes('Vật lý')) {
+            mainSubject = 'Vật Lý';
+        } else if (student.className.includes('Hóa Học') || student.className.includes('Hóa học')) {
+            mainSubject = 'Hóa Học';
+        }
+
+        const subjects = ['Toán', 'Vật Lý', 'Hóa Học'];
+        
+        return subjects.map(subject => {
+            let average, midterm, final, regular;
+            
+            if (subject === mainSubject) {
+                // Môn chính có điểm cao hơn
+                average = baseScore + (Math.random() * 0.5);
+                midterm = average + (Math.random() * 0.8 - 0.4);
+                final = average + (Math.random() * 0.8 - 0.4);
+                regular = average + (Math.random() * 0.6 - 0.3);
+            } else {
+                // Môn phụ có điểm thấp hơn một chút
+                average = baseScore - (Math.random() * 0.8);
+                midterm = average + (Math.random() * 0.8 - 0.4);
+                final = average + (Math.random() * 0.8 - 0.4);
+                regular = average + (Math.random() * 0.6 - 0.3);
+            }
+            
+            // Đảm bảo điểm trong khoảng hợp lý (0-10)
+            average = Math.max(0, Math.min(10, average));
+            midterm = Math.max(0, Math.min(10, midterm));
+            final = Math.max(0, Math.min(10, final));
+            regular = Math.max(0, Math.min(10, regular));
+            
+            return {
+                name: subject,
+                average: average.toFixed(1),
+                midterm: midterm.toFixed(1),
+                final: final.toFixed(1),
+                regular: regular.toFixed(1)
+            };
+        });
     }
 
     closeModal() {

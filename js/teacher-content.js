@@ -254,6 +254,18 @@ class TeacherContentManager {
         this.modalType = document.getElementById('create-type');
         this.modalPrice = document.getElementById('create-price');
         this.modalVisibility = document.getElementById('create-visibility');
+        this.modalFile = document.getElementById('create-file');
+        this.fileList = document.getElementById('file-list');
+        this.fileNames = document.getElementById('file-names');
+
+        this.previewModal = document.getElementById('content-preview-modal');
+        this.previewBody = document.getElementById('content-preview-body');
+        this.previewCloseBtn = document.getElementById('preview-modal-close');
+
+        this.editModal = document.getElementById('content-edit-modal');
+        this.editForm = document.getElementById('content-edit-form');
+        this.editCloseBtn = document.getElementById('edit-modal-close');
+        this.cancelEditBtn = document.getElementById('cancel-edit-btn');
     }
 
     bindEvents() {
@@ -330,6 +342,71 @@ class TeacherContentManager {
                     this.closeModal();
                 }
             });
+        }
+
+        if (this.modalFile) {
+            this.modalFile.addEventListener('change', (event) => {
+                this.handleFileSelection(event);
+            });
+        }
+
+        if (this.previewCloseBtn) {
+            this.previewCloseBtn.addEventListener('click', () => this.closePreviewModal());
+        }
+
+        if (this.previewModal) {
+            this.previewModal.addEventListener('click', (event) => {
+                if (event.target === this.previewModal) {
+                    this.closePreviewModal();
+                }
+            });
+        }
+
+        if (this.editCloseBtn) {
+            this.editCloseBtn.addEventListener('click', () => this.closeEditModal());
+        }
+
+        if (this.cancelEditBtn) {
+            this.cancelEditBtn.addEventListener('click', () => this.closeEditModal());
+        }
+
+        if (this.editModal) {
+            this.editModal.addEventListener('click', (event) => {
+                if (event.target === this.editModal) {
+                    this.closeEditModal();
+                }
+            });
+        }
+
+        if (this.editForm) {
+            this.editForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                this.handleEditContent();
+            });
+        }
+    }
+
+    handleFileSelection(event) {
+        const files = event.target.files;
+        if (!files || files.length === 0) {
+            if (this.fileList) this.fileList.style.display = 'none';
+            return;
+        }
+
+        if (this.fileList) this.fileList.style.display = 'block';
+        if (this.fileNames) {
+            this.fileNames.innerHTML = Array.from(files).map((file, index) => {
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--bg-secondary); border-radius: 8px;">
+                        <span style="font-size: 13px; color: var(--text-primary);">
+                            <i class="fas fa-file" style="margin-right: 6px; color: var(--primary-color);"></i>
+                            ${file.name}
+                        </span>
+                        <span style="font-size: 12px; color: var(--text-secondary);">${fileSize} MB</span>
+                    </div>
+                `;
+            }).join('');
         }
     }
 
@@ -510,7 +587,7 @@ class TeacherContentManager {
                         <button class="btn btn-sm btn-primary" data-action="view" data-id="${item.id}">Xem</button>
                         <button class="btn btn-sm btn-secondary" data-action="edit" data-id="${item.id}">Chỉnh sửa</button>
                         <button class="btn btn-sm btn-secondary" data-action="toggle" data-id="${item.id}">${item.status === 'hidden' ? 'Hiển thị' : 'Ẩn'}</button>
-                        <button class="btn btn-sm btn-secondary" data-action="duplicate" data-id="${item.id}">Nhân bản</button>
+                        <button class="btn btn-sm btn-danger" data-action="delete" data-id="${item.id}">Xóa</button>
                     </div>
                 </td>
             </tr>
@@ -552,10 +629,10 @@ class TeacherContentManager {
 
         switch (action) {
             case 'view':
-                alert(`Xem trước nội dung "${item.title}" (mô phỏng).`);
+                this.showPreviewModal(item);
                 break;
             case 'edit':
-                alert(`Mở trình chỉnh sửa cho "${item.title}" (mô phỏng).`);
+                this.showEditModal(item);
                 break;
             case 'toggle':
                 if (item.status === 'hidden') {
@@ -569,8 +646,13 @@ class TeacherContentManager {
                 }
                 this.renderAll();
                 break;
-            case 'duplicate':
-                alert(`Đã tạo bản sao của "${item.title}" (mô phỏng).`);
+            case 'delete':
+                if (confirm(`Bạn có chắc chắn muốn xóa nội dung "${item.title}"? Hành động này không thể hoàn tác.`)) {
+                    this.contents = this.contents.filter(content => content.id !== id);
+                    this.activity.unshift({ time: this.now(), message: `Đã xóa nội dung "${item.title}".` });
+                    this.renderAll();
+                    alert(`Đã xóa nội dung "${item.title}" thành công (mô phỏng).`);
+                }
                 break;
             default:
                 break;
@@ -738,6 +820,7 @@ class TeacherContentManager {
         const price = Number(this.modalPrice.value) || 0;
         const visibility = this.modalVisibility.value;
         const description = this.modalDescription.value.trim();
+        const files = this.modalFile?.files || [];
 
         if (!title) {
             alert('Vui lòng nhập tiêu đề nội dung.');
@@ -746,6 +829,12 @@ class TeacherContentManager {
 
         const newId = `CNT-${Math.floor(Math.random() * 900 + 200)}`;
         const now = this.now();
+
+        // Xử lý file đính kèm
+        let fileInfo = '';
+        if (files.length > 0) {
+            fileInfo = ` (${files.length} file đính kèm: ${Array.from(files).map(f => f.name).join(', ')})`;
+        }
 
         this.contents.push({
             id: newId,
@@ -762,14 +851,15 @@ class TeacherContentManager {
             creator: 'Bạn',
             revenue: 0,
             submittedAt: now,
-            note: description || 'Đang chờ phê duyệt'
+            note: description || 'Đang chờ phê duyệt',
+            attachments: files.length > 0 ? Array.from(files).map(f => f.name) : []
         });
 
-        this.activity.unshift({ time: now, message: `Đã gửi nội dung "${title}" lên hệ thống để phê duyệt.` });
+        this.activity.unshift({ time: now, message: `Đã gửi nội dung "${title}"${fileInfo} lên hệ thống để phê duyệt.` });
         this.closeModal();
         this.renderAll();
 
-        alert('Nội dung mới đã được gửi phê duyệt. Bạn sẽ nhận thông báo khi Admin phản hồi (mô phỏng).');
+        alert(`Nội dung mới đã được gửi phê duyệt${fileInfo ? ` với ${files.length} file đính kèm` : ''}. Bạn sẽ nhận thông báo khi Admin phản hồi (mô phỏng).`);
     }
 
     openModal() {
@@ -778,12 +868,159 @@ class TeacherContentManager {
         document.body.style.overflow = 'hidden';
         this.modalForm.reset();
         this.modalPrice.value = 0;
+        if (this.fileList) this.fileList.style.display = 'none';
+        if (this.fileNames) this.fileNames.innerHTML = '';
     }
 
     closeModal() {
         if (!this.modal) return;
         this.modal.classList.remove('open');
         document.body.style.overflow = '';
+    }
+
+    showPreviewModal(item) {
+        if (!this.previewModal || !this.previewBody) return;
+
+        const subject = this.subjectLabels[item.subject] || item.subject;
+        const type = this.typeLabels[item.type] || item.type;
+        const price = item.price === 0 ? 'Miễn phí' : this.formatCurrency(item.price);
+        const statusChip = this.getStatusChip(item);
+        const attachments = item.attachments && item.attachments.length > 0
+            ? `<div style="margin-top: 16px;">
+                <h4 style="margin-bottom: 8px;">Tệp đính kèm</h4>
+                <ul style="list-style: none; padding: 0;">
+                    ${item.attachments.map(file => `<li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <i class="fas fa-file" style="margin-right: 8px; color: var(--primary-color);"></i>
+                        ${file}
+                    </li>`).join('')}
+                </ul>
+               </div>`
+            : '';
+
+        this.previewBody.innerHTML = `
+            <div class="preview-header">
+                <div>
+                    <h3>${item.title}</h3>
+                    <p class="text-muted">Mã: ${item.id} • Tạo bởi: ${item.creator}</p>
+                </div>
+            </div>
+            <div class="preview-meta-grid">
+                <div>
+                    <span class="meta-label">Môn học</span>
+                    <div class="meta-value">${subject}</div>
+                </div>
+                <div>
+                    <span class="meta-label">Loại nội dung</span>
+                    <div class="meta-value">${type}</div>
+                </div>
+                <div>
+                    <span class="meta-label">Giá bán</span>
+                    <div class="meta-value">${price}</div>
+                </div>
+                <div>
+                    <span class="meta-label">Trạng thái</span>
+                    <div class="meta-value">${statusChip}</div>
+                </div>
+                <div>
+                    <span class="meta-label">Học sinh</span>
+                    <div class="meta-value">${item.students} người</div>
+                </div>
+                <div>
+                    <span class="meta-label">Lượt xem</span>
+                    <div class="meta-value">${item.views}</div>
+                </div>
+                <div>
+                    <span class="meta-label">Đánh giá</span>
+                    <div class="meta-value">${item.rating ? `${item.rating.toFixed(1)} ⭐` : 'Chưa có'}</div>
+                </div>
+                <div>
+                    <span class="meta-label">Cập nhật</span>
+                    <div class="meta-value">${item.updatedAt}</div>
+                </div>
+            </div>
+            ${item.note ? `
+            <div class="preview-section">
+                <h3>Mô tả</h3>
+                <div class="preview-body">${item.note}</div>
+            </div>
+            ` : ''}
+            ${attachments}
+        `;
+
+        this.previewModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closePreviewModal() {
+        if (!this.previewModal) return;
+        this.previewModal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    showEditModal(item) {
+        if (!this.editModal) return;
+
+        document.getElementById('edit-content-id').value = item.id;
+        document.getElementById('edit-title').value = item.title;
+        document.getElementById('edit-subject').value = item.subject;
+        document.getElementById('edit-type').value = item.type;
+        document.getElementById('edit-price').value = item.price;
+        document.getElementById('edit-visibility').value = item.visibility;
+        document.getElementById('edit-description').value = item.note || '';
+
+        this.editModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeEditModal() {
+        if (!this.editModal) return;
+        this.editModal.classList.remove('open');
+        document.body.style.overflow = '';
+        if (this.editForm) {
+            this.editForm.reset();
+        }
+    }
+
+    handleEditContent() {
+        const id = document.getElementById('edit-content-id').value;
+        const title = document.getElementById('edit-title').value.trim();
+        const subject = document.getElementById('edit-subject').value;
+        const type = document.getElementById('edit-type').value;
+        const price = Number(document.getElementById('edit-price').value) || 0;
+        const visibility = document.getElementById('edit-visibility').value;
+        const description = document.getElementById('edit-description').value.trim();
+
+        if (!title) {
+            alert('Vui lòng nhập tiêu đề nội dung.');
+            return;
+        }
+
+        const item = this.contents.find(content => content.id === id);
+        if (!item) {
+            alert('Không tìm thấy nội dung để chỉnh sửa.');
+            return;
+        }
+
+        // Cập nhật thông tin
+        item.title = title;
+        item.subject = subject;
+        item.type = type;
+        item.price = price;
+        item.visibility = visibility;
+        item.note = description || item.note;
+        item.updatedAt = this.now();
+
+        // Nếu đang ở trạng thái pending, giữ nguyên. Nếu không, chuyển về pending để admin duyệt lại
+        if (item.status === 'published') {
+            item.status = 'pending';
+            this.activity.unshift({ time: this.now(), message: `Đã cập nhật nội dung "${title}" và gửi lại để phê duyệt.` });
+        } else {
+            this.activity.unshift({ time: this.now(), message: `Đã cập nhật nội dung "${title}".` });
+        }
+
+        this.closeEditModal();
+        this.renderAll();
+        alert(`Đã cập nhật nội dung "${title}" thành công (mô phỏng).`);
     }
 
     now() {

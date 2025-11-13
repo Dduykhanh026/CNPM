@@ -24,8 +24,27 @@
     </nav>
 
     <div class="container">
-        <div class="grid grid-2">
+        <div class="dashboard-header">
+            <h1>Thanh Toán Sách</h1>
+            <p>Mua sách và tài liệu học tập, hoặc nạp tiền vào tài khoản</p>
+        </div>
+
+        <div class="grid grid-2" style="margin-bottom: 30px;">
             <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Số Dư Tài Khoản</h2>
+                </div>
+                <div style="text-align: center; padding: 40px 0;">
+                    <h1 style="font-size: 48px; color: var(--primary-color); margin-bottom: 10px;" id="balance-amount">500,000</h1>
+                    <p style="font-size: 18px; color: #666;">VNĐ</p>
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn btn-primary" style="flex: 1;" id="show-topup-btn">Nạp Tiền</button>
+                    <button class="btn btn-secondary" style="flex: 1;" id="view-history-btn">Lịch Sử</button>
+                </div>
+            </div>
+
+            <div class="card" id="topup-form-container" style="display: none;">
                 <div class="card-header">
                     <h2 class="card-title">Nạp Tiền Vào Tài Khoản</h2>
                 </div>
@@ -41,55 +60,114 @@
                             <option value="momo">MoMo</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Nạp Tiền</button>
+                    <div class="form-actions-inline">
+                        <button type="button" class="btn btn-secondary" id="cancel-topup-btn">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Nạp Tiền</button>
+                    </div>
                 </form>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Số Dư Tài Khoản</h2>
-                </div>
-                <div style="text-align: center; padding: 40px 0;">
-                    <h1 style="font-size: 48px; color: var(--primary-color); margin-bottom: 10px;">500,000</h1>
-                    <p style="font-size: 18px; color: #666;">VNĐ</p>
-                </div>
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-secondary" style="width: 100%;">Xem Lịch Sử Giao Dịch</button>
-                </div>
             </div>
         </div>
 
-        <div class="card" style="margin-top: 30px;">
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-header">
+                <h2 class="card-title">Sách & Tài Liệu Có Thể Mua</h2>
+                <p class="card-subtitle">Chọn sách bạn muốn mua và thanh toán</p>
+            </div>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên Sách/Tài Liệu</th>
+                            <th>Môn Học</th>
+                            <th>Loại</th>
+                            <th>Giá</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="books-table">
+                        <tr>
+                            <td><strong>Dao động điều hòa - Video minh họa</strong></td>
+                            <td>Vật Lý</td>
+                            <td>Video</td>
+                            <td>50,000 VNĐ</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-book-id="1" data-book-price="50000" data-book-title="Dao động điều hòa - Video minh họa">Mua Ngay</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hóa học hữu cơ - Cơ bản</strong></td>
+                            <td>Hóa Học</td>
+                            <td>Tài liệu</td>
+                            <td>30,000 VNĐ</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-book-id="2" data-book-price="30000" data-book-title="Hóa học hữu cơ - Cơ bản">Mua Ngay</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phản ứng hóa học - Video</strong></td>
+                            <td>Hóa Học</td>
+                            <td>Video</td>
+                            <td>40,000 VNĐ</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-book-id="3" data-book-price="40000" data-book-title="Phản ứng hóa học - Video">Mua Ngay</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chuyên đề hình học không gian 12</strong></td>
+                            <td>Toán</td>
+                            <td>Tài liệu</td>
+                            <td>70,000 VNĐ</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-book-id="4" data-book-price="70000" data-book-title="Chuyên đề hình học không gian 12">Mua Ngay</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chuỗi bài tập luyện thi THPT - Vật lý</strong></td>
+                            <td>Vật Lý</td>
+                            <td>Bài tập</td>
+                            <td>35,000 VNĐ</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-book-id="5" data-book-price="35000" data-book-title="Chuỗi bài tập luyện thi THPT - Vật lý">Mua Ngay</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
             <div class="card-header">
                 <h2 class="card-title">Tài Liệu Đã Mua</h2>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tên Tài Liệu</th>
-                        <th>Môn Học</th>
-                        <th>Giá</th>
-                        <th>Ngày Mua</th>
-                        <th>Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Dao động điều hòa</td>
-                        <td>Vật Lý</td>
-                        <td>50,000 VNĐ</td>
-                        <td>10/12/2024</td>
-                        <td><button class="btn btn-sm btn-primary">Xem</button></td>
-                    </tr>
-                    <tr>
-                        <td>Hóa học hữu cơ - Cơ bản</td>
-                        <td>Hóa Học</td>
-                        <td>30,000 VNĐ</td>
-                        <td>08/12/2024</td>
-                        <td><button class="btn btn-sm btn-primary">Xem</button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên Tài Liệu</th>
+                            <th>Môn Học</th>
+                            <th>Giá</th>
+                            <th>Ngày Mua</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchased-table">
+                        <tr>
+                            <td>Dao động điều hòa</td>
+                            <td>Vật Lý</td>
+                            <td>50,000 VNĐ</td>
+                            <td>10/12/2024</td>
+                            <td><button class="btn btn-sm btn-primary">Xem</button></td>
+                        </tr>
+                        <tr>
+                            <td>Hóa học hữu cơ - Cơ bản</td>
+                            <td>Hóa Học</td>
+                            <td>30,000 VNĐ</td>
+                            <td>08/12/2024</td>
+                            <td><button class="btn btn-sm btn-primary">Xem</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
