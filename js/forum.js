@@ -281,13 +281,147 @@ function filterBySubject(subject) {
 }
 
 function showCreatePost() {
-    const subject = prompt('Chọn môn học:\n1. Toán\n2. Vật Lý\n3. Hóa Học');
-    const title = prompt('Nhập tiêu đề bài viết:');
-    const content = prompt('Nhập nội dung bài viết:');
+    const modal = document.getElementById('create-post-modal');
+    const form = document.getElementById('create-post-form');
+    const cancelBtn = document.getElementById('cancel-create-post');
+    const closeBtn = document.getElementById('create-post-modal-close');
+    const fileInput = document.getElementById('post-attachments');
+    const filePreview = document.getElementById('file-preview');
 
-    if (subject && title && content) {
-        alert('Bài viết đã được tạo thành công!\n(Tính năng sẽ được kết nối API trong phiên bản triển khai thực tế.)');
+    if (!modal) return;
+
+    // Reset form
+    if (form) {
+        form.reset();
     }
+    if (filePreview) {
+        filePreview.innerHTML = '';
+    }
+
+    // Show modal
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Handle file selection
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) {
+                filePreview.innerHTML = '';
+                return;
+            }
+            filePreview.innerHTML = files.map(file => {
+                const size = (file.size / 1024).toFixed(1);
+                return `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <i class="fas fa-file" style="color: var(--primary-color);"></i>
+                    <span>${file.name} (${size} KB)</span>
+                </div>`;
+            }).join('');
+        });
+    }
+
+    // Close modal handlers
+    const closeModal = () => {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    };
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Handle form submission
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleCreatePost();
+        });
+    }
+}
+
+function handleCreatePost() {
+    const subject = document.getElementById('post-subject')?.value;
+    const title = document.getElementById('post-title')?.value.trim();
+    const content = document.getElementById('post-content')?.value.trim();
+    const fileInput = document.getElementById('post-attachments');
+
+    // Validation
+    if (!subject || !title || !content) {
+        alert('Vui lòng điền đầy đủ các trường bắt buộc.');
+        return;
+    }
+
+    if (title.length < 5) {
+        alert('Tiêu đề phải có ít nhất 5 ký tự.');
+        return;
+    }
+
+    if (content.length < 10) {
+        alert('Nội dung phải có ít nhất 10 ký tự.');
+        return;
+    }
+
+    // Get current user
+    const userStr = localStorage.getItem('currentUser');
+    if (!userStr) {
+        alert('Vui lòng đăng nhập để tạo bài viết.');
+        return;
+    }
+
+    const currentUser = JSON.parse(userStr);
+    const author = currentUser.name || 'Người dùng';
+
+    // Get file attachments
+    const attachments = [];
+    if (fileInput && fileInput.files.length > 0) {
+        Array.from(fileInput.files).forEach(file => {
+            attachments.push(file.name);
+        });
+    }
+
+    // Create new post
+    const newPost = {
+        id: Date.now(), // Simple ID generation
+        title: title,
+        subject: subject,
+        author: author,
+        content: content,
+        replies: 0,
+        views: 0,
+        date: 'Vừa xong',
+        solved: false,
+        attachments: attachments
+    };
+
+    // Add to posts array
+    if (forumManager) {
+        forumManager.posts.unshift(newPost); // Add to beginning
+        forumManager.persistPosts();
+        forumManager.loadPosts();
+    }
+
+    // Close modal
+    const modal = document.getElementById('create-post-modal');
+    if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // Show success message
+    alert('Bài viết đã được tạo thành công!');
+
+    // Scroll to top to see new post
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function viewPost(id) {
