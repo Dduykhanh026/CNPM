@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lớp Học Trực Tuyến - KH33</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .live-class-container {
+            display: flex;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        .live-class-sidebar {
+            width: 280px;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .live-class-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+        }
+
+        .live-class-header {
+            background: var(--bg-primary);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .group-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .group-selector select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            font-size: 14px;
+            min-width: 200px;
+        }
+
+        .video-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .main-video-area {
+            flex: 1;
+            background: #000;
+            border-radius: 16px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        .video-placeholder {
+            color: #fff;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn.active {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .control-btn.inactive {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .control-btn.danger {
+            background: var(--danger-color);
+            color: #fff;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .student-management {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .chat-container {
+            width: 360px;
+            background: var(--bg-primary);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chat-message.own {
+            align-items: flex-end;
+        }
+
+        .chat-message.own .message-bubble {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .message-bubble {
+            background: var(--bg-secondary);
+            padding: 10px 14px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .attach-btn, .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .attach-btn {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .sidebar-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .participant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .participant-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .participant-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .participant-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .participant-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--danger-color);
+        }
+
+        .participant-status.active {
+            background: #4CAF50;
+        }
+
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .file-preview i {
+            color: var(--primary-color);
+        }
+
+        .file-preview-remove {
+            margin-left: auto;
+            cursor: pointer;
+            color: var(--danger-color);
+        }
+
+        @media (max-width: 1200px) {
+            .chat-container {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .live-class-container {
+                flex-direction: column;
+            }
+
+            .live-class-sidebar {
+                width: 100%;
+                height: 200px;
+            }
+
+            .chat-container {
+                width: 100%;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">KH33</div>
+            <ul class="nav-menu" id="nav-menu"></ul>
+            <div class="nav-user">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Người Dùng</span>
+                <button class="btn btn-outline" id="logout-btn">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="live-class-container">
+        <!-- Sidebar điều hướng -->
+        <div class="live-class-sidebar">
+            <div class="sidebar-section">
+                <h3>Tham gia</h3>
+                <div class="participant-list" id="participant-list">
+                    <!-- Participants will be loaded here -->
+                </div>
+            </div>
+            <div class="sidebar-section" id="teacher-controls-section" style="display: none;">
+                <h3>Quản lý lớp học</h3>
+                <div class="student-management">
+                    <button class="btn btn-sm btn-primary" id="add-student-btn">
+                        <i class="fas fa-user-plus"></i> Thêm học sinh
+                    </button>
+                    <button class="btn btn-sm btn-danger" id="remove-student-btn">
+                        <i class="fas fa-user-minus"></i> Xóa học sinh
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khu vực chính -->
+        <div class="live-class-main">
+            <!-- Header với combobox nhóm -->
+            <div class="live-class-header">
+                <div class="group-selector">
+                    <label for="group-select" style="font-weight: 500;">Nhóm:</label>
+                    <select id="group-select">
+                        <option value="class-12a1">Lớp 12A1 - Toán</option>
+                        <option value="class-12a2">Lớp 12A2 - Vật Lý</option>
+                        <option value="class-12a3">Lớp 12A3 - Hóa Học</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span id="class-status" class="badge badge-success">Đang diễn ra</span>
+                </div>
+            </div>
+
+            <!-- Khu vực video và điều khiển -->
+            <div class="video-container">
+                <div class="main-video-area" id="main-video-area">
+                    <div class="video-placeholder">
+                        <i class="fas fa-video" style="font-size: 64px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>Video sẽ hiển thị ở đây</p>
+                    </div>
+                </div>
+
+                <div class="video-controls">
+                    <button class="control-btn active" id="mic-btn" title="Bật/Tắt Microphone">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn active" id="camera-btn" title="Bật/Tắt Camera">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="control-btn inactive" id="screen-share-btn" title="Chia sẻ màn hình">
+                        <i class="fas fa-desktop"></i>
+                    </button>
+                    <button class="control-btn inactive" id="cc-btn" title="Bật/Tắt Phụ đề">
+                        <i class="fas fa-closed-captioning"></i>
+                    </button>
+                    <button class="control-btn danger" id="end-call-btn" title="Kết thúc cuộc gọi">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khung chat nhóm -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3>Chat nhóm</h3>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="chat-input-area">
+                <div id="file-preview-container"></div>
+                <div class="chat-input-row">
+                    <input type="file" id="file-attachment" style="display: none;" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    <button class="attach-btn" id="attach-btn" title="Đính kèm file">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <textarea 
+                        id="chat-input" 
+                        class="chat-input" 
+                        placeholder="Nhập tin nhắn..." 
+                        maxlength="200"
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="send-btn" title="Gửi tin nhắn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thêm học sinh -->
+    <div class="modal" id="add-student-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="add-student-modal-close" aria-label="Đóng">&times;</button>
+            <h3>Thêm học sinh vào lớp học</h3>
+            <form id="add-student-form" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label>Tìm kiếm học sinh</label>
+                    <input type="text" id="student-search-input" placeholder="Nhập tên hoặc email học sinh...">
+                </div>
+                <div id="student-search-results" style="max-height: 300px; overflow-y: auto; margin-top: 16px;">
+                    <!-- Search results will appear here -->
+                </div>
+                <div class="form-actions-inline" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" id="cancel-add-student">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Thêm học sinh</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal xóa học sinh -->
+    <div class="modal" id="remove-student-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="remove-student-modal-close" aria-label="Đóng">&times;</button>
+            <h3>Xóa học sinh khỏi lớp học</h3>
+            <div style="margin-top: 20px;">
+                <p class="text-muted">Chọn học sinh bạn muốn xóa khỏi lớp học:</p>
+                <div id="student-remove-list" style="max-height: 400px; overflow-y: auto; margin-top: 16px;">
+                    <!-- Student list will appear here -->
+                </div>
+                <div class="form-actions-inline" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" id="cancel-remove-student">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="confirm-remove-student">Xóa học sinh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/live-class.js"></script>
+</body>
+</html>
+

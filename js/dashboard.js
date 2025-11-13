@@ -974,22 +974,22 @@ class DashboardManager {
             </div>
             
             <div class="card" style="margin-top: 20px;">
-                <h2 style="margin-bottom: 15px;">Livestream</h2>
+                <h2 style="margin-bottom: 15px;">Lớp Học Trực Tuyến</h2>
                 <div class="content-grid">
                     <div class="content-card">
                         <div class="content-card-image"></div>
                         <div class="content-card-body">
-                            <h3 class="content-card-title">Livestream Toán - Đại số</h3>
+                            <h3 class="content-card-title">Lớp Toán - Đại số</h3>
                             <p class="content-card-description">
                                 <span class="badge badge-info">Toán</span>
-                                <span class="badge badge-danger">Đang Live</span>
+                                <span class="badge badge-danger">Đang diễn ra</span>
                             </p>
                             <div class="content-card-footer">
                                 <div class="content-meta">
                                     <span>👥 45 học sinh</span>
                                     <span>🕒 15:00 - 16:30</span>
                                 </div>
-                                <button class="btn btn-sm btn-primary">Tham Gia</button>
+                                <button class="btn btn-sm btn-primary" onclick="window.location.href='live-class.html'">Tham Gia</button>
                             </div>
                         </div>
                     </div>
@@ -997,17 +997,17 @@ class DashboardManager {
                     <div class="content-card">
                         <div class="content-card-image"></div>
                         <div class="content-card-body">
-                            <h3 class="content-card-title">Livestream Vật Lý - Dao động</h3>
+                            <h3 class="content-card-title">Lớp Vật Lý - Dao động</h3>
                             <p class="content-card-description">
                                 <span class="badge badge-info">Vật Lý</span>
-                                <span class="badge badge-warning">Sắp Bắt Đầu</span>
+                                <span class="badge badge-warning">Sắp bắt đầu</span>
                             </p>
                             <div class="content-card-footer">
                                 <div class="content-meta">
                                     <span>📅 20/12/2024</span>
                                     <span>🕒 14:00 - 15:30</span>
                                 </div>
-                                <button class="btn btn-sm btn-primary">Đăng Ký</button>
+                                <button class="btn btn-sm btn-primary" onclick="window.location.href='live-class.html'">Tham Gia</button>
                             </div>
                         </div>
                     </div>
@@ -2016,7 +2016,12 @@ class DashboardManager {
             </div>
             
             <div class="card" style="margin-bottom: 20px;">
-                <button class="btn btn-primary">Tạo Livestream Mới</button>
+                <div class="form-actions-inline">
+                    <button class="btn btn-primary" onclick="window.location.href='live-class.html'">
+                        <i class="fas fa-video"></i> Bắt đầu lớp học trực tuyến
+                    </button>
+                    <button class="btn btn-secondary">Tạo Livestream Mới</button>
+                </div>
             </div>
             
             <div class="content-grid">
@@ -2033,7 +2038,7 @@ class DashboardManager {
                                 <span>👥 45 học sinh</span>
                                 <span>🕒 15:00 - 16:30</span>
                             </div>
-                            <button class="btn btn-sm btn-primary">Quản Lý</button>
+                            <button class="btn btn-sm btn-primary" onclick="window.location.href='live-class.html'">Tham Gia</button>
                         </div>
                     </div>
                 </div>
@@ -2051,7 +2056,7 @@ class DashboardManager {
                                 <span>📅 20/12/2024</span>
                                 <span>🕒 14:00 - 15:30</span>
                             </div>
-                            <button class="btn btn-sm btn-primary">Chỉnh Sửa</button>
+                            <button class="btn btn-sm btn-primary" onclick="window.location.href='live-class.html'">Bắt Đầu</button>
                         </div>
                     </div>
                 </div>

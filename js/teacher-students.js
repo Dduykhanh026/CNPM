@@ -180,6 +180,7 @@ class TeacherStudentManager {
 
         this.importBtn = document.getElementById('import-students');
         this.addGroupBtn = document.getElementById('add-student-group');
+        this.addStudentBtn = document.getElementById('add-student-btn');
     }
 
     init() {
@@ -254,6 +255,12 @@ class TeacherStudentManager {
         if (this.addGroupBtn) {
             this.addGroupBtn.addEventListener('click', () => {
                 alert('Tính năng tạo lớp mới đang được mô phỏng. Vui lòng liên hệ admin để được hỗ trợ.');
+            });
+        }
+
+        if (this.addStudentBtn) {
+            this.addStudentBtn.addEventListener('click', () => {
+                this.showAddStudentForm();
             });
         }
     }
@@ -588,6 +595,153 @@ class TeacherStudentManager {
             default:
                 return '<span class="status-chip">Không xác định</span>';
         }
+    }
+
+    showAddStudentForm() {
+        if (!this.modal || !this.modalBody) return;
+        
+        this.modalBody.innerHTML = `
+            <h3>Thêm Học Sinh Mới</h3>
+            <form id="add-student-form" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label>Họ và tên <span style="color: var(--danger-color);">*</span></label>
+                    <input type="text" id="new-student-name" required placeholder="Nhập họ và tên học sinh">
+                </div>
+                <div class="form-group">
+                    <label>Mã học sinh <span style="color: var(--danger-color);">*</span></label>
+                    <input type="text" id="new-student-id" required placeholder="VD: STU-001">
+                </div>
+                <div class="form-group">
+                    <label>Lớp <span style="color: var(--danger-color);">*</span></label>
+                    <select id="new-student-class" required>
+                        <option value="">Chọn lớp</option>
+                        ${this.dataset.classes.map(cls => `<option value="${cls.id}">${cls.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="new-student-email" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="tel" id="new-student-phone" placeholder="0123456789">
+                </div>
+                <div class="form-group">
+                    <label>Điểm trung bình ban đầu</label>
+                    <input type="number" id="new-student-score" min="0" max="10" step="0.1" value="7.0" placeholder="7.0">
+                </div>
+                <div class="form-group">
+                    <label>Tiến độ ban đầu (%)</label>
+                    <input type="number" id="new-student-progress" min="0" max="100" value="50" placeholder="50">
+                </div>
+                <div class="form-actions-inline" style="margin-top: 24px;">
+                    <button type="button" class="btn btn-secondary" id="cancel-add-student">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Thêm học sinh</button>
+                </div>
+            </form>
+        `;
+
+        // Bind form events
+        const form = document.getElementById('add-student-form');
+        const cancelBtn = document.getElementById('cancel-add-student');
+
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleAddStudent();
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                this.closeModal();
+            });
+        }
+
+        this.modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    handleAddStudent() {
+        const name = document.getElementById('new-student-name')?.value.trim();
+        const id = document.getElementById('new-student-id')?.value.trim();
+        const classId = document.getElementById('new-student-class')?.value;
+        const email = document.getElementById('new-student-email')?.value.trim();
+        const phone = document.getElementById('new-student-phone')?.value.trim();
+        const score = parseFloat(document.getElementById('new-student-score')?.value) || 7.0;
+        const progress = parseInt(document.getElementById('new-student-progress')?.value) || 50;
+
+        // Validation
+        if (!name || !id || !classId) {
+            alert('Vui lòng điền đầy đủ các trường bắt buộc (Họ tên, Mã học sinh, Lớp).');
+            return;
+        }
+
+        // Check if student ID already exists
+        if (this.dataset.students.some(s => s.id === id)) {
+            alert('Mã học sinh đã tồn tại. Vui lòng sử dụng mã khác.');
+            return;
+        }
+
+        // Find class info
+        const selectedClass = this.dataset.classes.find(c => c.id === classId);
+        if (!selectedClass) {
+            alert('Lớp được chọn không hợp lệ.');
+            return;
+        }
+
+        // Determine status based on score and progress
+        let status = 'ontrack';
+        let engagement = 'Trung bình';
+        
+        if (score < 6.5 || progress < 60) {
+            status = 'critical';
+            engagement = 'Thấp';
+        } else if (score < 7.5 || progress < 75) {
+            status = 'warning';
+            engagement = 'Trung bình';
+        } else if (score >= 8.5 && progress >= 85) {
+            engagement = 'Cao';
+        }
+
+        // Create new student object
+        const newStudent = {
+            id: id,
+            name: name,
+            classId: classId,
+            className: selectedClass.name,
+            averageScore: Math.max(0, Math.min(10, score)),
+            progress: Math.max(0, Math.min(100, progress)),
+            engagement: engagement,
+            status: status,
+            interventions: [],
+            recentActivity: [
+                {
+                    time: new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
+                    activity: 'Được thêm vào hệ thống',
+                    note: 'Học sinh mới'
+                }
+            ]
+        };
+
+        // Add to dataset
+        this.dataset.students.push(newStudent);
+
+        // Recalculate aggregates
+        this.recalculateAggregates();
+
+        // Re-render everything
+        this.renderStats();
+        this.renderClassTable();
+        this.populateClassFilter();
+        this.renderStudentTable();
+        this.renderTierDistribution();
+        this.renderInterventionList();
+
+        // Close modal
+        this.closeModal();
+
+        alert(`Đã thêm học sinh ${name} vào lớp ${selectedClass.name} thành công!`);
     }
 }
 
